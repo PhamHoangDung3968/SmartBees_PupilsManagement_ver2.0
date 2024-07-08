@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
+from MainFormGUI import MainFormGUI
+
 class LoginGUI:
     def __init__(self):
         
@@ -36,6 +38,9 @@ class LoginGUI:
             messagebox.showinfo("Success", "Đăng nhập thành công")
             self.root.destroy()
             # Add your logic to open the MainFormGUI here
+            mainForm = MainFormGUI()
+            mainForm.run()
+            
         else:
             messagebox.showerror("Error", "Đăng nhập thất bại")
 
