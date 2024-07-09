@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
-from MainFormGUI import MainFormGUI
+from GUI.MainFormGUI import MainFormGUI
 
 class LoginGUI:
     def __init__(self):
@@ -53,6 +53,3 @@ class LoginGUI:
     def run(self):
         self.root.mainloop()
 
-if __name__ == "__main__":
-    app = LoginGUI()
-    app.run()
