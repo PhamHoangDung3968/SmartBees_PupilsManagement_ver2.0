@@ -4,9 +4,16 @@ import gspread
 
 gs = gspread.service_account("cre.json")
 sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
-worksheet = sht.sheet1
-values_list = worksheet.get_all_values()[2:]
-result_list_Book = [row[:5] for row in values_list]
+worksheet1 = sht.sheet1
+values_list_Book = worksheet1.get_all_values()[2:]
+result_list_Book = [row[:5] for row in values_list_Book]
+
+
+worksheet2 = sht.worksheet("Trang tính2") 
+values_list_Student = worksheet2.get_all_values()[2:]
+result_list_Student = [row[:7] for row in values_list_Student]
+
+
 
 class MainFormGUI:
     def __init__(self):
@@ -76,7 +83,7 @@ class MainFormGUI:
         btnInPDF1.pack(side="top", anchor="ne",ipady=5)
         btnXuatExcel1.pack(side="top", anchor="ne",ipady=5)
         table_columns1 = ["ID", "FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "TEL", "ADDRESS", "PARENT NAME"]
-        table_data1 = [[None] * len(table_columns1)]
+        table_data1 = result_list_Student
         self.table1 = ttk.Treeview(self.class_management_tab, columns=table_columns1, show="headings",height=25)
         for col in table_columns1:
             self.table1.heading(col, text=col)
