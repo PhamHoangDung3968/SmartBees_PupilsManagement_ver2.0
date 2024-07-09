@@ -183,6 +183,12 @@ class MainFormGUI:
         tree_scrollx3.pack(fill="x")
         # Cấu hình liên kết thanh cuộn với Treeview
         self.table3.configure(xscrollcommand=tree_scrollx3.set)
+        # Tạo thanh cuộn dọc
+        tree_scroll_y3 = ttk.Scrollbar(self.class_management_tab, orient="vertical", command=self.table3.yview)
+        tree_scroll_y3.pack(side="right", fill="y")
+
+# Cấu hình liên kết thanh cuộn với Treeview
+        self.table3.configure(yscrollcommand=tree_scroll_y3.set)
 
         btnSearch_Book = ttk.Button(self.class_management_tab, text="Tìm kiếm", width=25)
         tfSearch_Ten_Book = ttk.Entry(self.class_management_tab, width=25 )
