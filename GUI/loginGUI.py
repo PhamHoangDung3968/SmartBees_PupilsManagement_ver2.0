@@ -21,6 +21,8 @@ class LoginGUI:
         self.panel.place(x=415, y=29, width=430, height=444)
         self.lbl_login = tk.Label(self.panel, text="LOGIN", font=("cambria", 24, "bold"), fg="#FBA834")
         self.lbl_login.place(x=158, y=10)
+        self.Title = tk.Label(self.canvas, text="SMART BEES", font=("cambria", 40, "bold"),fg="black",bg="#fffbc4")
+        self.Title.place(x=55, y=220)
         self.lb1 = tk.Label(self.panel, text="UserName", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb1.place(x=33, y=55)
         self.tf1 = tk.Entry(self.panel)
