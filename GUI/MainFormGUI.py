@@ -1,5 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
+import gspread
+
+gs = gspread.service_account("cre.json")
+sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+worksheet = sht.sheet1
+values_list = worksheet.get_all_values()[2:]
+result_list = [row[:5] for row in values_list]
 
 class MainFormGUI:
     def __init__(self):
@@ -9,11 +16,6 @@ class MainFormGUI:
         # style.configure('TButton', font=('cambria', 11, 'bold'))
         # style.configure('TTreeview', font=('cambria', 11, 'bold'))
         # Tạo thanh cuộn ngang
-        
-
-
-
-
         self.root.title("Main Form GUI")
         self.root.geometry("1097x700")
         self.content_frame = ttk.Frame(self.root)
@@ -168,7 +170,7 @@ class MainFormGUI:
         btnXuatExcel3.pack(side="top", anchor="ne",ipady=5)
         
         table_columns3 = ["ID", "CAMBRIDE LEVER", "BOOK NAME", "MAIN BOOK"]
-        table_data3 = [[None] * len(table_columns3)]
+        table_data3 = result_list
         self.table3 = ttk.Treeview(self.class_management_tab, columns=table_columns3, show="headings",height=25)
         for col in table_columns3:
             self.table3.heading(col, text=col)
