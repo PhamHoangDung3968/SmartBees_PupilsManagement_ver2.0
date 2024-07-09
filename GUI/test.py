@@ -3,12 +3,18 @@ import tkinter as tk
 from tkinter import ttk
 import gspread
 
-# Google Sheets setup
 gs = gspread.service_account("cre.json")
 sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
-worksheet = sht.sheet1
-values_list = worksheet.get_all_values()[2:]
-result_list_Book = [row[:5] for row in values_list]
+worksheet1 = sht.sheet1
+values_list_Book = worksheet1.get_all_values()[2:]
+result_list_Book = [row[:5] for row in values_list_Book]
+
+
+worksheet2 = sht.worksheet("Trang tính2") 
+values_list_Student = worksheet2.get_all_values()[2:]
+result_list_Student = [row[:7] for row in values_list_Student]
+
+
 
 class MainFormGUI:
     def __init__(self):
@@ -101,8 +107,12 @@ class MainFormGUI:
         self.table1 = ttk.Treeview(self.student_management_tab, columns=table_columns1, show="headings", height=25)
         for col in table_columns1:
             self.table1.heading(col, text=col)
+        for row in result_list_Student:
+            self.table1.insert("", "end", values=row)
         self.table1.pack(fill="x")
-        
+        tree_scroll_y1 = ttk.Scrollbar(self.student_management_tab, orient="vertical", command=self.table1.yview)
+        tree_scroll_y1.pack(side="right", fill="y")
+        self.table1.configure(yscrollcommand=tree_scroll_y1.set)
         self.create_search_section(self.student_management_tab, "student")
 
     def create_score_management_tab(self):

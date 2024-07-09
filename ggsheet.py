@@ -32,18 +32,21 @@
 #     print(row[:3])
 
 
-import gspread
+# import gspread
 
-# Giả sử tệp chứng chỉ của bạn có tên là "cre.json"
-gs = gspread.service_account("cre.json")
+# # Giả sử tệp chứng chỉ của bạn có tên là "cre.json"
+# gs = gspread.service_account("cre.json")
 
-# Mở bảng tính bằng cách sử dụng khóa của nó
-sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+# # Mở bảng tính bằng cách sử dụng khóa của nó
+# sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
 
-# Lấy bảng tính đầu tiên (Sheet1)
-worksheet = sht.sheet1
+# # Lấy bảng tính đầu tiên (Sheet1)
+# worksheet = sht.sheet1
 
-# Lấy tất cả giá trị từ cột A đến C
-values_list = worksheet.get_all_values()
-result_list = [row[:5] for row in values_list]
+# # Lấy tất cả giá trị từ cột A đến C
+# values_list = worksheet.get_all_values()
+# result_list = [row[:5] for row in values_list]
 
+import ezsheets
+ss = ezsheets.Spreadsheet("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+ss.downloadAsExcel()
