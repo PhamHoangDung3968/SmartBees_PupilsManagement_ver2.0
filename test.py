@@ -1,3 +1,4 @@
+'''
 from tkinter import *
 
 def login():
@@ -23,3 +24,4 @@ button_login = Button(window, text="Đăng nhập", command=login)
 button_login.pack()
 
 window.mainloop()
+'''
