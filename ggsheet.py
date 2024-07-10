@@ -147,5 +147,4 @@ file_path = f'QLHS-{current_time}.xlsx'
 
 # Save the new Excel file
 wb.save(file_path)
-
 print(f"Data copied to {file_path}")

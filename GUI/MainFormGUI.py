@@ -6,6 +6,8 @@ import ezsheets
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, Border, Side, PatternFill
 from openpyxl.utils import get_column_letter
+from datetime import datetime
+
 
 gs = gspread.service_account("cre.json")
 sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
@@ -243,6 +245,7 @@ class MainFormGUI:
         self.root.destroy()
     
     def XuatExcel3(self):
+        # Function to get data from a specified range
         def get_data_from_range(sheet, start_row, end_row, start_col, end_col):
             data = []
             for row in range(start_row, end_row + 1):
@@ -251,15 +254,17 @@ class MainFormGUI:
                     row_data.append(sheet[row, col])
                 data.append(row_data)
             return data
+
         # Download the specific Google Sheet
         ss = ezsheets.Spreadsheet("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
 
         # Specify the sheet, columns, and rows
+        # lag
         sheet_name = 'sheet 1'  # Change this to the specific sheet name
-        start_row = 1
-        end_row = 17
-        start_col = 1
-        end_col = 13
+        start_row = 1  # Skip the header row
+        end_row = 13
+        start_col = 3
+        end_col = 18
 
         sheet = ss[sheet_name]
         data = get_data_from_range(sheet, start_row, end_row, start_col, end_col)
@@ -302,8 +307,8 @@ class MainFormGUI:
             cell.border = thin_border
 
         # Write the data and apply borders
-        for row_idx, row_data in enumerate(data, start=3):
-            for col_idx, value in enumerate(row_data, start=1):
+        for col_idx, col_data in enumerate(data, start=1):
+            for row_idx, value in enumerate(col_data, start=3):
                 cell = ws.cell(row=row_idx, column=col_idx, value=value)
                 cell.border = thin_border
 
@@ -321,8 +326,11 @@ class MainFormGUI:
             adjusted_width = (max_length + 2)
             ws.column_dimensions[column].width = adjusted_width
 
+        # Generate unique file name with date and time
+        current_time = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
+        file_path = f'D:\\QLHS-{current_time}.xlsx'
+
         # Save the new Excel file
-        file_path = 'D:\\BookManagement.xlsx'
         wb.save(file_path)
         messagebox.showinfo("Success", "Download the file successfully, please check your D drive!")
 
