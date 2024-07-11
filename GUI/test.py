@@ -6,6 +6,8 @@ import ezsheets
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, Border, Side, PatternFill
 from openpyxl.utils import get_column_letter
+from datetime import datetime
+
 
 gs = gspread.service_account("cre.json")
 sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
@@ -14,9 +16,45 @@ values_list_Book = worksheet.get_all_values()[2:]
 result_list_Book = [row[:5] for row in values_list_Book]
 
 values_list_Student = worksheet.get_all_values()[2:]
-result_list_Student = [row[21:29] for row in values_list_Student]
+result_list_Student = [row[22:29] for row in values_list_Student]
+
+values_list_Class = worksheet.get_all_values()[2:]
+result_list_Class = [row[14:20] for row in values_list_Class]
+
+values_list_Score = worksheet.get_all_values()[2:]
+result_list_Score = [row[22:21] for row in values_list_Class]
 
 
+
+result_list_Score = [row[22:24] for row in values_list_Score] 
+lop = [row[25] for row in values_list_Score]
+combined_data = result_list_Score.copy()
+for i in range(len(combined_data)):
+    combined_data[i].append(lop[i])
+teacher = [row[40] for row in values_list_Score]
+combined_data1 = result_list_Score.copy() 
+for i in range(len(combined_data1)):
+    combined_data1[i].append(teacher[i])
+listen = [row[41] for row in values_list_Score]
+combined_data2 = result_list_Score.copy() 
+for i in range(len(combined_data2)):
+    combined_data2[i].append(listen[i])
+speak = [row[42] for row in values_list_Score]
+combined_data3 = result_list_Score.copy() 
+for i in range(len(combined_data3)):
+    combined_data3[i].append(speak[i])
+rw = [row[43] for row in values_list_Score]
+combined_data4 = result_list_Score.copy() 
+for i in range(len(combined_data4)):
+    combined_data4[i].append(rw[i])
+total = [row[44] for row in values_list_Score]
+combined_data5 = result_list_Score.copy() 
+for i in range(len(combined_data5)):
+    combined_data5[i].append(total[i])
+ps = [row[45] for row in values_list_Score]
+combined_data6 = result_list_Score.copy() 
+for i in range(len(combined_data6)):
+    combined_data6[i].append(ps[i])
 
 class MainFormGUI:
     def __init__(self):
@@ -86,6 +124,8 @@ class MainFormGUI:
         self.table = ttk.Treeview(self.class_management_tab, columns=table_columns, show="headings", height=25)
         for col in table_columns:
             self.table.heading(col, text=col)
+        for row in result_list_Class:
+            self.table.insert("", "end", values=row)
         self.table.pack(fill="x")
         
         self.create_search_section(self.class_management_tab, "class")
@@ -132,10 +172,12 @@ class MainFormGUI:
         btnInPDF2.pack(side="right", padx=5, pady=5)
         btnXuatExcel2.pack(side="right", padx=5, pady=5)
         
-        table_columns2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING", "READING", "TOTAL GRADE"]
+        table_columns2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2 = ttk.Treeview(self.score_management_tab, columns=table_columns2, show="headings", height=25)
         for col in table_columns2:
             self.table2.heading(col, text=col)
+        for row in combined_data6:
+            self.table2.insert("", "end", values=row)
         self.table2.pack(fill="x")
         
         tree_scrollx2 = ttk.Scrollbar(self.score_management_tab, orient="horizontal", command=self.table2.xview)
@@ -203,6 +245,7 @@ class MainFormGUI:
         self.root.destroy()
     
     def XuatExcel3(self):
+        # Function to get data from a specified range
         def get_data_from_range(sheet, start_row, end_row, start_col, end_col):
             data = []
             for row in range(start_row, end_row + 1):
@@ -211,15 +254,18 @@ class MainFormGUI:
                     row_data.append(sheet[row, col])
                 data.append(row_data)
             return data
+
         # Download the specific Google Sheet
         ss = ezsheets.Spreadsheet("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
 
         # Specify the sheet, columns, and rows
+        # lag
         sheet_name = 'sheet 1'  # Change this to the specific sheet name
-        start_row = 1
-        end_row = 17
-        start_col = 1
-        end_col = 13
+        start_row = 1  # Skip the header row
+        end_row = 13
+        start_col = 3
+        test = worksheet.get_all_values()
+        end_col = len([row[1] for row in test] )
 
         sheet = ss[sheet_name]
         data = get_data_from_range(sheet, start_row, end_row, start_col, end_col)
@@ -262,8 +308,8 @@ class MainFormGUI:
             cell.border = thin_border
 
         # Write the data and apply borders
-        for row_idx, row_data in enumerate(data, start=3):
-            for col_idx, value in enumerate(row_data, start=1):
+        for col_idx, col_data in enumerate(data, start=1):
+            for row_idx, value in enumerate(col_data, start=3):
                 cell = ws.cell(row=row_idx, column=col_idx, value=value)
                 cell.border = thin_border
 
@@ -281,10 +327,13 @@ class MainFormGUI:
             adjusted_width = (max_length + 2)
             ws.column_dimensions[column].width = adjusted_width
 
+        # Generate unique file name with date and time
+        current_time = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
+        file_path = f'D:\\QLHS-{current_time}.xlsx'
+
         # Save the new Excel file
-        file_path = 'D:\\BookManagement.xlsx'
         wb.save(file_path)
-        messagebox.showinfo("Success", "Download the file successfully, please check your D drive!!")
+        messagebox.showinfo("Success", "Download the file successfully, please check your D drive!")
 
 if __name__ == "__main__":
     app = MainFormGUI()

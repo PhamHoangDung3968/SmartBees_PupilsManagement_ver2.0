@@ -264,7 +264,8 @@ class MainFormGUI:
         start_row = 1  # Skip the header row
         end_row = 13
         start_col = 3
-        end_col = 18
+        test = worksheet.get_all_values()
+        end_col = len([row[1] for row in test] )
 
         sheet = ss[sheet_name]
         data = get_data_from_range(sheet, start_row, end_row, start_col, end_col)
