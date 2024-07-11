@@ -25,11 +25,11 @@ class LoginGUI:
         self.Title.place(x=55, y=220)
         self.lb1 = tk.Label(self.panel, text="UserName", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb1.place(x=33, y=55)
-        self.tf1 = tk.Entry(self.panel)
+        self.tf1 = tk.Entry(self.panel, font=("cambria", 13, "bold"))
         self.tf1.place(x=33, y=108, width=357, height=30)
         self.lb2 = tk.Label(self.panel, text="Password", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb2.place(x=33, y=171)
-        self.tf2 = tk.Entry(self.panel, show="*")
+        self.tf2 = tk.Entry(self.panel, show="*", font=("cambria", 13, "bold"))
         self.tf2.place(x=33, y=224, width=357, height=30)
         self.btn1 = tk.Button(self.panel, text="Login", font=("cambria", 14), command=self.login, width=20, bg="#FBA834",fg="white" )
         self.btn1.place(x=106, y=299)
@@ -51,5 +51,5 @@ class LoginGUI:
         return username == "admin" and password == "123"
 
     def run(self):
+        self.root.resizable(False, False)
         self.root.mainloop()
-

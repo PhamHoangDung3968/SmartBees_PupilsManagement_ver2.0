@@ -70,4 +70,9 @@ ps = [row[45] for row in values_list_Score]
 combined_data6 = result_list_Score.copy() 
 for i in range(len(combined_data6)):
     combined_data6[i].append(ps[i])
-print(combined_data6)
+
+
+
+test = worksheet.get_all_values()
+end_col = len([row[15] for row in test] )
+print(end_col)
