@@ -39,10 +39,10 @@ class Add_NewClass:
         self.lb6.place(x=33, y=500)
         self.tf6 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
         self.tf6.place(x=33, y=545, width=430, height=30)
-        self.btn1 = tk.Button(self.panel, text="ADD NEW", font=("cambria", 14, "bold"),command=self.Add_book, width=20, bg="#FBA834",fg="black" )
+        self.btn1 = tk.Button(self.panel, text="ADD NEW", font=("cambria", 14, "bold"),command=self.Add_Class, width=20, bg="#FBA834",fg="black" )
         self.btn1.place(x=150, y=600)
 
-    def Add_book(self):
+    def Add_Class(self):
         worksheet3 = sht.worksheet("sheet 3")
         test = worksheet3.get_all_values()
         end_col = len([row[1] for row in test] )
