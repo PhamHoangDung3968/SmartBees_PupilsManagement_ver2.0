@@ -9,51 +9,49 @@ from openpyxl.utils import get_column_letter
 from datetime import datetime
 from Add_NewClass import Add_NewClass
 
-
-
+#connect to gg sheet
 gs = gspread.service_account("cre.json")
 sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
 worksheet = sht.sheet1
+
+#show data
 values_list_Book = worksheet.get_all_values()[2:]
 result_list_Book = [row[:5] for row in values_list_Book]
-
-values_list_Student = worksheet.get_all_values()[2:]
-result_list_Student = [row[22:29] for row in values_list_Student]
-
-values_list_Class = worksheet.get_all_values()[2:]
-result_list_Class = [row[14:20] for row in values_list_Class]
-
+worksheet2 = sht.worksheet("sheet 2")
+values_list_Student = worksheet2.get_all_values()[2:]
+result_list_Student = [row[:7] for row in values_list_Student]
+worksheet3 = sht.worksheet("sheet 3")
+values_list_Class = worksheet3.get_all_values()[2:]
+result_list_Class = [row[:6] for row in values_list_Class]
 values_list_Score = worksheet.get_all_values()[2:]
-result_list_Score = [row[22:21] for row in values_list_Class]
-
-
-
-result_list_Score = [row[22:24] for row in values_list_Score] 
-lop = [row[25] for row in values_list_Score]
+worksheet2 = sht.worksheet("sheet 2")
+values_list_Score = worksheet2.get_all_values()[2:]  
+result_list_Score = [row[:2] for row in values_list_Score] 
+lop = [row[3] for row in values_list_Score]
 combined_data = result_list_Score.copy()
 for i in range(len(combined_data)):
     combined_data[i].append(lop[i])
-teacher = [row[40] for row in values_list_Score]
+teacher = [row[18] for row in values_list_Score]
 combined_data1 = result_list_Score.copy() 
 for i in range(len(combined_data1)):
     combined_data1[i].append(teacher[i])
-listen = [row[41] for row in values_list_Score]
+listen = [row[19] for row in values_list_Score]
 combined_data2 = result_list_Score.copy() 
 for i in range(len(combined_data2)):
     combined_data2[i].append(listen[i])
-speak = [row[42] for row in values_list_Score]
+speak = [row[20] for row in values_list_Score]
 combined_data3 = result_list_Score.copy() 
 for i in range(len(combined_data3)):
     combined_data3[i].append(speak[i])
-rw = [row[43] for row in values_list_Score]
+rw = [row[21] for row in values_list_Score]
 combined_data4 = result_list_Score.copy() 
 for i in range(len(combined_data4)):
     combined_data4[i].append(rw[i])
-total = [row[44] for row in values_list_Score]
+total = [row[22] for row in values_list_Score]
 combined_data5 = result_list_Score.copy() 
 for i in range(len(combined_data5)):
     combined_data5[i].append(total[i])
-ps = [row[45] for row in values_list_Score]
+ps = [row[23] for row in values_list_Score]
 combined_data6 = result_list_Score.copy() 
 for i in range(len(combined_data6)):
     combined_data6[i].append(ps[i])
@@ -238,6 +236,7 @@ class MainFormGUI:
     def dangxuat(self):
         self.root.destroy()
     
+    #Xuất Excel
     def XuatExcel3(self):
         # Function to get data from a specified range
         def get_data_from_range(sheet, start_row, end_row, start_col, end_col):
@@ -345,12 +344,12 @@ class MainFormGUI:
 
         # Specify the sheet, columns, and rows
         # lag
-        sheet_name = 'sheet 1'  # Change this to the specific sheet name
-        start_row = 15  # Skip the header row
-        end_row = 21
+        sheet_name = 'sheet 3'  # Change this to the specific sheet name
+        start_row = 1  # Skip the header row
+        end_row = 7
         start_col = 3
-        test = worksheet.get_all_values()
-        end_col = len([row[15] for row in test] )
+        test = worksheet3.get_all_values()
+        end_col = len([row[1] for row in test] )
 
         sheet = ss[sheet_name]
         data = get_data_from_range(sheet, start_row, end_row, start_col, end_col)
@@ -434,12 +433,12 @@ class MainFormGUI:
 
         # Specify the sheet, columns, and rows
         # lag
-        sheet_name = 'sheet 1'  # Change this to the specific sheet name
-        start_row = 23  # Skip the header row
-        end_row = 45
+        sheet_name = 'sheet 2'  # Change this to the specific sheet name
+        start_row = 1  # Skip the header row
+        end_row = 23
         start_col = 3
-        test = worksheet.get_all_values()
-        end_col = len([row[23] for row in test] )
+        test = worksheet2.get_all_values()
+        end_col = len([row[1] for row in test] )
 
         sheet = ss[sheet_name]
         data = get_data_from_range(sheet, start_row, end_row, start_col, end_col)
@@ -452,7 +451,7 @@ class MainFormGUI:
         headers = [
             "ID", "FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "TEL", "ADDRESS", "PARENT NAME",	"ENROLCAMP",
             "MAIN CAMP", "TOTAL FEE", "MAIN FEE", "NEW COMER", "STARTING OFF MONTH", "STARTING QUIT MONTH", "CERTIFICATE",	
-            "PUBLIC SCHOOL", "SUB TEL", "STARTING TRANSFER MONTH", "TEACHER", "LISTENING", "SPEAKING"
+            "PUBLIC SCHOOL", "SUB TEL", "STARTING TRANSFER MONTH", "TEACHER", "LISTENING", "SPEAKING",
             "READING & WRITING", "TOTAL GRADE", "PERCENT"
         ]
 
