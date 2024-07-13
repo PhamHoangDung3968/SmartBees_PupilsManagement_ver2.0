@@ -7,7 +7,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, Border, Side, PatternFill
 from openpyxl.utils import get_column_letter
 from datetime import datetime
-from Add_NewClass import Add_NewClass
+from GUI.Add_NewClass import Add_NewClass
 
 #connect to gg sheet
 gs = gspread.service_account("cre.json")
