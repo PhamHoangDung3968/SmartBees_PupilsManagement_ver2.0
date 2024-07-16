@@ -127,7 +127,8 @@ class MainFormGUI:
         for row in result_list_Class:
             self.table.insert("", "end", values=row)
         self.table.pack(fill="x")
-        
+        self.table.bind("<ButtonRelease-1>", self.on_row_select)
+
         self.create_search_section(self.class_management_tab, "class")
 
     def create_student_management_tab(self):
@@ -153,6 +154,8 @@ class MainFormGUI:
         tree_scroll_y1 = ttk.Scrollbar(self.student_management_tab, orient="vertical", command=self.table1.yview)
         tree_scroll_y1.pack(side="right", fill="y")
         self.table1.configure(yscrollcommand=tree_scroll_y1.set)
+        self.table1.bind("<ButtonRelease-1>", self.on_row_select1)
+
         self.create_search_section(self.student_management_tab, "student")
 
     def create_score_management_tab(self):
@@ -175,7 +178,8 @@ class MainFormGUI:
         for row in combined_data6:
             self.table2.insert("", "end", values=row)
         self.table2.pack(fill="x")
-        
+        self.table2.bind("<ButtonRelease-1>", self.on_row_select2)
+
         tree_scrollx2 = ttk.Scrollbar(self.score_management_tab, orient="horizontal", command=self.table2.xview)
         tree_scrollx2.pack(fill="x")
         self.table2.configure(xscrollcommand=tree_scrollx2.set)
@@ -202,7 +206,8 @@ class MainFormGUI:
         for row in result_list_Book:
             self.table3.insert("", "end", values=row)
         self.table3.pack(fill="x")
-        
+        self.table3.bind("<ButtonRelease-1>", self.on_row_select3)
+
         tree_scrollx3 = ttk.Scrollbar(self.book_management_tab, orient="horizontal", command=self.table3.xview)
         tree_scrollx3.pack(fill="x")
         self.table3.configure(xscrollcommand=tree_scrollx3.set)
@@ -514,10 +519,61 @@ class MainFormGUI:
     def AddGUI_Class(self):
         AddNewClass = Add_NewClass()
         AddNewClass.run()
+
     def AddGUI_Book(self):
         AddNewBook = Add_NewBook()
         AddNewBook.run()
 
+    #select table
+    def on_row_select(self, event):
+        selected_item = self.table.selection()
+        if selected_item:
+            row_values = self.table.item(selected_item, "values")
+            row_list = row_values[0]
+            if row_list in worksheet3.col_values(1):
+                matched_row1 = worksheet3.find(row_values[0]).row
+                row_data1 = worksheet3.row_values(matched_row1)
+            print(row_data1)
+        else:
+            print("Value not found in the sheet.")
+
+    def on_row_select1(self, event):
+        selected_item1 = self.table1.selection()
+        if selected_item1:
+            row_values1 = self.table1.item(selected_item1, "values")
+            row_list1 = row_values1[0] 
+            if row_list1 in worksheet2.col_values(1):
+                matched_row = worksheet2.find(row_values1[0]).row
+                row_data = worksheet2.row_values(matched_row)
+            print(row_data)
+        else:
+            print("Value not found in the sheet.")
+
+    def on_row_select3(self, event):
+        selected_item3 = self.table3.selection()
+        if selected_item3:
+            row_values3 = self.table3.item(selected_item3, "values")
+            row_list3 = row_values3[0] 
+            if row_list3 in worksheet.col_values(1):
+                matched_row3 = worksheet.find(row_values3[0]).row
+                row_data3 = worksheet.row_values(matched_row3)
+            print(row_data3)
+        else:
+            print("Value not found in the sheet.")
+    
+    def on_row_select2(self, event):
+        selected_item2 = self.table2.selection()
+        if selected_item2:
+            row_values2 = self.table2.item(selected_item2, "values")
+            row_list2 = row_values2[0] 
+            if row_list2 in worksheet2.col_values(1):
+                matched_row2 = worksheet2.find(row_values2[0]).row
+                row_data2 = worksheet2.row_values(matched_row2)
+            print(row_data2)
+        else:
+            print("Value not found in the sheet.")
+
+            
 if __name__ == "__main__":
     app = MainFormGUI()
     app.run()
