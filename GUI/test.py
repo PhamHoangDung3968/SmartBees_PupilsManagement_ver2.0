@@ -21,39 +21,39 @@ values_list_Book = worksheet.get_all_values()[2:]
 result_list_Book = [row[:5] for row in values_list_Book]
 worksheet2 = sht.worksheet("sheet 2")
 values_list_Student = worksheet2.get_all_values()[2:]
-result_list_Student = [row[:7] for row in values_list_Student]
+result_list_Student = [row[:8] for row in values_list_Student]
 worksheet3 = sht.worksheet("sheet 3")
 values_list_Class = worksheet3.get_all_values()[2:]
 result_list_Class = [row[:6] for row in values_list_Class]
 values_list_Score = worksheet.get_all_values()[2:]
 worksheet2 = sht.worksheet("sheet 2")
 values_list_Score = worksheet2.get_all_values()[2:]  
-result_list_Score = [row[:2] for row in values_list_Score] 
-lop = [row[3] for row in values_list_Score]
+result_list_Score = [row[:3] for row in values_list_Score] 
+lop = [row[4] for row in values_list_Score]
 combined_data = result_list_Score.copy()
 for i in range(len(combined_data)):
     combined_data[i].append(lop[i])
-teacher = [row[18] for row in values_list_Score]
+teacher = [row[19] for row in values_list_Score]
 combined_data1 = result_list_Score.copy() 
 for i in range(len(combined_data1)):
     combined_data1[i].append(teacher[i])
-listen = [row[19] for row in values_list_Score]
+listen = [row[20] for row in values_list_Score]
 combined_data2 = result_list_Score.copy() 
 for i in range(len(combined_data2)):
     combined_data2[i].append(listen[i])
-speak = [row[20] for row in values_list_Score]
+speak = [row[21] for row in values_list_Score]
 combined_data3 = result_list_Score.copy() 
 for i in range(len(combined_data3)):
     combined_data3[i].append(speak[i])
-rw = [row[21] for row in values_list_Score]
+rw = [row[22] for row in values_list_Score]
 combined_data4 = result_list_Score.copy() 
 for i in range(len(combined_data4)):
     combined_data4[i].append(rw[i])
-total = [row[22] for row in values_list_Score]
+total = [row[23] for row in values_list_Score]
 combined_data5 = result_list_Score.copy() 
 for i in range(len(combined_data5)):
     combined_data5[i].append(total[i])
-ps = [row[23] for row in values_list_Score]
+ps = [row[24] for row in values_list_Score]
 combined_data6 = result_list_Score.copy() 
 for i in range(len(combined_data6)):
     combined_data6[i].append(ps[i])
@@ -144,7 +144,7 @@ class MainFormGUI:
         btnAddNew1.pack(side="right", padx=5, pady=5)
         btnXuatExcel1.pack(side="right", padx=5, pady=5)
         
-        table_columns1 = ["ID", "FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "TEL", "ADDRESS", "PARENT NAME"]
+        table_columns1 = ["ID", "STUDENT CODE","FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "TEL", "ADDRESS", "PARENT NAME"]
         self.table1 = ttk.Treeview(self.student_management_tab, columns=table_columns1, show="headings", height=25)
         for col in table_columns1:
             self.table1.heading(col, text=col)
@@ -171,7 +171,7 @@ class MainFormGUI:
         btnAddNew2.pack(side="right", padx=5, pady=5)
         btnXuatExcel2.pack(side="right", padx=5, pady=5)
         
-        table_columns2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
+        table_columns2 = ["ID", "STUDENT CODE","FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2 = ttk.Treeview(self.score_management_tab, columns=table_columns2, show="headings", height=25)
         for col in table_columns2:
             self.table2.heading(col, text=col)
@@ -442,7 +442,7 @@ class MainFormGUI:
         # lag
         sheet_name = 'sheet 2'  # Change this to the specific sheet name
         start_row = 1  # Skip the header row
-        end_row = 23
+        end_row = 25
         start_col = 3
         test = worksheet2.get_all_values()
         end_col = len([row[1] for row in test] )
@@ -456,7 +456,7 @@ class MainFormGUI:
 
         # Write headers and data to the new Excel sheet
         headers = [
-            "ID", "FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "TEL", "ADDRESS", "PARENT NAME",	"ENROLCAMP",
+            "ID","STUDENT CODE", "FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "TEL", "ADDRESS", "PARENT NAME",	"ENROLCAMP",
             "MAIN CAMP", "TOTAL FEE", "MAIN FEE", "NEW COMER", "STARTING OFF MONTH", "STARTING QUIT MONTH", "CERTIFICATE",	
             "PUBLIC SCHOOL", "SUB TEL", "STARTING TRANSFER MONTH", "TEACHER", "LISTENING", "SPEAKING",
             "READING & WRITING", "TOTAL GRADE", "PERCENT"
@@ -479,7 +479,7 @@ class MainFormGUI:
         title_cell.font = title_font
         title_cell.fill = title_fill
         title_cell.alignment = header_alignment
-        ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=23)
+        ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=25)
 
         # Write the headers and apply styles
         for col_idx, header in enumerate(headers, start=1):

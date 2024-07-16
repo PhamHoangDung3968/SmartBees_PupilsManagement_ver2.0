@@ -136,9 +136,15 @@ sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
 # result_list_Book2 = [row[:5] for row in values_list_Book]
 
 # print(result_list_Book2)
-worksheet3 = sht.worksheet("sheet 3")
-test = worksheet3.get_all_values()[2:]
-row_values =worksheet3.row_values(3)
-print(row_values)
+# worksheet3 = sht.worksheet("sheet 3")
+# test = worksheet3.get_all_values()[2:]
+# row_values =worksheet3.row_values(3)
+worksheet1 = sht.worksheet("sheet 1")
+# Assuming 'worksheet1' is the desired worksheet
+values = worksheet1.col_values(1)[2:]  # Get all values from column A
+max_value = max(values)  # Find the maximum value
+
+print(f"The maximum value in column A is: {max_value}")
+
 
 
