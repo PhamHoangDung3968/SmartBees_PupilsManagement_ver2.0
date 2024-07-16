@@ -56,13 +56,19 @@ class Add_NewClass:
         existing_names = [row[1] for row in test]
         if name in existing_names:
             messagebox.showerror("Error", "Lớp này đã được lưu")
+            self.tf1.delete(0, 'end')
         elif name == "":
             messagebox.showerror("Error", "Bạn chưa nhập tên lớp")
         else:
             new_row_values = [x,name,day,time,room,teacher,fteacher]
             worksheet3.append_row(new_row_values, value_input_option='RAW')
             messagebox.showinfo("Success", "Lưu thành công!")
-
+            self.tf1.delete(0, 'end')
+            self.tf2.delete(0, 'end')
+            self.tf3.delete(0, 'end')
+            self.tf4.delete(0, 'end')
+            self.tf5.delete(0, 'end')
+            self.tf6.delete(0, 'end')
         
     def run(self):
         self.root.resizable(False, False)

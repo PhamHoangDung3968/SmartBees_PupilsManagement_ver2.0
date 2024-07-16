@@ -8,6 +8,8 @@ from openpyxl.styles import Alignment, Font, Border, Side, PatternFill
 from openpyxl.utils import get_column_letter
 from datetime import datetime
 from Add_NewClass import Add_NewClass
+from Add_NewBook import Add_NewBook
+
 
 #connect to gg sheet
 gs = gspread.service_account("cre.json")
@@ -125,7 +127,8 @@ class MainFormGUI:
         for row in result_list_Class:
             self.table.insert("", "end", values=row)
         self.table.pack(fill="x")
-        
+        self.table.bind("<ButtonRelease-1>", self.on_row_select)
+
         self.create_search_section(self.class_management_tab, "class")
 
     def create_student_management_tab(self):
@@ -151,6 +154,8 @@ class MainFormGUI:
         tree_scroll_y1 = ttk.Scrollbar(self.student_management_tab, orient="vertical", command=self.table1.yview)
         tree_scroll_y1.pack(side="right", fill="y")
         self.table1.configure(yscrollcommand=tree_scroll_y1.set)
+        self.table1.bind("<ButtonRelease-1>", self.on_row_select1)
+
         self.create_search_section(self.student_management_tab, "student")
 
     def create_score_management_tab(self):
@@ -187,7 +192,7 @@ class MainFormGUI:
         button_frame = ttk.Frame(self.book_management_tab, style='TFrame')
         button_frame.pack(side="top", fill="x")
         
-        btnAddNew3 = ttk.Button(button_frame, text="Thêm mới", width=25, style='TButton')
+        btnAddNew3 = ttk.Button(button_frame, text="Thêm mới",command=self.AddGUI_Book, width=25, style='TButton')
         btnXuatExcel3 = ttk.Button(button_frame, text="Xuất excel", command=self.XuatExcel3, width=25, style='TButton')
         
         btnAddNew3.pack(side="right", padx=5, pady=5)
@@ -512,6 +517,24 @@ class MainFormGUI:
     def AddGUI_Class(self):
         AddNewClass = Add_NewClass()
         AddNewClass.run()
+    def AddGUI_Book(self):
+        AddNewBook = Add_NewBook()
+        AddNewBook.run()
+    # def on_row_select(self, event):
+    #     selected_item = self.table.selection()
+    #     if selected_item:
+    #         row_values = self.table.item(selected_item, "values")
+    #         row_list = list(row_values) 
+    #         print(row_list)
+    # def on_row_select1(self, event):
+    #     selected_item1 = self.table1.selection()
+    #     if selected_item1:
+    #         row_values1 = self.table1.item(selected_item1, "values")
+    #         row_list1 = list(row_values1) 
+    #         print(row_list1)
+
+
+
 
 if __name__ == "__main__":
     app = MainFormGUI()

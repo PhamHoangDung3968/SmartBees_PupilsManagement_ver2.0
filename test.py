@@ -137,6 +137,6 @@ sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
 
 # print(result_list_Book2)
 worksheet3 = sht.worksheet("sheet 3")
-test = worksheet3.get_all_values()
-existing_names = [row[1] for row in test]
-print(existing_names)
+test = worksheet3.get_all_values()[2:]
+row_values =worksheet3.row_values(3)
+print(row_values)

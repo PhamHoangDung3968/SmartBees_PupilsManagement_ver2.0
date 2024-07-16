@@ -77,29 +77,48 @@ class Add_NewBook:
         self.tf12.place(x=750, y=530, width=200, height=30)
 
 
-        self.btn1 = tk.Button(self.panel, text="ADD NEW", font=("cambria", 14, "bold"), width=20, bg="#FBA834",fg="black" )
+        self.btn1 = tk.Button(self.panel, text="ADD NEW", font=("cambria", 14, "bold"),command=self.Add_Book, width=20, bg="#FBA834",fg="black" )
         self.btn1.place(x=400, y=600)
 
-    # def Add_Class(self):
-    #     worksheet3 = sht.worksheet("sheet 3")
-    #     test = worksheet3.get_all_values()
-    #     end_col = len([row[1] for row in test] )
-    #     x= end_col-2+1
-    #     name = self.tf1.get()
-    #     day = self.tf2.get()
-    #     time = self.tf3.get()
-    #     room = int(self.tf4.get())
-    #     teacher = self.tf5.get()
-    #     fteacher = self.tf6.get()
-    #     existing_names = [row[1] for row in test]
-    #     if name in existing_names:
-    #         messagebox.showerror("Error", "Lớp này đã được lưu")
-    #     elif name == "":
-    #         messagebox.showerror("Error", "Bạn chưa nhập tên lớp")
-    #     else:
-    #         new_row_values = [x,name,day,time,room,teacher,fteacher]
-    #         worksheet3.append_row(new_row_values, value_input_option='RAW')
-    #         messagebox.showinfo("Success", "Lưu thành công!")
+    def Add_Book(self):
+        worksheet1 = sht.worksheet("sheet 1")
+        test = worksheet1.get_all_values()
+        end_col = len([row[1] for row in test] )
+        x= end_col-2+1
+        cl = self.tf1.get()
+        mb = self.tf2.get()
+        sk1 = self.tf3.get()
+        sk2 = self.tf4.get()
+        sk3 = self.tf5.get()
+        sk4 = self.tf6.get()
+        vb = self.tf7.get()
+        gb = self.tf8.get()
+        tb = self.tf9.get()
+        p = self.tf10.get()
+        vm = self.tf11.get()
+        pc = self.tf12.get()
+        existing_cls = [row[1] for row in test]
+        if cl in existing_cls:
+            messagebox.showerror("Error", "Cấp độ này đã được lưu")
+            self.tf1.delete(0, 'end')
+        elif cl == "":
+            messagebox.showerror("Error", "Bạn chưa nhập cấp độ")
+        else:
+            new_row_values = [x,cl,mb,sk1,sk2,sk3,sk4,vb,gb,tb,p,vm,pc]
+            worksheet1.append_row(new_row_values, value_input_option='RAW')
+            messagebox.showinfo("Success", "Lưu thành công!")
+            self.tf1.delete(0, 'end')
+            self.tf2.delete(0, 'end')
+            self.tf3.delete(0, 'end')
+            self.tf4.delete(0, 'end')
+            self.tf5.delete(0, 'end')
+            self.tf6.delete(0, 'end')
+            self.tf7.delete(0, 'end')
+            self.tf8.delete(0, 'end')
+            self.tf9.delete(0, 'end')
+            self.tf10.delete(0, 'end')
+            self.tf11.delete(0, 'end')
+            self.tf12.delete(0, 'end')
 
         
     def run(self):

@@ -1,8 +1,12 @@
 import tkinter as tk
 from tkinter import messagebox
 import gspread
+from tkinter import ttk
 gs = gspread.service_account("cre.json")
 sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+worksheet3 = sht.worksheet("sheet 3")
+values_list_Class = worksheet3.get_all_values()[2:]
+result_list_Class = [row[1] for row in values_list_Class]
 class Add_NewStudent:
     def __init__(self):
         
@@ -46,11 +50,6 @@ class Add_NewStudent:
         self.tf6 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
         self.tf6.place(x=370, y=320, width=300, height=30)
 
-        self.lb7 = tk.Label(self.panel, text="Vocab book", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb7.place(x=33, y=375)
-        self.tf7 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
-        self.tf7.place(x=33, y=420, width=300, height=30)
-
         self.lb8 = tk.Label(self.panel, text="New Comer", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb8.place(x=370, y=375)
         self.tf8 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
@@ -80,8 +79,11 @@ class Add_NewStudent:
 
         self.lb13 = tk.Label(self.panel, text="Main class", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb13.place(x=700, y=60)
-        self.tf13 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
+        self.tf13 = ttk.Combobox(self.panel, font=("cambria", 13, "bold"))
+        self.tf13['values'] = result_list_Class
+        self.tf13.current(0)
         self.tf13.place(x=700, y=108, width=240, height=30)
+
 
         self.lb14 = tk.Label(self.panel, text="Parent name", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb14.place(x=1000, y=60)
@@ -134,29 +136,72 @@ class Add_NewStudent:
 
         
 
-        self.btn1 = tk.Button(self.panel, text="ADD NEW", font=("cambria", 14, "bold"), width=20, bg="#FBA834",fg="black" )
+        self.btn1 = tk.Button(self.panel, text="ADD NEW", font=("cambria", 14, "bold"),command=self.Add_Student, width=20, bg="#FBA834",fg="black" )
         self.btn1.place(x=520, y=600)
 
-    # def Add_Class(self):
-    #     worksheet3 = sht.worksheet("sheet 3")
-    #     test = worksheet3.get_all_values()
-    #     end_col = len([row[1] for row in test] )
-    #     x= end_col-2+1
-    #     name = self.tf1.get()
-    #     day = self.tf2.get()
-    #     time = self.tf3.get()
-    #     room = int(self.tf4.get())
-    #     teacher = self.tf5.get()
-    #     fteacher = self.tf6.get()
-    #     existing_names = [row[1] for row in test]
-    #     if name in existing_names:
-    #         messagebox.showerror("Error", "Lớp này đã được lưu")
-    #     elif name == "":
-    #         messagebox.showerror("Error", "Bạn chưa nhập tên lớp")
-    #     else:
-    #         new_row_values = [x,name,day,time,room,teacher,fteacher]
-    #         worksheet3.append_row(new_row_values, value_input_option='RAW')
-    #         messagebox.showinfo("Success", "Lưu thành công!")
+    def Add_Student(self):
+        worksheet2 = sht.worksheet("sheet 2")
+        test = worksheet2.get_all_values()
+        end_col = len([row[1] for row in test] )
+        x= end_col-2+1
+        fn = self.tf1.get()
+        b = self.tf2.get()
+        a = self.tf3.get()
+        som = self.tf4.get()
+        ps = self.tf5.get()
+        stm = self.tf6.get()
+        nc = self.tf8.get()
+        t = self.tf9.get()
+        e = self.tf10.get()
+        mc = self.tf11.get()
+        tf = self.tf12.get()
+        mcla = self.tf13.get()
+        pn = self.tf14.get()
+        sqm = self.tf15.get()
+        tea = self.tf16.get()
+        st = self.tf17.get()
+        mf = self.tf18.get()
+        c = self.tf19.get()
+        rw = float(self.tf20.get())
+        lis = float(self.tf21.get())
+        spe = float(self.tf22.get())
+        total = rw + lis + spe
+        percent = str(round((total/15)*100,2))+"%"
+        
+        existing_fn = [row[:3] for row in test]
+        if fn and b in existing_fn:
+            messagebox.showerror("Error", "Học sinh này đã được lưu")
+            self.tf1.delete(0, 'end')
+            self.tf2.delete(0, 'end')
+
+        elif fn == "" or b =="":
+            messagebox.showerror("Error", "Bạn chưa nhập cấp độ")
+        else:
+            new_row_values = [x, fn, b, a, som, ps, stm, nc, t, e, mc, tf, mcla, pn, sqm, tea, st, mf , c, rw, lis, spe, total, percent]
+            worksheet2.append_row(new_row_values, value_input_option='RAW')
+            messagebox.showinfo("Success", "Lưu thành công!")
+            self.tf1.delete(0, 'end')
+            self.tf2.delete(0, 'end')
+            self.tf3.delete(0, 'end')
+            self.tf4.delete(0, 'end')
+            self.tf5.delete(0, 'end')
+            self.tf6.delete(0, 'end')
+            self.tf8.delete(0, 'end')
+            self.tf9.delete(0, 'end')
+            self.tf10.delete(0, 'end')
+            self.tf11.delete(0, 'end')
+            self.tf12.delete(0, 'end')
+
+            self.tf13.delete(0, 'end')
+            self.tf14.delete(0, 'end')
+            self.tf15.delete(0, 'end')
+            self.tf16.delete(0, 'end')
+            self.tf17.delete(0, 'end')
+            self.tf18.delete(0, 'end')
+            self.tf19.delete(0, 'end')
+            self.tf20.delete(0, 'end')
+            self.tf21.delete(0, 'end')
+            self.tf22.delete(0, 'end')
 
         
     def run(self):

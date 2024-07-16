@@ -8,6 +8,8 @@ from openpyxl.styles import Alignment, Font, Border, Side, PatternFill
 from openpyxl.utils import get_column_letter
 from datetime import datetime
 from GUI.Add_NewClass import Add_NewClass
+from GUI.Add_NewBook import Add_NewBook
+
 
 #connect to gg sheet
 gs = gspread.service_account("cre.json")
@@ -187,7 +189,7 @@ class MainFormGUI:
         button_frame = ttk.Frame(self.book_management_tab, style='TFrame')
         button_frame.pack(side="top", fill="x")
         
-        btnAddNew3 = ttk.Button(button_frame, text="Thêm mới", width=25, style='TButton')
+        btnAddNew3 = ttk.Button(button_frame, text="Thêm mới",command=self.AddGUI_Book, width=25, style='TButton')
         btnXuatExcel3 = ttk.Button(button_frame, text="Xuất excel", command=self.XuatExcel3, width=25, style='TButton')
         
         btnAddNew3.pack(side="right", padx=5, pady=5)
@@ -512,6 +514,9 @@ class MainFormGUI:
     def AddGUI_Class(self):
         AddNewClass = Add_NewClass()
         AddNewClass.run()
+    def AddGUI_Book(self):
+        AddNewBook = Add_NewBook()
+        AddNewBook.run()
 
 if __name__ == "__main__":
     app = MainFormGUI()
