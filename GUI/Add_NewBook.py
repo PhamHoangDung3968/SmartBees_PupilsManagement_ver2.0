@@ -83,8 +83,8 @@ class Add_NewBook:
     def Add_Book(self):
         worksheet1 = sht.worksheet("sheet 1")
         test = worksheet1.get_all_values()
-        end_col = len([row[1] for row in test] )
-        x= end_col-2+1
+        values = worksheet1.col_values(1)[2:]
+        max_value = max(list(map(int, values))) + 1  
         cl = self.tf1.get()
         mb = self.tf2.get()
         sk1 = self.tf3.get()
@@ -104,7 +104,7 @@ class Add_NewBook:
         elif cl == "":
             messagebox.showerror("Error", "Bạn chưa nhập cấp độ")
         else:
-            new_row_values = [x,cl,mb,sk1,sk2,sk3,sk4,vb,gb,tb,p,vm,pc]
+            new_row_values = [max_value,cl,mb,sk1,sk2,sk3,sk4,vb,gb,tb,p,vm,pc]
             worksheet1.append_row(new_row_values, value_input_option='RAW')
             messagebox.showinfo("Success", "Lưu thành công!")
             self.tf1.delete(0, 'end')

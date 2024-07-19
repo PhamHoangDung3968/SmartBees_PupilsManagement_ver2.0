@@ -45,8 +45,8 @@ class Add_NewClass:
     def Add_Class(self):
         worksheet3 = sht.worksheet("sheet 3")
         test = worksheet3.get_all_values()
-        end_col = len([row[1] for row in test] )
-        x= end_col-2+1
+        values = worksheet3.col_values(1)[2:]
+        max_value = max(list(map(int, values))) + 1  
         name = self.tf1.get()
         day = self.tf2.get()
         time = self.tf3.get()
@@ -60,7 +60,7 @@ class Add_NewClass:
         elif name == "":
             messagebox.showerror("Error", "Bạn chưa nhập tên lớp")
         else:
-            new_row_values = [x,name,day,time,room,teacher,fteacher]
+            new_row_values = [max_value,name,day,time,room,teacher,fteacher]
             worksheet3.append_row(new_row_values, value_input_option='RAW')
             messagebox.showinfo("Success", "Lưu thành công!")
             self.tf1.delete(0, 'end')

@@ -49,6 +49,11 @@ class Add_NewStudent:
         self.lb6.place(x=370, y=270)
         self.tf6 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
         self.tf6.place(x=370, y=320, width=300, height=30)
+        
+        self.lb7 = tk.Label(self.panel, text="Student code", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb7.place(x=33, y=375)
+        self.tf7 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
+        self.tf7.place(x=33, y=420, width=430, height=30)
 
         self.lb8 = tk.Label(self.panel, text="New Comer", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb8.place(x=370, y=375)
@@ -142,10 +147,11 @@ class Add_NewStudent:
     def Add_Student(self):
         worksheet2 = sht.worksheet("sheet 2")
         test = worksheet2.get_all_values()
-        end_col = len([row[1] for row in test] )
-        x= end_col-2+1
+        values = worksheet2.col_values(1)[2:]
+        max_value = max(list(map(int, values))) + 1  
         fn = self.tf1.get()
         b = self.tf2.get()
+        stc = self.tf7.get()
         a = self.tf3.get()
         som = self.tf4.get()
         ps = self.tf5.get()
@@ -177,7 +183,7 @@ class Add_NewStudent:
         elif fn == "" or b =="":
             messagebox.showerror("Error", "Bạn chưa nhập cấp độ")
         else:
-            new_row_values = [x, fn, b, a, som, ps, stm, nc, t, e, mc, tf, mcla, pn, sqm, tea, st, mf , c, rw, lis, spe, total, percent]
+            new_row_values = [max_value, stc ,fn, b, mcla, t, a, pn, e, mc, tf,mf, nc, som,sqm,c, ps,st, stm, tea,lis,spe, rw,total, percent]
             worksheet2.append_row(new_row_values, value_input_option='RAW')
             messagebox.showinfo("Success", "Lưu thành công!")
             self.tf1.delete(0, 'end')

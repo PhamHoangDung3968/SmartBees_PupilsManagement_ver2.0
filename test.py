@@ -142,9 +142,9 @@ sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
 worksheet1 = sht.worksheet("sheet 1")
 # Assuming 'worksheet1' is the desired worksheet
 values = worksheet1.col_values(1)[2:]  # Get all values from column A
-max_value = max(values)  # Find the maximum value
+max_value = max(list(map(int, values)))  # Find the maximum value
 
-print(f"The maximum value in column A is: {max_value}")
+print(max_value)
 
 
 

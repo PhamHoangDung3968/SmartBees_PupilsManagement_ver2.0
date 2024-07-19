@@ -127,7 +127,7 @@ class MainFormGUI:
         for row in result_list_Class:
             self.table.insert("", "end", values=row)
         self.table.pack(fill="x")
-        self.table.bind("<ButtonRelease-1>", self.on_row_select)
+        self.table.bind("<Double-1>", self.on_row_select)
 
         self.create_search_section(self.class_management_tab, "class")
 
@@ -154,7 +154,7 @@ class MainFormGUI:
         tree_scroll_y1 = ttk.Scrollbar(self.student_management_tab, orient="vertical", command=self.table1.yview)
         tree_scroll_y1.pack(side="right", fill="y")
         self.table1.configure(yscrollcommand=tree_scroll_y1.set)
-        self.table1.bind("<ButtonRelease-1>", self.on_row_select1)
+        self.table1.bind("<Double-1>", self.on_row_select1)
 
         self.create_search_section(self.student_management_tab, "student")
 
@@ -178,7 +178,7 @@ class MainFormGUI:
         for row in combined_data6:
             self.table2.insert("", "end", values=row)
         self.table2.pack(fill="x")
-        self.table2.bind("<ButtonRelease-1>", self.on_row_select2)
+        self.table2.bind("<Double-1>", self.on_row_select2)
 
         tree_scrollx2 = ttk.Scrollbar(self.score_management_tab, orient="horizontal", command=self.table2.xview)
         tree_scrollx2.pack(fill="x")
@@ -206,7 +206,7 @@ class MainFormGUI:
         for row in result_list_Book:
             self.table3.insert("", "end", values=row)
         self.table3.pack(fill="x")
-        self.table3.bind("<ButtonRelease-1>", self.on_row_select3)
+        self.table3.bind("<Double-1>", self.on_row_select3)
 
         tree_scrollx3 = ttk.Scrollbar(self.book_management_tab, orient="horizontal", command=self.table3.xview)
         tree_scrollx3.pack(fill="x")
