@@ -9,6 +9,7 @@ from openpyxl.utils import get_column_letter
 from datetime import datetime
 from Add_NewClass import Add_NewClass
 from Add_NewBook import Add_NewBook
+from Add_NewStudent import Add_NewStudent
 
 
 #connect to gg sheet
@@ -21,39 +22,39 @@ values_list_Book = worksheet.get_all_values()[2:]
 result_list_Book = [row[:5] for row in values_list_Book]
 worksheet2 = sht.worksheet("sheet 2")
 values_list_Student = worksheet2.get_all_values()[2:]
-result_list_Student = [row[:8] for row in values_list_Student]
+result_list_Student = [row[:7] for row in values_list_Student]
 worksheet3 = sht.worksheet("sheet 3")
 values_list_Class = worksheet3.get_all_values()[2:]
-result_list_Class = [row[:6] for row in values_list_Class]
+result_list_Class = [row[:7] for row in values_list_Class]
 values_list_Score = worksheet.get_all_values()[2:]
 worksheet2 = sht.worksheet("sheet 2")
 values_list_Score = worksheet2.get_all_values()[2:]  
-result_list_Score = [row[:3] for row in values_list_Score] 
-lop = [row[4] for row in values_list_Score]
+result_list_Score = [row[:2] for row in values_list_Score] 
+lop = [row[3] for row in values_list_Score]
 combined_data = result_list_Score.copy()
 for i in range(len(combined_data)):
     combined_data[i].append(lop[i])
-teacher = [row[19] for row in values_list_Score]
+teacher = [row[18] for row in values_list_Score]
 combined_data1 = result_list_Score.copy() 
 for i in range(len(combined_data1)):
     combined_data1[i].append(teacher[i])
-listen = [row[20] for row in values_list_Score]
+listen = [row[19] for row in values_list_Score]
 combined_data2 = result_list_Score.copy() 
 for i in range(len(combined_data2)):
     combined_data2[i].append(listen[i])
-speak = [row[21] for row in values_list_Score]
+speak = [row[20] for row in values_list_Score]
 combined_data3 = result_list_Score.copy() 
 for i in range(len(combined_data3)):
     combined_data3[i].append(speak[i])
-rw = [row[22] for row in values_list_Score]
+rw = [row[21] for row in values_list_Score]
 combined_data4 = result_list_Score.copy() 
 for i in range(len(combined_data4)):
     combined_data4[i].append(rw[i])
-total = [row[23] for row in values_list_Score]
+total = [row[22] for row in values_list_Score]
 combined_data5 = result_list_Score.copy() 
 for i in range(len(combined_data5)):
     combined_data5[i].append(total[i])
-ps = [row[24] for row in values_list_Score]
+ps = [row[23] for row in values_list_Score]
 combined_data6 = result_list_Score.copy() 
 for i in range(len(combined_data6)):
     combined_data6[i].append(ps[i])
@@ -120,14 +121,14 @@ class MainFormGUI:
         btnAddNew.pack(side="right", padx=5, pady=5)
         btnXuatExcel.pack(side="right", padx=5, pady=5)
         
-        table_columns = ["CLASSNO", "MAIN CLASS", "STUDYING DAY", "STUDYING TIME", "ROOM", "TEACHER"]
+        table_columns = ["CLASSNO", "MAIN CLASS", "STUDYING DAY", "STUDYING TIME", "ROOM", "TEACHER", "FOREIGN TEACHER"]
         self.table = ttk.Treeview(self.class_management_tab, columns=table_columns, show="headings", height=25)
         for col in table_columns:
             self.table.heading(col, text=col)
         for row in result_list_Class:
             self.table.insert("", "end", values=row)
         self.table.pack(fill="x")
-        self.table.bind("<ButtonRelease-1>", self.on_row_select)
+        self.table.bind("<Double-1>", self.on_row_select)
 
         self.create_search_section(self.class_management_tab, "class")
 
@@ -138,13 +139,13 @@ class MainFormGUI:
         button_frame = ttk.Frame(self.student_management_tab, style='TFrame')
         button_frame.pack(side="top", fill="x")
         
-        btnAddNew1 = ttk.Button(button_frame, text="Thêm mới", width=25, style='TButton')
+        btnAddNew1 = ttk.Button(button_frame, text="Thêm mới",command=self.AddGUI_Student, width=25, style='TButton')
         btnXuatExcel1 = ttk.Button(button_frame, text="Xuất excel", command=self.XuatExcel12, width=25, style='TButton')
         
         btnAddNew1.pack(side="right", padx=5, pady=5)
         btnXuatExcel1.pack(side="right", padx=5, pady=5)
         
-        table_columns1 = ["ID", "STUDENT CODE","FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "TEL", "ADDRESS", "PARENT NAME"]
+        table_columns1 = ["ID", "FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "TEL", "ADDRESS", "PARENT NAME"]
         self.table1 = ttk.Treeview(self.student_management_tab, columns=table_columns1, show="headings", height=25)
         for col in table_columns1:
             self.table1.heading(col, text=col)
@@ -154,31 +155,29 @@ class MainFormGUI:
         tree_scroll_y1 = ttk.Scrollbar(self.student_management_tab, orient="vertical", command=self.table1.yview)
         tree_scroll_y1.pack(side="right", fill="y")
         self.table1.configure(yscrollcommand=tree_scroll_y1.set)
-        self.table1.bind("<ButtonRelease-1>", self.on_row_select1)
+        self.table1.bind("<Double-1>", self.on_row_select1)
 
+        tree_scrollx1 = ttk.Scrollbar(self.student_management_tab, orient="horizontal", command=self.table1.xview)
+        tree_scrollx1.pack(fill="x")
+        self.table1.configure(xscrollcommand=tree_scrollx1.set)
         self.create_search_section(self.student_management_tab, "student")
 
     def create_score_management_tab(self):
         self.score_management_tab = ttk.Frame(self.tab_control, style='TFrame')
         self.tab_control.add(self.score_management_tab, text="Quản lý điểm số")
-        
         button_frame = ttk.Frame(self.score_management_tab, style='TFrame')
         button_frame.pack(side="top", fill="x")
-        
-        btnAddNew2 = ttk.Button(button_frame, text="Thêm mới", width=25, style='TButton')
         btnXuatExcel2 = ttk.Button(button_frame, text="Xuất excel",command=self.XuatExcel12, width=25, style='TButton')
-        
-        btnAddNew2.pack(side="right", padx=5, pady=5)
         btnXuatExcel2.pack(side="right", padx=5, pady=5)
         
-        table_columns2 = ["ID", "STUDENT CODE","FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
+        table_columns2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2 = ttk.Treeview(self.score_management_tab, columns=table_columns2, show="headings", height=25)
         for col in table_columns2:
             self.table2.heading(col, text=col)
         for row in combined_data6:
             self.table2.insert("", "end", values=row)
         self.table2.pack(fill="x")
-        self.table2.bind("<ButtonRelease-1>", self.on_row_select2)
+        self.table2.bind("<Double-1>", self.on_row_select2)
 
         tree_scrollx2 = ttk.Scrollbar(self.score_management_tab, orient="horizontal", command=self.table2.xview)
         tree_scrollx2.pack(fill="x")
@@ -206,7 +205,7 @@ class MainFormGUI:
         for row in result_list_Book:
             self.table3.insert("", "end", values=row)
         self.table3.pack(fill="x")
-        self.table3.bind("<ButtonRelease-1>", self.on_row_select3)
+        self.table3.bind("<Double-1>", self.on_row_select3)
 
         tree_scrollx3 = ttk.Scrollbar(self.book_management_tab, orient="horizontal", command=self.table3.xview)
         tree_scrollx3.pack(fill="x")
@@ -442,7 +441,7 @@ class MainFormGUI:
         # lag
         sheet_name = 'sheet 2'  # Change this to the specific sheet name
         start_row = 1  # Skip the header row
-        end_row = 25
+        end_row = 24
         start_col = 3
         test = worksheet2.get_all_values()
         end_col = len([row[1] for row in test] )
@@ -456,7 +455,7 @@ class MainFormGUI:
 
         # Write headers and data to the new Excel sheet
         headers = [
-            "ID","STUDENT CODE", "FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "TEL", "ADDRESS", "PARENT NAME",	"ENROLCAMP",
+            "ID", "FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "TEL", "ADDRESS", "PARENT NAME",	"ENROLCAMP",
             "MAIN CAMP", "TOTAL FEE", "MAIN FEE", "NEW COMER", "STARTING OFF MONTH", "STARTING QUIT MONTH", "CERTIFICATE",	
             "PUBLIC SCHOOL", "SUB TEL", "STARTING TRANSFER MONTH", "TEACHER", "LISTENING", "SPEAKING",
             "READING & WRITING", "TOTAL GRADE", "PERCENT"
@@ -479,7 +478,7 @@ class MainFormGUI:
         title_cell.font = title_font
         title_cell.fill = title_fill
         title_cell.alignment = header_alignment
-        ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=25)
+        ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=24)
 
         # Write the headers and apply styles
         for col_idx, header in enumerate(headers, start=1):
@@ -523,18 +522,103 @@ class MainFormGUI:
     def AddGUI_Book(self):
         AddNewBook = Add_NewBook()
         AddNewBook.run()
+    
+    def AddGUI_Student(self):
+        AddNewStudent = Add_NewStudent()
+        AddNewStudent.run()
 
+    #select table
     def on_row_select(self, event):
         selected_item = self.table.selection()
         if selected_item:
             row_values = self.table.item(selected_item, "values")
             row_list = row_values[0]
             if row_list in worksheet3.col_values(1):
+                vitribandau = "A"+str(worksheet3.find(row_values[0]).row)
                 matched_row1 = worksheet3.find(row_values[0]).row
+
+                count_values = len(worksheet3.row_values(matched_row1))
                 row_data1 = worksheet3.row_values(matched_row1)
-            print(row_data1)
+                if len(row_data1)<=6:
+                    row_data1.extend([""] * (6 - len(row_data1) + 1))
+                char_to_num = dict()
+                letters = [chr(i) for i in range(65, 91)]
+                n = 30
+                mapping = {}
+                for i in range(1, n + 1):
+                    mapping[i] = letters[(i - 1) % 26]
+                vitrisua = vitribandau+":"+mapping[count_values]+str(matched_row1)
+            self.Edit_NewClass(row_data1,vitrisua)
+            # print(row_data1)
         else:
             print("Value not found in the sheet.")
+
+
+    def Edit_NewClass(self,row_data,vitrisua):
+        self.rootClass = tk.Tk()
+        self.rootClass.title("Edit class")
+        self.rootClass.geometry("520x680")
+        self.canvas1 = tk.Canvas(self.rootClass, width=self.rootClass.winfo_screenwidth(), height=self.rootClass.winfo_screenheight())
+        self.canvas1.pack(fill=tk.BOTH, expand=True)
+        self.panel1 = tk.Frame(self.canvas1, bd=4, relief="solid")
+        self.panel1.place(x=10, y=10, width=500, height=650)
+        self.lbl_addNewClass = tk.Label(self.panel1, text="Edit class", font=("cambria", 24, "bold"), fg="black")
+        self.lbl_addNewClass.place(x=180, y=10)
+        self.lb1 = tk.Label(self.panel1, text="Main class", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb1.place(x=33, y=60)
+        self.tf1 = tk.Entry(self.panel1,font=("cambria", 13, "bold"))
+        self.tf1.place(x=33, y=108, width=430, height=30)
+        self.lb2 = tk.Label(self.panel1, text="STUDYING DAY", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb2.place(x=33, y=171)
+        self.tf2 = tk.Entry(self.panel1,font=("cambria", 13, "bold"))
+        self.tf2.place(x=33, y=224, width=430, height=30)
+        self.lb3 = tk.Label(self.panel1, text="STUDYING TIME", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb3.place(x=33, y=290)
+        self.tf3 = tk.Entry(self.panel1, font=("cambria", 13, "bold"))
+        self.tf3.place(x=33, y=340, width=200, height=30)
+        self.lb4 = tk.Label(self.panel1, text="ROOM", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb4.place(x=260, y=290)
+        self.tf4 = tk.Entry(self.panel1, font=("cambria", 13, "bold"))
+        self.tf4.place(x=260, y=340, width=200, height=30)
+        self.lb5 = tk.Label(self.panel1, text="TEACHER", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb5.place(x=33, y=400)
+        self.tf5 = tk.Entry(self.panel1,font=("cambria", 13, "bold"))
+        self.tf5.place(x=33, y=445, width=430, height=30)
+        self.lb6 = tk.Label(self.panel1, text="FOREIGN TEACHER", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb6.place(x=33, y=500)
+        self.tf6 = tk.Entry(self.panel1,font=("cambria", 13, "bold"))
+        self.tf6.place(x=33, y=545, width=430, height=30)
+        self.tf1.insert(0, row_data[1])
+        self.tf2.insert(0, row_data[2])
+        self.tf3.insert(0, row_data[3])
+        self.tf4.insert(0, row_data[4])
+        self.tf5.insert(0, row_data[5])
+        self.tf6.insert(0, row_data[6])
+        def chinhsua():
+            name = self.tf1.get()
+            day = self.tf2.get()
+            time = self.tf3.get()
+            room = int(self.tf4.get())
+            teacher = self.tf5.get()
+            fteacher = self.tf6.get()
+            new_values = [int(row_data[0]),name,day,time,room,teacher,fteacher]
+            # worksheet3.update(values=[new_values], range_name=vitrisua)
+            try:
+                worksheet3.update(values=[new_values], range_name=vitrisua)
+                messagebox.showinfo("Thành công", "Cập nhật thành công!")
+
+            except Exception as e:
+                messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")
+        self.btn1 = tk.Button(self.panel1, text="EDIT NEW",command=chinhsua, font=("cambria", 14, "bold"), width=20, bg="#FBA834",fg="black" )
+        self.btn1.place(x=150, y=600)
+    
+        
+
+    
+        
+
+    
+
 
     def on_row_select1(self, event):
         selected_item1 = self.table1.selection()
@@ -544,10 +628,12 @@ class MainFormGUI:
             if row_list1 in worksheet2.col_values(1):
                 matched_row = worksheet2.find(row_values1[0]).row
                 row_data = worksheet2.row_values(matched_row)
-            print(row_data)
+            # print(row_data)
         else:
             print("Value not found in the sheet.")
-
+    
+    
+    
     def on_row_select3(self, event):
         selected_item3 = self.table3.selection()
         if selected_item3:
@@ -571,10 +657,6 @@ class MainFormGUI:
             print(row_data2)
         else:
             print("Value not found in the sheet.")
-
-            
-
-
 
 
 if __name__ == "__main__":

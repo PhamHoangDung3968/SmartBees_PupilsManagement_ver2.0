@@ -50,7 +50,7 @@ class Add_NewStudent:
         self.tf6 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
         self.tf6.place(x=370, y=320, width=300, height=30)
         
-        self.lb7 = tk.Label(self.panel, text="Student code", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb7 = tk.Label(self.panel, text="Parent name", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb7.place(x=33, y=375)
         self.tf7 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
         self.tf7.place(x=33, y=420, width=430, height=30)
@@ -88,13 +88,6 @@ class Add_NewStudent:
         self.tf13['values'] = result_list_Class
         self.tf13.current(0)
         self.tf13.place(x=700, y=108, width=240, height=30)
-
-
-        self.lb14 = tk.Label(self.panel, text="Parent name", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb14.place(x=1000, y=60)
-        self.tf14 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
-        self.tf14.place(x=1000, y=108, width=240, height=30)
-
 
         self.lb15 = tk.Label(self.panel, text="Starting quit month", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb15.place(x=700, y=160)
@@ -162,7 +155,6 @@ class Add_NewStudent:
         mc = self.tf11.get()
         tf = self.tf12.get()
         mcla = self.tf13.get()
-        pn = self.tf14.get()
         sqm = self.tf15.get()
         tea = self.tf16.get()
         st = self.tf17.get()
@@ -183,7 +175,7 @@ class Add_NewStudent:
         elif fn == "" or b =="":
             messagebox.showerror("Error", "Bạn chưa nhập cấp độ")
         else:
-            new_row_values = [max_value, stc ,fn, b, mcla, t, a, pn, e, mc, tf,mf, nc, som,sqm,c, ps,st, stm, tea,lis,spe, rw,total, percent]
+            new_row_values = [max_value ,fn, b, mcla, t, a, stc, e, mc, tf,mf, nc, som,sqm,c, ps,st, stm, tea,lis,spe, rw,total, percent]
             worksheet2.append_row(new_row_values, value_input_option='RAW')
             messagebox.showinfo("Success", "Lưu thành công!")
             self.tf1.delete(0, 'end')

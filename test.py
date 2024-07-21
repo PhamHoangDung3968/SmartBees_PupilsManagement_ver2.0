@@ -105,46 +105,43 @@ window.mainloop()
 
 
 
-import gspread
+# import gspread
+
 # gs = gspread.service_account("cre.json")
 # sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
-# worksheet = sht.worksheet("sheet 2")
-# # Thêm một hàng mới vào cuối bảng tính
-# test = worksheet.get_all_values()
-# end_col = len([row[1] for row in test] )
-# x= end_col-2+1
-# new_row_values = [x, 2, 3, 4, 5]  # Giá trị của hàng mới
-# worksheet.append_row(new_row_values, value_input_option='RAW')
-# values_list_Book = worksheet.get_all_values()[2:]
-# result_list_Book2 = [row[:5] for row in values_list_Book]
+# worksheet1 = sht.worksheet("sheet 3")
+# new_values = ["haha", "hehe", "New Value 3", "New Value 4"]
 
-# print(result_list_Book2)
+# # Update the second row
+# worksheet1.update(values=[new_values], range_name='A9:D9')
 
 
+# Tạo một dictionary để lưu trữ ánh xạ từ A-Z sang 1-26
+char_to_num = dict()
+for i, c in enumerate('ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
+    char_to_num[c] = i + 1
 
-# import gspread
-gs = gspread.service_account("cre.json")
-sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
-# worksheet = sht.worksheet("sheet 3")
-# # Thêm một hàng mới vào cuối bảng tính
-# test = worksheet.get_all_values()
-# end_col = len([row[1] for row in test] )
-# x= end_col-2+1
-# new_row_values = [x, 2, 3, 4, 5]  # Giá trị của hàng mới
-# worksheet.append_row(new_row_values, value_input_option='RAW')
-# values_list_Book = worksheet.get_all_values()[2:]
-# result_list_Book2 = [row[:5] for row in values_list_Book]
-
-# print(result_list_Book2)
-# worksheet3 = sht.worksheet("sheet 3")
-# test = worksheet3.get_all_values()[2:]
-# row_values =worksheet3.row_values(3)
-worksheet1 = sht.worksheet("sheet 1")
-# Assuming 'worksheet1' is the desired worksheet
-values = worksheet1.col_values(1)[2:]  # Get all values from column A
-max_value = max(list(map(int, values)))  # Find the maximum value
-
-print(max_value)
+# Ví dụ sử dụng
+char = 'C'
+num = char_to_num[char]
+# print(f"Ký tự '{char}' được gán số {num}")
 
 
+# Tạo một danh sách các chữ cái từ A đến Z
+# Tạo một danh sách các chữ cái từ A đến Z
+letters = [chr(i) for i in range(65, 91)]
+
+# Giá trị của n
+n = 30
+
+# Tạo một từ điển để gán số từ 1 đến n thành các chữ cái
+mapping = {}
+for i in range(1, n + 1):
+    # Sử dụng phép chia dư để lặp lại các chữ cái từ A đến Z
+    mapping[i] = letters[(i - 1) % 26]
+
+# In kết quả
+
+# Kiểm tra số 3 tương ứng với chữ cái gì
+print(f"Số 3 tương ứng với chữ cái: {mapping[3]}")
 
