@@ -37,7 +37,7 @@ window.mainloop()
 # from openpyxl.utils import get_column_letter
 
 # gs = gspread.service_account("cre.json")
-# sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+# sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 # worksheet2 = sht.worksheet("sheet 2")
 # values_list_Score = worksheet2.get_all_values()[2:]  
 # result_list_Score = [row[:2] for row in values_list_Score] 
@@ -82,7 +82,7 @@ window.mainloop()
 # gs = gspread.service_account("cre.json")
 
 # # Open the spreadsheet using the sheet key
-# sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+# sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 # worksheet = sht.sheet1
 
 # # Get the current data in columns A to F (modify these as needed)
@@ -108,7 +108,7 @@ window.mainloop()
 # import gspread
 
 # gs = gspread.service_account("cre.json")
-# sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+# sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 # worksheet1 = sht.worksheet("sheet 3")
 # new_values = ["haha", "hehe", "New Value 3", "New Value 4"]
 

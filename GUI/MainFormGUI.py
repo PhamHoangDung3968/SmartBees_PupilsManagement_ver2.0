@@ -14,7 +14,7 @@ from GUI.Add_NewStudent import Add_NewStudent
 
 #connect to gg sheet
 gs = gspread.service_account("cre.json")
-sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 worksheet = sht.sheet1
 
 #show data
@@ -255,7 +255,7 @@ class MainFormGUI:
             return data
 
         # Download the specific Google Sheet
-        ss = ezsheets.Spreadsheet("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+        ss = ezsheets.Spreadsheet("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 
         # Specify the sheet, columns, and rows
         # lag
@@ -346,7 +346,7 @@ class MainFormGUI:
             return data
 
         # Download the specific Google Sheet
-        ss = ezsheets.Spreadsheet("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+        ss = ezsheets.Spreadsheet("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 
         # Specify the sheet, columns, and rows
         # lag
@@ -435,7 +435,7 @@ class MainFormGUI:
             return data
 
         # Download the specific Google Sheet
-        ss = ezsheets.Spreadsheet("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+        ss = ezsheets.Spreadsheet("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 
         # Specify the sheet, columns, and rows
         # lag

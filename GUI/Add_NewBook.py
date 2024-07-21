@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import gspread
 gs = gspread.service_account("cre.json")
-sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 class Add_NewBook:
     def __init__(self):
         

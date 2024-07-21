@@ -1,7 +1,7 @@
 # import gspread
 
 # gs = gspread.service_account("cre.json")
-# sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+# sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 # value = sht.sheet1.acell("B1").value
 # # print(value)
 
@@ -22,7 +22,7 @@
 # import gspread
 
 # gs = gspread.service_account("cre.json")  # Assuming your credentials file is named "cre.json"
-# sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+# sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 # worksheet = sht.sheet1
 
 # # Get all values using `get_all_values()`
@@ -38,7 +38,7 @@
 # gs = gspread.service_account("cre.json")
 
 # # Mở bảng tính bằng cách sử dụng khóa của nó
-# sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+# sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 
 # # Lấy bảng tính đầu tiên (Sheet1)
 # worksheet = sht.sheet1
@@ -49,7 +49,7 @@
 
 '''
 import ezsheets
-ss = ezsheets.Spreadsheet("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+ss = ezsheets.Spreadsheet("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 ss.downloadAsExcel()
 '''
 
@@ -71,7 +71,7 @@ def get_data_from_range(sheet, start_row, end_row, start_col, end_col):
     return data
 
 # Download the specific Google Sheet
-ss = ezsheets.Spreadsheet("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+ss = ezsheets.Spreadsheet("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 
 # Specify the sheet, columns, and rows
 # lag

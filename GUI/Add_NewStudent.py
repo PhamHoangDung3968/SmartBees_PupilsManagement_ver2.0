@@ -3,7 +3,7 @@ from tkinter import messagebox
 import gspread
 from tkinter import ttk
 gs = gspread.service_account("cre.json")
-sht = gs.open_by_key("1RPL8Tv_JctB7icajUTBoEq1lMO8XYb3sxySdGHJGgvY")
+sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 worksheet3 = sht.worksheet("sheet 3")
 values_list_Class = worksheet3.get_all_values()[2:]
 result_list_Class = [row[1] for row in values_list_Class]
