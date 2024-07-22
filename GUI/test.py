@@ -71,15 +71,10 @@ class MainFormGUI:
         self.style = ttk.Style()
         self.style.configure('TFrame', background='#e6e6e6')
         self.style.configure('TButton', background='#cc0000', foreground='#cc0000', font=('Cambria', 12, 'bold'))
-        
         self.style.configure('TLabel', background='#e6e6e6', foreground='#007acc', font=('Cambria', 12, 'bold'))
-        
         self.style.configure('TEntry', background='#007acc', foreground='#007acc', font=('Cambria', 12))
-        
         self.style.configure('TNotebook.Tab', font=('Cambria', 14, 'bold'), background='#007acc', foreground='#007acc')
-        
         self.style.configure('TTreeview.Heading', font=('Cambria', 11, 'bold'), background='#007ACC', foreground='white')
-        
         self.style.configure('TTreeview', font=('Cambria', 11), background='#f5f5f5', foreground='#333333')
 
         # Main content frame
@@ -87,6 +82,14 @@ class MainFormGUI:
         self.content_frame.pack(fill="both", expand=True)
         self.tab_control = ttk.Notebook(self.content_frame)
         self.tab_control.pack(fill="both", expand=True)
+        
+        # Store entry widgets
+        self.entries = {
+            "class": {},
+            "student": {},
+            "score": {},
+            "book": {}
+        }
         
         # Class management tab
         self.create_class_management_tab()
@@ -99,6 +102,8 @@ class MainFormGUI:
         
         # Book management tab
         self.create_book_management_tab()
+
+        self.tab_control.bind("<<NotebookTabChanged>>", self.on_tab_change)
 
         # Logout button
         self.content_seach = ttk.Frame(self.root)
@@ -128,8 +133,8 @@ class MainFormGUI:
         for row in result_list_Class:
             self.table.insert("", "end", values=row)
         self.table.pack(fill="x")
-        self.table.bind("<Double-1>", self.on_row_select)
 
+        self.original_data_class = result_list_Class[:]
         self.create_search_section(self.class_management_tab, "class")
 
     def create_student_management_tab(self):
@@ -152,21 +157,25 @@ class MainFormGUI:
         for row in result_list_Student:
             self.table1.insert("", "end", values=row)
         self.table1.pack(fill="x")
+        
         tree_scroll_y1 = ttk.Scrollbar(self.student_management_tab, orient="vertical", command=self.table1.yview)
         tree_scroll_y1.pack(side="right", fill="y")
         self.table1.configure(yscrollcommand=tree_scroll_y1.set)
-        self.table1.bind("<Double-1>", self.on_row_select1)
 
         tree_scrollx1 = ttk.Scrollbar(self.student_management_tab, orient="horizontal", command=self.table1.xview)
         tree_scrollx1.pack(fill="x")
         self.table1.configure(xscrollcommand=tree_scrollx1.set)
+        
+        self.original_data_student = result_list_Student[:]
         self.create_search_section(self.student_management_tab, "student")
 
     def create_score_management_tab(self):
         self.score_management_tab = ttk.Frame(self.tab_control, style='TFrame')
         self.tab_control.add(self.score_management_tab, text="Quản lý điểm số")
+        
         button_frame = ttk.Frame(self.score_management_tab, style='TFrame')
         button_frame.pack(side="top", fill="x")
+        
         btnXuatExcel2 = ttk.Button(button_frame, text="Xuất excel",command=self.XuatExcel12, width=25, style='TButton')
         btnXuatExcel2.pack(side="right", padx=5, pady=5)
         
@@ -177,12 +186,12 @@ class MainFormGUI:
         for row in combined_data6:
             self.table2.insert("", "end", values=row)
         self.table2.pack(fill="x")
-        self.table2.bind("<Double-1>", self.on_row_select2)
-
+        
         tree_scrollx2 = ttk.Scrollbar(self.score_management_tab, orient="horizontal", command=self.table2.xview)
         tree_scrollx2.pack(fill="x")
         self.table2.configure(xscrollcommand=tree_scrollx2.set)
         
+        self.original_data_score = combined_data6[:]
         self.create_search_section(self.score_management_tab, "score")
 
     def create_book_management_tab(self):
@@ -205,8 +214,7 @@ class MainFormGUI:
         for row in result_list_Book:
             self.table3.insert("", "end", values=row)
         self.table3.pack(fill="x")
-        self.table3.bind("<Double-1>", self.on_row_select3)
-
+        
         tree_scrollx3 = ttk.Scrollbar(self.book_management_tab, orient="horizontal", command=self.table3.xview)
         tree_scrollx3.pack(fill="x")
         self.table3.configure(xscrollcommand=tree_scrollx3.set)
@@ -215,26 +223,107 @@ class MainFormGUI:
         tree_scroll_y3.pack(side="right", fill="y")
         self.table3.configure(yscrollcommand=tree_scroll_y3.set)
         
+        self.original_data_book = result_list_Book[:]
         self.create_search_section(self.book_management_tab, "book")
 
     def create_search_section(self, tab, type_):
         if type_ == "class":
-            fields = ["Giáo viên", "Phòng", "Lớp", "ID lớp"]
+            fields = ["TEACHER", "ROOM", "MAIN CLASS", "CLASSNO"]
         elif type_ == "student":
-            fields = ["Tên lớp", "Tên học sinh", "ID lớp"]
+            fields = ["MAIN CLASS", "FULL NAME", "ID"]
         elif type_ == "score":
-            fields = ["Giáo viên", "Lớp", "Tên học sinh", "ID"]
+            fields = ["TEACHER", "MAIN CLASS", "FULL NAME", "ID"]
         elif type_ == "book":
-            fields = ["Tên sách", "CAMBRIDGE LEVEL", "ID"]
+            fields = ["BOOK NAME", "CAMBRIDGE LEVEL", "ID"]
         
-        for field in fields:
+        self.entries[type_] = {}  # Use a dictionary to store entry widgets
+        for i, field in enumerate(fields):
+            lbl_name = f"lbl{i+1}"
+            tf_name = f"tf{i+1}"
+            
             lbl = ttk.Label(tab, text=f"Nhập {field}:", style='TLabel')
             lbl.pack(side="left", anchor="ne", padx=5, pady=5)
+            
             tf = ttk.Entry(tab, width=25, style='TEntry')
             tf.pack(side="left", anchor="ne", ipady=3, padx=5, pady=5)
-        
-        btnSearch = ttk.Button(tab, text="Tìm kiếm", width=25, style='TButton')
+            
+            # Store the widgets in the dictionary
+            self.entries[type_][lbl_name] = lbl
+            self.entries[type_][tf_name] = tf
+
+        btnSearch = ttk.Button(tab, text="Tìm kiếm", width=25, style='TButton', command=lambda t=type_: self.searching(t))
         btnSearch.pack(side="left", anchor="ne", ipady=3, padx=5, pady=5)
+
+    def searching(self, type_):
+        column_mapping = {
+            "class": {
+                "TEACHER": 5,
+                "ROOM": 4,
+                "MAIN CLASS": 1,
+                "CLASSNO": 0
+            },
+            "student": {
+                "MAIN CLASS": 3,
+                "FULL NAME": 1,
+                "ID": 0
+            },
+            "score": {
+                "TEACHER": 3,
+                "MAIN CLASS": 2,
+                "FULL NAME": 1,
+                "ID": 0
+            },
+            "book": {
+                "BOOK NAME": 2,
+                "CAMBRIDGE LEVEL": 1,
+                "ID": 0,
+            }
+        }
+        
+        search_criteria = {key: entry.get().lower() for key, entry in self.entries[type_].items() if 'tf' in key}
+        matching_rows = []
+
+        mapping = column_mapping[type_]
+
+        if type_ == "class":
+            data = result_list_Class
+            table = self.table
+        elif type_ == "student":
+            data = result_list_Student
+            table = self.table1
+        elif type_ == "score":
+            data = combined_data6
+            table = self.table2
+        elif type_ == "book":
+            data = result_list_Book
+            table = self.table3
+
+        for row in data:
+            if all(search_criteria[f'tf{index+1}'] in row[mapping[field]].lower() for index, field in enumerate(mapping)):
+                matching_rows.append(row)
+        
+        self.populate_table(table, matching_rows)
+        
+        if not matching_rows:
+            messagebox.showinfo("Thông báo", "Không tìm thấy dữ liệu khớp với các tiêu chí tìm kiếm đã nhập")
+
+    def populate_table(self, table, data):
+        for row in table.get_children():
+            table.delete(row)
+        for row in data:
+            table.insert("", "end", values=row)
+    
+    def on_tab_change(self, event):
+        selected_tab = self.tab_control.index(self.tab_control.select())
+        if selected_tab == self.tab_control.index(self.class_management_tab):
+            self.populate_table(self.table, self.original_data_class)
+        elif selected_tab == self.tab_control.index(self.student_management_tab):
+            self.populate_table(self.table1, self.original_data_student)
+        elif selected_tab == self.tab_control.index(self.score_management_tab):
+            self.populate_table(self.table2, self.original_data_score)
+        elif selected_tab == self.tab_control.index(self.book_management_tab):
+            self.populate_table(self.table3, self.original_data_book)
+    
 
     def run(self):
         self.root.mainloop()
@@ -527,32 +616,6 @@ class MainFormGUI:
         AddNewStudent = Add_NewStudent()
         AddNewStudent.run()
 
-    #select table
-    def on_row_select(self, event):
-        selected_item = self.table.selection()
-        if selected_item:
-            row_values = self.table.item(selected_item, "values")
-            row_list = row_values[0]
-            if row_list in worksheet3.col_values(1):
-                vitribandau = "A"+str(worksheet3.find(row_values[0]).row)
-                matched_row1 = worksheet3.find(row_values[0]).row
-
-                count_values = len(worksheet3.row_values(matched_row1))
-                row_data1 = worksheet3.row_values(matched_row1)
-                if len(row_data1)<=6:
-                    row_data1.extend([""] * (6 - len(row_data1) + 1))
-                char_to_num = dict()
-                letters = [chr(i) for i in range(65, 91)]
-                n = 30
-                mapping = {}
-                for i in range(1, n + 1):
-                    mapping[i] = letters[(i - 1) % 26]
-                vitrisua = vitribandau+":"+mapping[count_values]+str(matched_row1)
-            self.Edit_NewClass(row_data1,vitrisua)
-            # print(row_data1)
-        else:
-            print("Value not found in the sheet.")
-
 
     def Edit_NewClass(self,row_data,vitrisua):
         self.rootClass = tk.Tk()
@@ -612,51 +675,6 @@ class MainFormGUI:
         self.btn1 = tk.Button(self.panel1, text="EDIT NEW",command=chinhsua, font=("cambria", 14, "bold"), width=20, bg="#FBA834",fg="black" )
         self.btn1.place(x=150, y=600)
     
-        
-
-    
-        
-
-    
-
-
-    def on_row_select1(self, event):
-        selected_item1 = self.table1.selection()
-        if selected_item1:
-            row_values1 = self.table1.item(selected_item1, "values")
-            row_list1 = row_values1[0] 
-            if row_list1 in worksheet2.col_values(1):
-                matched_row = worksheet2.find(row_values1[0]).row
-                row_data = worksheet2.row_values(matched_row)
-            # print(row_data)
-        else:
-            print("Value not found in the sheet.")
-    
-    
-    
-    def on_row_select3(self, event):
-        selected_item3 = self.table3.selection()
-        if selected_item3:
-            row_values3 = self.table3.item(selected_item3, "values")
-            row_list3 = row_values3[0] 
-            if row_list3 in worksheet.col_values(1):
-                matched_row3 = worksheet.find(row_values3[0]).row
-                row_data3 = worksheet.row_values(matched_row3)
-            print(row_data3)
-        else:
-            print("Value not found in the sheet.")
-    
-    def on_row_select2(self, event):
-        selected_item2 = self.table2.selection()
-        if selected_item2:
-            row_values2 = self.table2.item(selected_item2, "values")
-            row_list2 = row_values2[0] 
-            if row_list2 in worksheet2.col_values(1):
-                matched_row2 = worksheet2.find(row_values2[0]).row
-                row_data2 = worksheet2.row_values(matched_row2)
-            print(row_data2)
-        else:
-            print("Value not found in the sheet.")
 
 
 if __name__ == "__main__":
