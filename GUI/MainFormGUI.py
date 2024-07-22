@@ -1,16 +1,17 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
+
 import gspread
 import ezsheets
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, Border, Side, PatternFill
 from openpyxl.utils import get_column_letter
 from datetime import datetime
+
 from GUI.Add_NewClass import Add_NewClass
 from GUI.Add_NewBook import Add_NewBook
 from GUI.Add_NewStudent import Add_NewStudent
-
 
 #connect to gg sheet
 gs = gspread.service_account("cre.json")
@@ -59,6 +60,8 @@ combined_data6 = result_list_Score.copy()
 for i in range(len(combined_data6)):
     combined_data6[i].append(ps[i])
 
+from EXCEL.Excel_creating import Excel_Create
+
 class MainFormGUI:
     def __init__(self):
         self.root = tk.Tk()
@@ -85,11 +88,17 @@ class MainFormGUI:
         
         # Store entry widgets
         self.entries = {
-            "class": {},
-            "student": {},
-            "score": {},
-            "book": {}
+            "class": [],
+            "student": [],
+            "score": [],
+            "book": []
         }
+        
+        # Original data storage
+        self.original_data_class = result_list_Class[:]
+        self.original_data_student = result_list_Student[:]
+        self.original_data_score = combined_data6[:]
+        self.original_data_book = result_list_Book[:]
         
         # Class management tab
         self.create_class_management_tab()
@@ -102,9 +111,7 @@ class MainFormGUI:
         
         # Book management tab
         self.create_book_management_tab()
-
-        self.tab_control.bind("<<NotebookTabChanged>>", self.on_tab_change)
-
+        
         # Logout button
         self.content_seach = ttk.Frame(self.root)
         self.content_seach.pack(fill="both", expand=True)
@@ -122,19 +129,19 @@ class MainFormGUI:
         # Buttons
         btnAddNew = ttk.Button(button_frame, text="Thêm mới", command=self.AddGUI_Class, width=25, style='TButton')
         btnXuatExcel = ttk.Button(button_frame, text="Xuất excel", command=self.XuatExcel, width=25, style='TButton')
+        btnReload = ttk.Button(button_frame, text="Reload", command=lambda: self.reload_tab("class"), width=25, style='TButton')
         
         btnAddNew.pack(side="right", padx=5, pady=5)
         btnXuatExcel.pack(side="right", padx=5, pady=5)
+        btnReload.pack(side="right", padx=5, pady=5)
         
         table_columns = ["CLASSNO", "MAIN CLASS", "STUDYING DAY", "STUDYING TIME", "ROOM", "TEACHER", "FOREIGN TEACHER"]
         self.table = ttk.Treeview(self.class_management_tab, columns=table_columns, show="headings", height=25)
         for col in table_columns:
             self.table.heading(col, text=col)
-        for row in result_list_Class:
-            self.table.insert("", "end", values=row)
+        self.populate_table(self.table, self.original_data_class)
         self.table.pack(fill="x")
 
-        self.original_data_class = result_list_Class[:]
         self.create_search_section(self.class_management_tab, "class")
 
     def create_student_management_tab(self):
@@ -146,18 +153,18 @@ class MainFormGUI:
         
         btnAddNew1 = ttk.Button(button_frame, text="Thêm mới",command=self.AddGUI_Student, width=25, style='TButton')
         btnXuatExcel1 = ttk.Button(button_frame, text="Xuất excel", command=self.XuatExcel12, width=25, style='TButton')
+        btnReload = ttk.Button(button_frame, text="Reload", command=lambda: self.reload_tab("student"), width=25, style='TButton')
         
         btnAddNew1.pack(side="right", padx=5, pady=5)
         btnXuatExcel1.pack(side="right", padx=5, pady=5)
+        btnReload.pack(side="right", padx=5, pady=5)
         
         table_columns1 = ["ID", "FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "TEL", "ADDRESS", "PARENT NAME"]
         self.table1 = ttk.Treeview(self.student_management_tab, columns=table_columns1, show="headings", height=25)
         for col in table_columns1:
             self.table1.heading(col, text=col)
-        for row in result_list_Student:
-            self.table1.insert("", "end", values=row)
+        self.populate_table(self.table1, self.original_data_student)
         self.table1.pack(fill="x")
-        
         tree_scroll_y1 = ttk.Scrollbar(self.student_management_tab, orient="vertical", command=self.table1.yview)
         tree_scroll_y1.pack(side="right", fill="y")
         self.table1.configure(yscrollcommand=tree_scroll_y1.set)
@@ -165,33 +172,29 @@ class MainFormGUI:
         tree_scrollx1 = ttk.Scrollbar(self.student_management_tab, orient="horizontal", command=self.table1.xview)
         tree_scrollx1.pack(fill="x")
         self.table1.configure(xscrollcommand=tree_scrollx1.set)
-        
-        self.original_data_student = result_list_Student[:]
         self.create_search_section(self.student_management_tab, "student")
 
     def create_score_management_tab(self):
         self.score_management_tab = ttk.Frame(self.tab_control, style='TFrame')
         self.tab_control.add(self.score_management_tab, text="Quản lý điểm số")
-        
         button_frame = ttk.Frame(self.score_management_tab, style='TFrame')
         button_frame.pack(side="top", fill="x")
-        
-        btnXuatExcel2 = ttk.Button(button_frame, text="Xuất excel",command=self.XuatExcel12, width=25, style='TButton')
+        btnXuatExcel2 = ttk.Button(button_frame, text="Xuất excel", command=self.XuatExcel12, width=25, style='TButton')
+        btnReload = ttk.Button(button_frame, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
         btnXuatExcel2.pack(side="right", padx=5, pady=5)
+        btnReload.pack(side="right", padx=5, pady=5)
         
         table_columns2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2 = ttk.Treeview(self.score_management_tab, columns=table_columns2, show="headings", height=25)
         for col in table_columns2:
             self.table2.heading(col, text=col)
-        for row in combined_data6:
-            self.table2.insert("", "end", values=row)
+        self.populate_table(self.table2, self.original_data_score)
         self.table2.pack(fill="x")
-        
+
         tree_scrollx2 = ttk.Scrollbar(self.score_management_tab, orient="horizontal", command=self.table2.xview)
         tree_scrollx2.pack(fill="x")
         self.table2.configure(xscrollcommand=tree_scrollx2.set)
         
-        self.original_data_score = combined_data6[:]
         self.create_search_section(self.score_management_tab, "score")
 
     def create_book_management_tab(self):
@@ -203,18 +206,19 @@ class MainFormGUI:
         
         btnAddNew3 = ttk.Button(button_frame, text="Thêm mới",command=self.AddGUI_Book, width=25, style='TButton')
         btnXuatExcel3 = ttk.Button(button_frame, text="Xuất excel", command=self.XuatExcel3, width=25, style='TButton')
+        btnReload = ttk.Button(button_frame, text="Reload", command=lambda: self.reload_tab("book"), width=25, style='TButton')
         
         btnAddNew3.pack(side="right", padx=5, pady=5)
         btnXuatExcel3.pack(side="right", padx=5, pady=5)
+        btnReload.pack(side="right", padx=5, pady=5)
         
         table_columns3 = ["ID", "CAMBRIDGE LEVEL", "BOOK NAME", "MAIN BOOK"]
         self.table3 = ttk.Treeview(self.book_management_tab, columns=table_columns3, show="headings", height=25)
         for col in table_columns3:
             self.table3.heading(col, text=col)
-        for row in result_list_Book:
-            self.table3.insert("", "end", values=row)
+        self.populate_table(self.table3, self.original_data_book)
         self.table3.pack(fill="x")
-        
+
         tree_scrollx3 = ttk.Scrollbar(self.book_management_tab, orient="horizontal", command=self.table3.xview)
         tree_scrollx3.pack(fill="x")
         self.table3.configure(xscrollcommand=tree_scrollx3.set)
@@ -223,14 +227,13 @@ class MainFormGUI:
         tree_scroll_y3.pack(side="right", fill="y")
         self.table3.configure(yscrollcommand=tree_scroll_y3.set)
         
-        self.original_data_book = result_list_Book[:]
         self.create_search_section(self.book_management_tab, "book")
 
     def create_search_section(self, tab, type_):
         if type_ == "class":
             fields = ["TEACHER", "ROOM", "MAIN CLASS", "CLASSNO"]
         elif type_ == "student":
-            fields = ["MAIN CLASS", "FULL NAME", "ID"]
+            fields = ["MAIN CLASS", "FULL NAME", "CLASSNO"]
         elif type_ == "score":
             fields = ["TEACHER", "MAIN CLASS", "FULL NAME", "ID"]
         elif type_ == "book":
@@ -253,8 +256,9 @@ class MainFormGUI:
 
         btnSearch = ttk.Button(tab, text="Tìm kiếm", width=25, style='TButton', command=lambda t=type_: self.searching(t))
         btnSearch.pack(side="left", anchor="ne", ipady=3, padx=5, pady=5)
-
+        
     def searching(self, type_):
+        # Define the column mappings for class management
         column_mapping = {
             "class": {
                 "TEACHER": 5,
@@ -283,22 +287,23 @@ class MainFormGUI:
         search_criteria = {key: entry.get().lower() for key, entry in self.entries[type_].items() if 'tf' in key}
         matching_rows = []
 
+        # Adjust the column_mapping based on type_
         mapping = column_mapping[type_]
 
         if type_ == "class":
-            data = result_list_Class
+            data_source = self.original_data_class
             table = self.table
         elif type_ == "student":
-            data = result_list_Student
+            data_source = self.original_data_student
             table = self.table1
         elif type_ == "score":
-            data = combined_data6
+            data_source = self.original_data_score
             table = self.table2
         elif type_ == "book":
-            data = result_list_Book
+            data_source = self.original_data_book
             table = self.table3
 
-        for row in data:
+        for row in data_source:
             if all(search_criteria[f'tf{index+1}'] in row[mapping[field]].lower() for index, field in enumerate(mapping)):
                 matching_rows.append(row)
         
@@ -313,17 +318,21 @@ class MainFormGUI:
         for row in data:
             table.insert("", "end", values=row)
     
-    def on_tab_change(self, event):
-        selected_tab = self.tab_control.index(self.tab_control.select())
-        if selected_tab == self.tab_control.index(self.class_management_tab):
+    def reload_tab(self, type_):
+        if type_ == "class":
             self.populate_table(self.table, self.original_data_class)
-        elif selected_tab == self.tab_control.index(self.student_management_tab):
+        elif type_ == "student":
             self.populate_table(self.table1, self.original_data_student)
-        elif selected_tab == self.tab_control.index(self.score_management_tab):
+        elif type_ == "score":
             self.populate_table(self.table2, self.original_data_score)
-        elif selected_tab == self.tab_control.index(self.book_management_tab):
+        elif type_ == "book":
             self.populate_table(self.table3, self.original_data_book)
-    
+
+        # Reset search entries
+        for entry in self.entries[type_].values():
+            if isinstance(entry, ttk.Entry):
+                entry.delete(0, tk.END)
+          
     
     def run(self):
         self.root.mainloop()
@@ -331,279 +340,20 @@ class MainFormGUI:
     def dangxuat(self):
         self.root.destroy()
     
-    #Xuất Excel
-    def XuatExcel3(self):
-        # Function to get data from a specified range
-        def get_data_from_range(sheet, start_row, end_row, start_col, end_col):
-            data = []
-            for row in range(start_row, end_row + 1):
-                row_data = []
-                for col in range(start_col, end_col + 1):
-                    row_data.append(sheet[row, col])
-                data.append(row_data)
-            return data
-
-        # Download the specific Google Sheet
-        ss = ezsheets.Spreadsheet("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
-
-        # Specify the sheet, columns, and rows
-        # lag
-        sheet_name = 'sheet 1'  # Change this to the specific sheet name
-        start_row = 1  # Skip the header row
-        end_row = 13
-        start_col = 3
-        test = worksheet.get_all_values()
-        end_col = len([row[1] for row in test] )
-
-        sheet = ss[sheet_name]
-        data = get_data_from_range(sheet, start_row, end_row, start_col, end_col)
-
-        # Create a new Excel file and write data to it
-        wb = Workbook()
-        ws = wb.active
-
-        # Write headers and data to the new Excel sheet
-        headers = [
-            "ID_BOOK", "CAMBRIDGE LEVEL", "PROGRESS", "MAIN BOOK", "SKILL BOOK 1",
-            "VOCAB BOOK", "SKILL BOOK 2", "SKILL BOOK 3", "SKILL BOOK 4",
-            "GRAMMAR BOOK", "TEST BOOK", "VIDEOS-MOVIES", "PICTURES-CARDS"
-        ]
-
-        # Define styles
-        header_font = Font(bold=True, color="000000")
-        header_alignment = Alignment(horizontal='center', vertical='center')
-        thin_border = Border(
-            left=Side(style='thin'), 
-            right=Side(style='thin'), 
-            top=Side(style='thin'), 
-            bottom=Side(style='thin')
-        )
-        title_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
-        title_font = Font(bold=True, size=14)
-
-        # Write the title and apply styles
-        title_cell = ws.cell(row=1, column=1, value="Quản Lý Sách")
-        title_cell.font = title_font
-        title_cell.fill = title_fill
-        title_cell.alignment = header_alignment
-        ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=13)
-
-        # Write the headers and apply styles
-        for col_idx, header in enumerate(headers, start=1):
-            cell = ws.cell(row=2, column=col_idx, value=header)
-            cell.font = header_font
-            cell.alignment = header_alignment
-            cell.border = thin_border
-
-        # Write the data and apply borders
-        for col_idx, col_data in enumerate(data, start=1):
-            for row_idx, value in enumerate(col_data, start=3):
-                cell = ws.cell(row=row_idx, column=col_idx, value=value)
-                cell.border = thin_border
-
-        # Adjust column widths to fit the content
-        for col in ws.iter_cols(min_row=1, max_row=ws.max_row, min_col=1, max_col=ws.max_column):
-            max_length = 0
-            column = get_column_letter(col[0].column)  # Get the column name
-            for cell in col:
-                if cell.value is not None:
-                    try:
-                        if len(str(cell.value)) > max_length:
-                            max_length = len(cell.value)
-                    except:
-                        pass
-            adjusted_width = (max_length + 2)
-            ws.column_dimensions[column].width = adjusted_width
-
-        # Generate unique file name with date and time
-        current_time = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
-        file_path = f'D:\\QLS-{current_time}.xlsx'
-
-        # Save the new Excel file
-        wb.save(file_path)
-        messagebox.showinfo("Success", "Download the file successfully, please check your D drive!")
-
+    
     def XuatExcel(self):
-        # Function to get data from a specified range
-        def get_data_from_range(sheet, start_row, end_row, start_col, end_col):
-            data = []
-            for row in range(start_row, end_row + 1):
-                row_data = []
-                for col in range(start_col, end_col + 1):
-                    row_data.append(sheet[row, col])
-                data.append(row_data)
-            return data
-
-        # Download the specific Google Sheet
-        ss = ezsheets.Spreadsheet("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
-
-        # Specify the sheet, columns, and rows
-        # lag
-        sheet_name = 'sheet 3'  # Change this to the specific sheet name
-        start_row = 1  # Skip the header row
-        end_row = 7
-        start_col = 3
-        test = worksheet3.get_all_values()
-        end_col = len([row[1] for row in test] )
-
-        sheet = ss[sheet_name]
-        data = get_data_from_range(sheet, start_row, end_row, start_col, end_col)
-
-        # Create a new Excel file and write data to it
-        wb = Workbook()
-        ws = wb.active
-
-        # Write headers and data to the new Excel sheet
-        headers = [
-            "CLASSNO", "MAIN CLASS", "STUDYING DAY", "STUDYING TIME", "ROOM", "TEACHER", "FOREIGN TEACHER"
-        ]
-
-        # Define styles
-        header_font = Font(bold=True, color="000000")
-        header_alignment = Alignment(horizontal='center', vertical='center')
-        thin_border = Border(
-            left=Side(style='thin'), 
-            right=Side(style='thin'), 
-            top=Side(style='thin'), 
-            bottom=Side(style='thin')
-        )
-        title_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
-        title_font = Font(bold=True, size=14)
-
-        # Write the title and apply styles
-        title_cell = ws.cell(row=1, column=1, value="Quản Lý Lớp Học")
-        title_cell.font = title_font
-        title_cell.fill = title_fill
-        title_cell.alignment = header_alignment
-        ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=7)
-
-        # Write the headers and apply styles
-        for col_idx, header in enumerate(headers, start=1):
-            cell = ws.cell(row=2, column=col_idx, value=header)
-            cell.font = header_font
-            cell.alignment = header_alignment
-            cell.border = thin_border
-
-        # Write the data and apply borders
-        for col_idx, col_data in enumerate(data, start=1):
-            for row_idx, value in enumerate(col_data, start=3):
-                cell = ws.cell(row=row_idx, column=col_idx, value=value)
-                cell.border = thin_border
-
-        # Adjust column widths to fit the content
-        for col in ws.iter_cols(min_row=1, max_row=ws.max_row, min_col=1, max_col=ws.max_column):
-            max_length = 0
-            column = get_column_letter(col[0].column)  # Get the column name
-            for cell in col:
-                if cell.value is not None:
-                    try:
-                        if len(str(cell.value)) > max_length:
-                            max_length = len(cell.value)
-                    except:
-                        pass
-            adjusted_width = (max_length + 2)
-            ws.column_dimensions[column].width = adjusted_width
-
-        # Generate unique file name with date and time
-        current_time = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
-        file_path = f'D:\\QLLH-{current_time}.xlsx'
-
-        # Save the new Excel file
-        wb.save(file_path)
-        messagebox.showinfo("Success", "Download the file successfully, please check your D drive!")
-
-    def XuatExcel12(self):
-        # Function to get data from a specified range
-        def get_data_from_range(sheet, start_row, end_row, start_col, end_col):
-            data = []
-            for row in range(start_row, end_row + 1):
-                row_data = []
-                for col in range(start_col, end_col + 1):
-                    row_data.append(sheet[row, col])
-                data.append(row_data)
-            return data
-
-        # Download the specific Google Sheet
-        ss = ezsheets.Spreadsheet("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
-
-        # Specify the sheet, columns, and rows
-        # lag
-        sheet_name = 'sheet 2'  # Change this to the specific sheet name
-        start_row = 1  # Skip the header row
-        end_row = 24
-        start_col = 3
-        test = worksheet2.get_all_values()
-        end_col = len([row[1] for row in test] )
-
-        sheet = ss[sheet_name]
-        data = get_data_from_range(sheet, start_row, end_row, start_col, end_col)
-
-        # Create a new Excel file and write data to it
-        wb = Workbook()
-        ws = wb.active
-
-        # Write headers and data to the new Excel sheet
-        headers = [
-            "ID", "FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "TEL", "ADDRESS", "PARENT NAME",	"ENROLCAMP",
-            "MAIN CAMP", "TOTAL FEE", "MAIN FEE", "NEW COMER", "STARTING OFF MONTH", "STARTING QUIT MONTH", "CERTIFICATE",	
-            "PUBLIC SCHOOL", "SUB TEL", "STARTING TRANSFER MONTH", "TEACHER", "LISTENING", "SPEAKING",
-            "READING & WRITING", "TOTAL GRADE", "PERCENT"
-        ]
-
-        # Define styles
-        header_font = Font(bold=True, color="000000")
-        header_alignment = Alignment(horizontal='center', vertical='center')
-        thin_border = Border(
-            left=Side(style='thin'), 
-            right=Side(style='thin'), 
-            top=Side(style='thin'), 
-            bottom=Side(style='thin')
-        )
-        title_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
-        title_font = Font(bold=True, size=14)
-
-        # Write the title and apply styles
-        title_cell = ws.cell(row=1, column=1, value="Quản Lý Lớp Học")
-        title_cell.font = title_font
-        title_cell.fill = title_fill
-        title_cell.alignment = header_alignment
-        ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=24)
-
-        # Write the headers and apply styles
-        for col_idx, header in enumerate(headers, start=1):
-            cell = ws.cell(row=2, column=col_idx, value=header)
-            cell.font = header_font
-            cell.alignment = header_alignment
-            cell.border = thin_border
-
-        # Write the data and apply borders
-        for col_idx, col_data in enumerate(data, start=1):
-            for row_idx, value in enumerate(col_data, start=3):
-                cell = ws.cell(row=row_idx, column=col_idx, value=value)
-                cell.border = thin_border
-
-        # Adjust column widths to fit the content
-        for col in ws.iter_cols(min_row=1, max_row=ws.max_row, min_col=1, max_col=ws.max_column):
-            max_length = 0
-            column = get_column_letter(col[0].column)  # Get the column name
-            for cell in col:
-                if cell.value is not None:
-                    try:
-                        if len(str(cell.value)) > max_length:
-                            max_length = len(cell.value)
-                    except:
-                        pass
-            adjusted_width = (max_length + 2)
-            ws.column_dimensions[column].width = adjusted_width
-
-        # Generate unique file name with date and time
-        current_time = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
-        file_path = f'D:\\QLHS-{current_time}.xlsx'
-
-        # Save the new Excel file
-        wb.save(file_path)
-        messagebox.showinfo("Success", "Download the file successfully, please check your D drive!")
+        Xuat1 = Excel_Create()
+        Xuat1.XuatExcel()
         
+    def XuatExcel12(self):
+        Xuat2 = Excel_Create()
+        Xuat2.XuatExcel12()
+    
+    def XuatExcel3(self):
+        Xuat3 = Excel_Create()
+        Xuat3.XuatExcel3()
+        
+      
     def AddGUI_Class(self):
         AddNewClass = Add_NewClass()
         AddNewClass.run()

@@ -37,7 +37,6 @@ class LoginGUI:
         username = self.tf1.get()
         password = self.tf2.get()
         if self.isValidCredentials(username, password):
-            messagebox.showinfo("Success", "Đăng nhập thành công")
             self.root.destroy()
             # Add your logic to open the MainFormGUI here
             mainForm = MainFormGUI()
