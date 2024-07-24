@@ -196,7 +196,7 @@ class MainFormGUI:
 
         tree_scrollx2 = ttk.Scrollbar(self.score_management_tab, orient="horizontal", command=self.table2.xview)
         tree_scrollx2.pack(fill="x")
-        self.table2.bind("<Double-1>", self.on_row_select2)
+        self.table2.bind("<Double-1>", self.on_row_select1)
         self.table2.configure(xscrollcommand=tree_scrollx2.set)
         
         self.create_search_section(self.score_management_tab, "score")
@@ -372,6 +372,8 @@ class MainFormGUI:
         AddNewStudent.run()
 
     #select table
+
+    #edit class
     def on_row_select(self, event):
         selected_item = self.table.selection()
         if selected_item:
@@ -386,57 +388,16 @@ class MainFormGUI:
                 if len(row_data1)<=6:
                     row_data1.extend([""] * (6 - len(row_data1) + 1))
                 char_to_num = dict()
+                row_data2 = len(row_data1)
                 letters = [chr(i) for i in range(65, 91)]
                 n = 30
                 mapping = {}
                 for i in range(1, n + 1):
                     mapping[i] = letters[(i - 1) % 26]
-                vitrisua = vitribandau+":"+mapping[count_values]+str(matched_row1)
+                vitrisua = vitribandau+":"+mapping[row_data2]+str(matched_row1)
             self.Edit_NewClass(row_data1,vitrisua)
-            # print(row_data1)
         else:
             print("Value not found in the sheet.")
-
-
-
-    def on_row_select1(self, event):
-        selected_item1 = self.table1.selection()
-        if selected_item1:
-            row_values1 = self.table1.item(selected_item1, "values")
-            row_list1 = row_values1[0] 
-            if row_list1 in worksheet2.col_values(1):
-                matched_row = worksheet2.find(row_values1[0]).row
-                row_data = worksheet2.row_values(matched_row)
-            # print(row_data)
-        else:
-            print("Value not found in the sheet.")
-    
-    
-    
-    def on_row_select3(self, event):
-        selected_item3 = self.table3.selection()
-        if selected_item3:
-            row_values3 = self.table3.item(selected_item3, "values")
-            row_list3 = row_values3[0] 
-            if row_list3 in worksheet.col_values(1):
-                matched_row3 = worksheet.find(row_values3[0]).row
-                row_data3 = worksheet.row_values(matched_row3)
-            print(row_data3)
-        else:
-            print("Value not found in the sheet.")
-    
-    def on_row_select2(self, event):
-        selected_item2 = self.table2.selection()
-        if selected_item2:
-            row_values2 = self.table2.item(selected_item2, "values")
-            row_list2 = row_values2[0] 
-            if row_list2 in worksheet2.col_values(1):
-                matched_row2 = worksheet2.find(row_values2[0]).row
-                row_data2 = worksheet2.row_values(matched_row2)
-            print(row_data2)
-        else:
-            print("Value not found in the sheet.")
-
 
     def Edit_NewClass(self,row_data,vitrisua):
         self.rootClass = tk.Tk()
@@ -486,15 +447,397 @@ class MainFormGUI:
             teacher = self.tf5.get()
             fteacher = self.tf6.get()
             new_values = [int(row_data[0]),name,day,time,room,teacher,fteacher]
-            # worksheet3.update(values=[new_values], range_name=vitrisua)
             try:
                 worksheet3.update(values=[new_values], range_name=vitrisua)
                 messagebox.showinfo("Thành công", "Cập nhật thành công!")
-
+                self.rootClass.destroy()
             except Exception as e:
                 messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")
         self.btn1 = tk.Button(self.panel1, text="EDIT NEW",command=chinhsua, font=("cambria", 14, "bold"), width=20, bg="#FBA834",fg="black" )
         self.btn1.place(x=150, y=600)
+
+
+
+
+    #edit student and point
+    def on_row_select1(self, event):
+        selected_item1 = self.table1.selection()
+        if selected_item1:
+            row_values2 = self.table1.item(selected_item1, "values")
+            row_list2 = row_values2[0] 
+            if row_list2 in worksheet2.col_values(1):
+                vitribandau2 = "A"+str(worksheet2.find(row_values2[0]).row)
+                matched_row2 = worksheet2.find(row_values2[0]).row
+
+                # count_values3 = len(worksheet.row_values(matched_row3))
+                row_data2 = worksheet2.row_values(matched_row2)
+                if len(row_data2)<=23:
+                    row_data2.extend([""] * (23 - len(row_data2) + 1))
+                char_to_num = dict()
+                count_values2 = len(row_data2)
+                letters2 = [chr(i) for i in range(65, 91)]
+                n2 = 30
+                mapping2 = {}
+                for i in range(1, n2 + 1):
+                    mapping2[i] = letters2[(i - 1) % 26]
+                vitrisua2 = vitribandau2+":"+mapping2[count_values2]+str(matched_row2)
+            # print(row_data1)
+            self.Edit_NewStudent(row_data2,vitrisua2)
+
+        else:
+            print("Value not found in the sheet.")
+        
+    def Edit_NewStudent(self,row_data3,vitrisua3):
+        self.rootStudent = tk.Tk()
+        self.rootStudent.title("Edit student and point")
+        self.rootStudent.geometry("1300x680")
+        self.canvas2 = tk.Canvas(self.rootStudent, width=self.root.winfo_screenwidth(), height=self.rootStudent.winfo_screenheight())
+        self.canvas2.pack(fill=tk.BOTH, expand=True)
+        self.panel2 = tk.Frame(self.canvas2, bd=4, relief="solid")
+        self.panel2.place(x=10, y=10, width=1275, height=650)
+        self.lbl_EditNewStudent = tk.Label(self.panel2, text="Edit student and point", font=("cambria", 24, "bold"), fg="black")
+        self.lbl_EditNewStudent.place(x=450, y=10)
+        self.lb1 = tk.Label(self.panel2, text="Full name", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb1.place(x=33, y=60)
+        self.tf1 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf1.place(x=33, y=108, width=300, height=30)
+
+        self.lb2 = tk.Label(self.panel2, text="Birthday (DOB)", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb2.place(x=370, y=60)
+        self.tf2 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf2.place(x=370, y=108, width=300, height=30)
+
+
+        self.lb3 = tk.Label(self.panel2, text="Address", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb3.place(x=33, y=160)
+        self.tf3 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf3.place(x=33, y=213, width=300, height=30)
+
+        self.lb4 = tk.Label(self.panel2, text="Starting off month", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb4.place(x=370, y=160)
+        self.tf4 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf4.place(x=370, y=213, width=300, height=30)
+
+        self.lb5 = tk.Label(self.panel2, text="Public school", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb5.place(x=33, y=270)
+        self.tf5 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf5.place(x=33, y=320, width=300, height=30)
+
+        self.lb6 = tk.Label(self.panel2, text="Starting transfer month", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb6.place(x=370, y=270)
+        self.tf6 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf6.place(x=370, y=320, width=300, height=30)
+        
+        self.lb7 = tk.Label(self.panel2, text="Parent name", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb7.place(x=33, y=375)
+        self.tf7 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf7.place(x=33, y=420, width=430, height=30)
+
+        self.lb8 = tk.Label(self.panel2, text="New Comer", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb8.place(x=370, y=375)
+        self.tf8 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf8.place(x=370, y=420, width=300, height=30)
+
+        self.lb9 = tk.Label(self.panel2, text="Tel", font=("cambria", 16, "bold"), fg="#FBA834")
+        self.lb9.place(x=33, y=480)
+        self.tf9 = tk.Entry(self.panel2, font=("cambria", 13, "bold"))
+        self.tf9.place(x=33, y=530, width=130, height=30)
+
+        self.lb10 = tk.Label(self.panel2, text="Enrolcamp", font=("cambria", 16, "bold"), fg="#FBA834")
+        self.lb10.place(x=200, y=480)
+        self.tf10 = tk.Entry(self.panel2, font=("cambria", 13, "bold"))
+        self.tf10.place(x=200, y=530, width=130, height=30)
+
+        self.lb11 = tk.Label(self.panel2, text="Main camp", font=("cambria", 16, "bold"), fg="#FBA834")
+        self.lb11.place(x=370, y=480)
+        self.tf11 = tk.Entry(self.panel2, font=("cambria", 13, "bold"))
+        self.tf11.place(x=370, y=530, width=130, height=30)
+
+        self.lb12 = tk.Label(self.panel2, text="Total fee", font=("cambria", 16, "bold"), fg="#FBA834")
+        self.lb12.place(x=540, y=480)
+        self.tf12 = tk.Entry(self.panel2, font=("cambria", 13, "bold"))
+        self.tf12.place(x=540, y=530, width=130, height=30)
+
+
+
+        self.lb13 = tk.Label(self.panel2, text="Main class", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb13.place(x=700, y=60)
+        self.tf13 = ttk.Combobox(self.panel2, font=("cambria", 13, "bold"))
+        values_list_Class13 = worksheet3.get_all_values()[2:]
+        result_list_Class13 = [row[1] for row in values_list_Class13]
+        self.tf13['values'] = result_list_Class13
+        self.tf13.current(0)
+        self.tf13.place(x=700, y=108, width=240, height=30)
+
+        self.lb15 = tk.Label(self.panel2, text="Starting quit month", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb15.place(x=700, y=160)
+        self.tf15 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf15.place(x=700, y=213, width=240, height=30)
+
+        self.lb16 = tk.Label(self.panel2, text="Teacher", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb16.place(x=700, y=270)
+        self.tf16 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf16.place(x=700, y=320, width=240, height=30)
+
+        self.lb17 = tk.Label(self.panel2, text="Sub tel", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb17.place(x=700, y=375)
+        self.tf17 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf17.place(x=700, y=420, width=240, height=30)
+
+
+        self.lb18 = tk.Label(self.panel2, text="Main fee", font=("cambria", 16, "bold"), fg="#FBA834")
+        self.lb18.place(x=700, y=480)
+        self.tf18 = tk.Entry(self.panel2, font=("cambria", 13, "bold"))
+        self.tf18.place(x=700, y=530, width=130, height=30)
+
+
+        self.lb19 = tk.Label(self.panel2, text="Certificate", font=("cambria", 16, "bold"), fg="#FBA834")
+        self.lb19.place(x=850, y=480)
+        self.tf19 = tk.Entry(self.panel2, font=("cambria", 13, "bold"))
+        self.tf19.place(x=850, y=530, width=130, height=30)
+
+
+        self.lb20 = tk.Label(self.panel2, text="Reading & Writing", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb20.place(x=1000, y=160)
+        self.tf20 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf20.place(x=1050, y=213, width=100, height=30)
+
+        self.lb21 = tk.Label(self.panel2, text="Listening", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb21.place(x=1050, y=270)
+        self.tf21 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf21.place(x=1050, y=320, width=100, height=30)
+
+        self.lb22 = tk.Label(self.panel2, text="Speaking", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb22.place(x=1050, y=375)
+        self.tf22 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
+        self.tf22.place(x=1050, y=420, width=100, height=30)
+
+        
+        self.tf1.insert(0, row_data3[1])
+        self.tf2.insert(0, row_data3[2])
+        self.tf13.insert(0, row_data3[3])
+        self.tf9.insert(0, row_data3[4])
+        self.tf3.insert(0, row_data3[5])
+        self.tf7.insert(0, row_data3[6])
+        self.tf10.insert(0, row_data3[7])
+        self.tf11.insert(0, row_data3[8])
+        self.tf12.insert(0, row_data3[9])
+        self.tf18.insert(0, row_data3[10])
+        self.tf8.insert(0, row_data3[11])
+        self.tf4.insert(0, row_data3[12])
+        self.tf15.insert(0, row_data3[13])
+        self.tf19.insert(0, row_data3[14])
+        self.tf5.insert(0, row_data3[15])
+        self.tf17.insert(0, row_data3[16])
+        self.tf6.insert(0, row_data3[17])
+        self.tf16.insert(0, row_data3[18])
+        self.tf21.insert(0, row_data3[19])
+        self.tf22.insert(0, row_data3[20])
+        self.tf20.insert(0, row_data3[21])
+        def chinhsua():
+            a1 = self.tf1.get()
+            a2 = self.tf10.get()
+            a3 = self.tf13.get()
+            a4 = self.tf9.get()
+            a5 = self.tf3.get()
+            a6 = self.tf7.get()
+            a7 = self.tf10.get()
+            a8 = self.tf11.get()
+            a9 = self.tf12.get()
+            a10 = self.tf18.get()
+            a11 = self.tf8.get()
+            a12 = self.tf4.get()
+            a13 = self.tf15.get()
+            a14 = self.tf19.get()
+            a15 = self.tf5.get()
+            a16 = self.tf17.get()
+            a17 = self.tf6.get()
+            a18 = self.tf16.get()
+            
+            try:
+                a21 = float(self.tf20.get())
+            except ValueError:
+                a21 = 0
+            try:
+                a19 = float(self.tf21.get())
+            except ValueError:
+                a19 = 0
+            try:
+                a20 = float(self.tf22.get())
+            except ValueError:
+                a20 = 0
+            total = a21 + a19 + a20
+            percent = str(round((total/15)*100,2))+"%"
+            
+
+            new_values3 = [int(row_data3[0]),a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,total,percent]
+            # worksheet3.update(values=[new_values], range_name=vitrisua)
+            try:
+                worksheet2.update(values=[new_values3], range_name=vitrisua3)
+                messagebox.showinfo("Thành công", "Cập nhật thành công!")
+                self.rootStudent.destroy()
+
+            except Exception as e:
+                messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")
+        
+        self.btn1 = tk.Button(self.panel2, text="SUBMIT", font=("cambria", 14, "bold"),command=chinhsua, width=20, bg="#FBA834",fg="black" )
+        self.btn1.place(x=520, y=600)
+    
+
+
+
+
+    
+    #edit book
+    def on_row_select3(self, event):
+        selected_item3 = self.table3.selection()
+        if selected_item3:
+            row_values3 = self.table3.item(selected_item3, "values")
+            row_list3 = row_values3[0] 
+            if row_list3 in worksheet.col_values(1):
+                vitribandau3 = "A"+str(worksheet.find(row_values3[0]).row)
+                matched_row3 = worksheet.find(row_values3[0]).row
+
+                # count_values3 = len(worksheet.row_values(matched_row3))
+                row_data3 = worksheet.row_values(matched_row3)
+                if len(row_data3)<=12:
+                    row_data3.extend([""] * (12 - len(row_data3) + 1))
+                char_to_num = dict()
+                count_values3 = len(row_data3)
+                letters3 = [chr(i) for i in range(65, 91)]
+                n3 = 30
+                mapping3 = {}
+                for i in range(1, n3 + 1):
+                    mapping3[i] = letters3[(i - 1) % 26]
+                vitrisua3 = vitribandau3+":"+mapping3[count_values3]+str(matched_row3)
+            self.Edit_NewBook(row_data3,vitrisua3)
+        else:
+            print("Value not found in the sheet.")
+    
+    def Edit_NewBook(self,row_data3,vitrisua3):
+        self.rootBook = tk.Tk()
+        self.rootBook.title("Edit book")
+        self.rootBook.geometry("1020x680")
+        self.canvas3 = tk.Canvas(self.rootBook, width=self.rootBook.winfo_screenwidth(), height=self.rootBook.winfo_screenheight())
+        self.canvas3.pack(fill=tk.BOTH, expand=True)
+        self.panel3 = tk.Frame(self.canvas3, bd=4, relief="solid")
+        self.panel3.place(x=10, y=10, width=1000, height=650)
+        self.lbl_editNewBook = tk.Label(self.panel3, text="Edit book", font=("cambria", 24, "bold"), fg="black")
+        self.lbl_editNewBook.place(x=300, y=10)
+        self.lb1 = tk.Label(self.panel3, text="Cambridge level", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb1.place(x=33, y=60)
+        self.tf1 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
+        self.tf1.place(x=33, y=108, width=430, height=30)
+
+        self.lb2 = tk.Label(self.panel3, text="Main book", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb2.place(x=530, y=60)
+        self.tf2 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
+        self.tf2.place(x=530, y=108, width=430, height=30)
+
+
+        self.lb3 = tk.Label(self.panel3, text="Skill book 1", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb3.place(x=33, y=160)
+        self.tf3 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
+        self.tf3.place(x=33, y=213, width=430, height=30)
+
+        self.lb4 = tk.Label(self.panel3, text="Skill book 2", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb4.place(x=530, y=160)
+        self.tf4 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
+        self.tf4.place(x=530, y=213, width=430, height=30)
+
+        self.lb5 = tk.Label(self.panel3, text="Skill book 3", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb5.place(x=33, y=270)
+        self.tf5 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
+        self.tf5.place(x=33, y=320, width=430, height=30)
+
+        self.lb6 = tk.Label(self.panel3, text="Skill book 4", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb6.place(x=530, y=270)
+        self.tf6 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
+        self.tf6.place(x=530, y=320, width=430, height=30)
+
+        self.lb7 = tk.Label(self.panel3, text="Vocab book", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb7.place(x=33, y=375)
+        self.tf7 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
+        self.tf7.place(x=33, y=420, width=430, height=30)
+
+        self.lb8 = tk.Label(self.panel3, text="Grammar book", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb8.place(x=530, y=375)
+        self.tf8 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
+        self.tf8.place(x=530, y=420, width=430, height=30)
+
+        self.lb9 = tk.Label(self.panel3, text="Test book", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb9.place(x=33, y=480)
+        self.tf9 = tk.Entry(self.panel3, font=("cambria", 13, "bold"))
+        self.tf9.place(x=33, y=530, width=200, height=30)
+
+        self.lb10 = tk.Label(self.panel3, text="Progress", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb10.place(x=260, y=480)
+        self.tf10 = tk.Entry(self.panel3, font=("cambria", 13, "bold"))
+        self.tf10.place(x=260, y=530, width=200, height=30)
+
+        self.lb11 = tk.Label(self.panel3, text="Videos-Movies", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb11.place(x=530, y=480)
+        self.tf11 = tk.Entry(self.panel3, font=("cambria", 13, "bold"))
+        self.tf11.place(x=530, y=530, width=200, height=30)
+
+        self.lb12 = tk.Label(self.panel3, text="Pictures-Cards", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb12.place(x=750, y=480)
+        self.tf12 = tk.Entry(self.panel3, font=("cambria", 13, "bold"))
+        self.tf12.place(x=750, y=530, width=200, height=30)
+
+        self.tf1.insert(0, row_data3[1])
+        self.tf10.insert(0, row_data3[2])
+        self.tf2.insert(0, row_data3[3])
+        self.tf3.insert(0, row_data3[4])
+        self.tf7.insert(0, row_data3[5])
+        self.tf4.insert(0, row_data3[6])
+        self.tf5.insert(0, row_data3[7])
+        self.tf6.insert(0, row_data3[8])
+        self.tf8.insert(0, row_data3[9])
+        self.tf9.insert(0, row_data3[10])
+        self.tf11.insert(0, row_data3[11])
+        self.tf12.insert(0, row_data3[12])
+        def chinhsua():
+            a1 = self.tf1.get()
+            a2 = self.tf10.get()
+            a3 = self.tf2.get()
+            a4 = self.tf3.get()
+            a5 = self.tf7.get()
+            a6 = self.tf4.get()
+            a7 = self.tf5.get()
+            a8 = self.tf6.get()
+            a9 = self.tf8.get()
+            a10 = self.tf9.get()
+            a11 = self.tf11.get()
+            a12 = self.tf12.get()
+            
+
+            new_values3 = [int(row_data3[0]),a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12]
+            # worksheet3.update(values=[new_values], range_name=vitrisua)
+            try:
+                worksheet.update(values=[new_values3], range_name=vitrisua3)
+                messagebox.showinfo("Thành công", "Cập nhật thành công!")
+                self.rootBook.destroy()
+
+            except Exception as e:
+                messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")
+        self.btn1 = tk.Button(self.panel3, text="Edit", font=("cambria", 14, "bold"),command=chinhsua, width=20, bg="#FBA834",fg="black" )
+        self.btn1.place(x=400, y=600)
+    
+    def on_row_select2(self, event):
+        selected_item2 = self.table2.selection()
+        if selected_item2:
+            row_values2 = self.table2.item(selected_item2, "values")
+            row_list2 = row_values2[0] 
+            if row_list2 in worksheet2.col_values(1):
+                matched_row2 = worksheet2.find(row_values2[0]).row
+                row_data2 = worksheet2.row_values(matched_row2)
+            print(row_data2)
+        else:
+            print("Value not found in the sheet.")
+
+
+    
     
 
 
