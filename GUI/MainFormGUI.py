@@ -533,7 +533,11 @@ class MainFormGUI:
 
         else:
             print("Value not found in the sheet.")
-        
+    
+    def on_combobox_select(self, event = None):
+            selected_value = self.tf13.get()
+            return selected_value
+             
     def Edit_NewStudent(self,row_data3,vitrisua3):
         self.rootStudent = tk.Tk()
         self.rootStudent.title("Edit student and point")
@@ -615,6 +619,10 @@ class MainFormGUI:
         self.tf13['values'] = result_list_Class13
         self.tf13.current(0)
         self.tf13.place(x=700, y=108, width=240, height=30)
+        
+        # Ràng buộc sự kiện chọn giá trị trong combobox với hàm xử lý sự kiện
+        self.tf13.bind("<<ComboboxSelected>>", self.on_combobox_select)
+        
 
         self.lb15 = tk.Label(self.panel2, text="Starting quit month", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb15.place(x=700, y=160)
@@ -680,11 +688,12 @@ class MainFormGUI:
         self.tf16.insert(0, row_data3[18])
         self.tf21.insert(0, row_data3[19])
         self.tf22.insert(0, row_data3[20])
-        self.tf20.insert(0, row_data3[21])
+        self.tf20.insert(0, row_data3[21]) 
+          
         def chinhsua():
             a1 = self.tf1.get()
             a2 = self.tf10.get()
-            a3 = self.tf13.get()
+            a3 = self.on_combobox_select()
             a4 = self.tf9.get()
             a5 = self.tf3.get()
             a6 = self.tf7.get()
