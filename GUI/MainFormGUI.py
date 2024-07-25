@@ -13,52 +13,80 @@ from GUI.Add_NewClass import Add_NewClass
 from GUI.Add_NewBook import Add_NewBook
 from GUI.Add_NewStudent import Add_NewStudent
 
-#connect to gg sheet
-gs = gspread.service_account("cre.json")
-sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
-worksheet = sht.sheet1
 
-#show data
-values_list_Book = worksheet.get_all_values()[2:]
-result_list_Book = [row[:5] for row in values_list_Book]
-worksheet2 = sht.worksheet("sheet 2")
-values_list_Student = worksheet2.get_all_values()[2:]
-result_list_Student = [row[:7] for row in values_list_Student]
-worksheet3 = sht.worksheet("sheet 3")
-values_list_Class = worksheet3.get_all_values()[2:]
-result_list_Class = [row[:7] for row in values_list_Class]
-values_list_Score = worksheet.get_all_values()[2:]
-worksheet2 = sht.worksheet("sheet 2")
-values_list_Score = worksheet2.get_all_values()[2:]  
-result_list_Score = [row[:2] for row in values_list_Score] 
-lop = [row[3] for row in values_list_Score]
-combined_data = result_list_Score.copy()
-for i in range(len(combined_data)):
-    combined_data[i].append(lop[i])
-teacher = [row[18] for row in values_list_Score]
-combined_data1 = result_list_Score.copy() 
-for i in range(len(combined_data1)):
-    combined_data1[i].append(teacher[i])
-listen = [row[19] for row in values_list_Score]
-combined_data2 = result_list_Score.copy() 
-for i in range(len(combined_data2)):
-    combined_data2[i].append(listen[i])
-speak = [row[20] for row in values_list_Score]
-combined_data3 = result_list_Score.copy() 
-for i in range(len(combined_data3)):
-    combined_data3[i].append(speak[i])
-rw = [row[21] for row in values_list_Score]
-combined_data4 = result_list_Score.copy() 
-for i in range(len(combined_data4)):
-    combined_data4[i].append(rw[i])
-total = [row[22] for row in values_list_Score]
-combined_data5 = result_list_Score.copy() 
-for i in range(len(combined_data5)):
-    combined_data5[i].append(total[i])
-ps = [row[23] for row in values_list_Score]
-combined_data6 = result_list_Score.copy() 
-for i in range(len(combined_data6)):
-    combined_data6[i].append(ps[i])
+def initialize_globals():
+    global gs, sht, worksheet, worksheet2, worksheet3
+    global values_list_Book, result_list_Book
+    global values_list_Student, result_list_Student
+    global values_list_Class, result_list_Class
+    global values_list_Score, result_list_Score
+    global lop, combined_data
+    global teacher, combined_data1
+    global listen, combined_data2
+    global speak, combined_data3
+    global rw, combined_data4
+    global total, combined_data5
+    global ps, combined_data6
+
+    # Connect to Google Sheets
+    gs = gspread.service_account("cre.json")
+    sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
+    worksheet = sht.sheet1
+
+    # Show data
+    values_list_Book = worksheet.get_all_values()[2:]
+    result_list_Book = [row[:5] for row in values_list_Book]
+
+    worksheet2 = sht.worksheet("sheet 2")
+    values_list_Student = worksheet2.get_all_values()[2:]
+    result_list_Student = [row[:7] for row in values_list_Student]
+
+    worksheet3 = sht.worksheet("sheet 3")
+    values_list_Class = worksheet3.get_all_values()[2:]
+    result_list_Class = [row[:7] for row in values_list_Class]
+
+    worksheet2 = sht.worksheet("sheet 2")
+    values_list_Score = worksheet2.get_all_values()[2:]
+    result_list_Score = [row[:2] for row in values_list_Score]
+
+    lop = [row[3] for row in values_list_Score]
+    combined_data = result_list_Score.copy()
+    for i in range(len(combined_data)):
+        combined_data[i].append(lop[i])
+
+    teacher = [row[18] for row in values_list_Score]
+    combined_data1 = result_list_Score.copy()
+    for i in range(len(combined_data1)):
+        combined_data1[i].append(teacher[i])
+
+    listen = [row[19] for row in values_list_Score]
+    combined_data2 = result_list_Score.copy()
+    for i in range(len(combined_data2)):
+        combined_data2[i].append(listen[i])
+
+    speak = [row[20] for row in values_list_Score]
+    combined_data3 = result_list_Score.copy()
+    for i in range(len(combined_data3)):
+        combined_data3[i].append(speak[i])
+
+    rw = [row[21] for row in values_list_Score]
+    combined_data4 = result_list_Score.copy()
+    for i in range(len(combined_data4)):
+        combined_data4[i].append(rw[i])
+
+    total = [row[22] for row in values_list_Score]
+    combined_data5 = result_list_Score.copy()
+    for i in range(len(combined_data5)):
+        combined_data5[i].append(total[i])
+
+    ps = [row[23] for row in values_list_Score]
+    combined_data6 = result_list_Score.copy()
+    for i in range(len(combined_data6)):
+        combined_data6[i].append(ps[i])
+
+# Call the function to initialize the globals
+initialize_globals()
+
 
 from EXCEL.Excel_creating import Excel_Create
 
@@ -118,6 +146,16 @@ class MainFormGUI:
         btnDangXuat = ttk.Button(self.content_seach, text="Đăng xuất", width=25, command=self.dangxuat)
         btnDangXuat.pack(side="right", anchor="ne")
 
+    def reload_data(self):
+        initialize_globals()
+        
+        # Original data storage
+        self.original_data_class = result_list_Class[:]
+        self.original_data_student = result_list_Student[:]
+        self.original_data_score = combined_data6[:]
+        self.original_data_book = result_list_Book[:]
+        
+        
     def create_class_management_tab(self):
         self.class_management_tab = ttk.Frame(self.tab_control, style='TFrame')
         self.tab_control.add(self.class_management_tab, text="Quản lý lớp học")
@@ -322,8 +360,11 @@ class MainFormGUI:
             table.delete(row)
         for row in data:
             table.insert("", "end", values=row)
-    
+
+
     def reload_tab(self, type_):
+        initialize_globals()  # Refresh the global data
+        self.update_original_data()  # Update the instance variables with new data
         if type_ == "class":
             self.populate_table(self.table, self.original_data_class)
         elif type_ == "student":
@@ -337,7 +378,13 @@ class MainFormGUI:
         for entry in self.entries[type_].values():
             if isinstance(entry, ttk.Entry):
                 entry.delete(0, tk.END)
-          
+
+    def update_original_data(self):
+        self.original_data_class = result_list_Class
+        self.original_data_student = result_list_Student
+        self.original_data_score = result_list_Score
+        self.original_data_book = result_list_Book
+
     
     def run(self):
         self.root.mainloop()
