@@ -160,9 +160,19 @@ class Add_NewStudent:
         st = self.tf17.get()
         mf = self.tf18.get()
         c = self.tf19.get()
-        rw = float(self.tf20.get())
-        lis = float(self.tf21.get())
-        spe = float(self.tf22.get())
+        try:
+            rw = float(self.tf20.get())
+        except ValueError:
+            rw = 0
+        try:
+            lis = float(self.tf21.get())
+        except ValueError:
+            lis = 0
+
+        try:
+            spe = float(self.tf22.get())
+        except ValueError:
+            spe = 0
         total = rw + lis + spe
         percent = str(round((total/15)*100,2))+"%"
         
