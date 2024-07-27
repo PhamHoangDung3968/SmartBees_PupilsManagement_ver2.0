@@ -7,14 +7,14 @@ class Add_NewClass:
     def __init__(self):
         
         self.root = tk.Tk()
-        self.root.title("Add new class manager")
+        self.root.title("Add new class")
         self.root.geometry("520x680")
         self.canvas = tk.Canvas(self.root, width=self.root.winfo_screenwidth(), height=self.root.winfo_screenheight())
         self.canvas.pack(fill=tk.BOTH, expand=True)
         self.panel = tk.Frame(self.canvas, bd=4, relief="solid")
         self.panel.place(x=10, y=10, width=500, height=650)
-        self.lbl_addNewClass = tk.Label(self.panel, text="Add new class manager", font=("cambria", 24, "bold"), fg="black")
-        self.lbl_addNewClass.place(x=80, y=10)
+        self.lbl_addNewClass = tk.Label(self.panel, text="ADD NEW CLASS", font=("cambria", 24, "bold"), fg="black")
+        self.lbl_addNewClass.place(x=120, y=10)
         self.lb1 = tk.Label(self.panel, text="Main class", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb1.place(x=33, y=60)
         self.tf1 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
@@ -39,8 +39,8 @@ class Add_NewClass:
         self.lb6.place(x=33, y=500)
         self.tf6 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
         self.tf6.place(x=33, y=545, width=430, height=30)
-        self.btn1 = tk.Button(self.panel, text="ADD NEW", font=("cambria", 14, "bold"),command=self.Add_Class, width=20, bg="#FBA834",fg="black" )
-        self.btn1.place(x=150, y=600)
+        self.btn1 = tk.Button(self.panel, text="SUBMIT", font=("cambria", 14, "bold"),command=self.Add_Class, width=20, bg="#FBA834",fg="black" )
+        self.btn1.place(x=120, y=600)
 
     def Add_Class(self):
         worksheet3 = sht.worksheet("sheet 3")

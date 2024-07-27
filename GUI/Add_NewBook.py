@@ -7,14 +7,14 @@ class Add_NewBook:
     def __init__(self):
         
         self.root = tk.Tk()
-        self.root.title("Add new book manager")
+        self.root.title("Add new book")
         self.root.geometry("1020x680")
         self.canvas = tk.Canvas(self.root, width=self.root.winfo_screenwidth(), height=self.root.winfo_screenheight())
         self.canvas.pack(fill=tk.BOTH, expand=True)
         self.panel = tk.Frame(self.canvas, bd=4, relief="solid")
         self.panel.place(x=10, y=10, width=1000, height=650)
-        self.lbl_addNewBook = tk.Label(self.panel, text="Add new book manager", font=("cambria", 24, "bold"), fg="black")
-        self.lbl_addNewBook.place(x=300, y=10)
+        self.lbl_addNewBook = tk.Label(self.panel, text="ADD NEW BOOK", font=("cambria", 24, "bold"), fg="black")
+        self.lbl_addNewBook.place(x=380, y=10)
         self.lb1 = tk.Label(self.panel, text="Cambridge level", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb1.place(x=33, y=60)
         self.tf1 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
@@ -77,7 +77,7 @@ class Add_NewBook:
         self.tf12.place(x=750, y=530, width=200, height=30)
 
 
-        self.btn1 = tk.Button(self.panel, text="ADD NEW", font=("cambria", 14, "bold"),command=self.Add_Book, width=20, bg="#FBA834",fg="black" )
+        self.btn1 = tk.Button(self.panel, text="SUBMIT", font=("cambria", 14, "bold"),command=self.Add_Book, width=20, bg="#FBA834",fg="black" )
         self.btn1.place(x=400, y=600)
 
     def Add_Book(self):
