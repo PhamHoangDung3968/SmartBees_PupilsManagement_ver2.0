@@ -218,7 +218,27 @@ class MainFormGUI:
     def create_score_management_tab(self):
         self.score_management_tab = ttk.Frame(self.tab_control, style='TFrame')
         self.tab_control.add(self.score_management_tab, text="Quản lý điểm số")
-        button_frame = ttk.Frame(self.score_management_tab, style='TFrame')
+        
+        self.inner_tab_control = ttk.Notebook(self.score_management_tab)
+        self.inner_tab_control.pack(expand=1, fill="both")
+
+        self.tab1 = ttk.Frame(self.inner_tab_control, style='TFrame')
+        self.inner_tab_control.add(self.tab1, text="Giai đoạn 1")
+
+        self.tab2 = ttk.Frame(self.inner_tab_control, style='TFrame')
+        self.inner_tab_control.add(self.tab2, text="Giai đoạn 2")
+
+        self.tab3 = ttk.Frame(self.inner_tab_control, style='TFrame')
+        self.inner_tab_control.add(self.tab3, text="Giai đoạn 3")
+
+        self.tab4 = ttk.Frame(self.inner_tab_control, style='TFrame')
+        self.inner_tab_control.add(self.tab4, text="Giai đoạn 4")
+
+        self.tab5 = ttk.Frame(self.inner_tab_control, style='TFrame')
+        self.inner_tab_control.add(self.tab5, text="Giai đoạn 5")
+
+        #tab 1
+        button_frame = ttk.Frame(self.tab1, style='TFrame')
         button_frame.pack(side="top", fill="x")
         btnXuatExcel2 = ttk.Button(button_frame, text="Xuất excel", command=self.XuatExcel12, width=25, style='TButton')
         btnReload = ttk.Button(button_frame, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
@@ -226,18 +246,108 @@ class MainFormGUI:
         btnReload.pack(side="right", padx=5, pady=5)
         
         table_columns2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
-        self.table2 = ttk.Treeview(self.score_management_tab, columns=table_columns2, show="headings", height=25)
+        self.table2 = ttk.Treeview(self.tab1, columns=table_columns2, show="headings", height=25)
         for col in table_columns2:
             self.table2.heading(col, text=col)
         self.populate_table(self.table2, self.original_data_score)
         self.table2.pack(fill="x")
 
-        tree_scrollx2 = ttk.Scrollbar(self.score_management_tab, orient="horizontal", command=self.table2.xview)
+        tree_scrollx2 = ttk.Scrollbar(self.tab1, orient="horizontal", command=self.table2.xview)
         tree_scrollx2.pack(fill="x")
-        self.table2.bind("<Double-1>", self.on_row_select1)
+        self.table2.bind("<Double-1>", self.on_row_select2)
         self.table2.configure(xscrollcommand=tree_scrollx2.set)
-        
-        self.create_search_section(self.score_management_tab, "score")
+
+        self.create_search_section(self.tab1, "score")
+
+
+        # tab 2
+        button_frame_2 = ttk.Frame(self.tab2, style='TFrame')
+        button_frame_2.pack(side="top", fill="x")
+        btnXuatExcel2_2 = ttk.Button(button_frame_2, text="Xuất excel", command=self.XuatExcel12, width=25, style='TButton')
+        btnReload_2 = ttk.Button(button_frame_2, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
+        btnXuatExcel2_2.pack(side="right", padx=5, pady=5)
+        btnReload_2.pack(side="right", padx=5, pady=5)
+
+        table_columns2_2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
+        self.table2_2 = ttk.Treeview(self.tab2, columns=table_columns2_2, show="headings", height=25)
+        for col in table_columns2_2:
+            self.table2_2.heading(col, text=col)
+        self.populate_table(self.table2_2, self.original_data_score)
+        self.table2_2.pack(fill="x")
+
+        tree_scrollx2_2 = ttk.Scrollbar(self.tab2, orient="horizontal", command=self.table2_2.xview)
+        tree_scrollx2_2.pack(fill="x")
+        self.table2_2.bind("<Double-1>", self.on_row_select2)
+        self.table2_2.configure(xscrollcommand=tree_scrollx2_2.set)
+
+        self.create_search_section(self.tab2, "score")
+
+        #tab 3
+        button_frame_3 = ttk.Frame(self.tab3, style='TFrame')
+        button_frame_3.pack(side="top", fill="x")
+        btnXuatExcel2_3 = ttk.Button(button_frame_3, text="Xuất excel",command=self.XuatExcel12, width=25, style='TButton')
+        btnReload_3 = ttk.Button(button_frame_3, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
+        btnXuatExcel2_3.pack(side="right", padx=5, pady=5)
+        btnReload_3.pack(side="right", padx=5, pady=5)
+
+        table_columns2_3 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
+        self.table2_3 = ttk.Treeview(self.tab3, columns=table_columns2_3, show="headings", height=25)
+        for col in table_columns2_3:
+            self.table2_3.heading(col, text=col)
+        self.populate_table(self.table2_3, self.original_data_score)
+        self.table2_3.pack(fill="x")
+
+        tree_scrollx2_3 = ttk.Scrollbar(self.tab3, orient="horizontal", command=self.table2_3.xview)
+        tree_scrollx2_3.pack(fill="x")
+        self.table2_3.bind("<Double-1>", self.on_row_select2)
+        self.table2_3.configure(xscrollcommand=tree_scrollx2_3.set)
+
+        self.create_search_section(self.tab3, "score")
+
+        #tab 4
+        button_frame_4 = ttk.Frame(self.tab4, style='TFrame')
+        button_frame_4.pack(side="top", fill="x")
+        btnXuatExcel2_4 = ttk.Button(button_frame_4, text="Xuất excel", command=self.XuatExcel12, width=25, style='TButton')
+        btnReload_4 = ttk.Button(button_frame_4, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
+        btnXuatExcel2_4.pack(side="right", padx=5, pady=5)
+        btnReload_4.pack(side="right", padx=5, pady=5)
+
+        table_columns2_4 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
+        self.table2_4 = ttk.Treeview(self.tab4, columns=table_columns2_4, show="headings", height=25)
+        for col in table_columns2_4:
+            self.table2_4.heading(col, text=col)
+        self.populate_table(self.table2_4, self.original_data_score)
+        self.table2_4.pack(fill="x")
+
+        tree_scrollx2_4 = ttk.Scrollbar(self.tab4, orient="horizontal", command=self.table2_4.xview)
+        tree_scrollx2_4.pack(fill="x")
+        self.table2_4.bind("<Double-1>", self.on_row_select2)
+        self.table2_4.configure(xscrollcommand=tree_scrollx2_4.set)
+
+        self.create_search_section(self.tab4, "score")
+
+        # tab 5
+        button_frame_5 = ttk.Frame(self.tab5, style='TFrame')
+        button_frame_5.pack(side="top", fill="x")
+        btnXuatExcel2_5 = ttk.Button(button_frame_5, text="Xuất excel", command=self.XuatExcel12, width=25, style='TButton')
+        btnReload_5 = ttk.Button(button_frame_5, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
+        btnXuatExcel2_5.pack(side="right", padx=5, pady=5)
+        btnReload_5.pack(side="right", padx=5, pady=5)
+
+        table_columns2_5 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
+        self.table2_5 = ttk.Treeview(self.tab5, columns=table_columns2_5, show="headings", height=25)
+        for col in table_columns2_5:
+            self.table2_5.heading(col, text=col)
+        self.populate_table(self.table2_5, self.original_data_score)
+        self.table2_5.pack(fill="x")
+
+        tree_scrollx2_5 = ttk.Scrollbar(self.tab5, orient="horizontal", command=self.table2_5.xview)
+        tree_scrollx2_5.pack(fill="x")
+        self.table2_5.bind("<Double-1>", self.on_row_select2)
+        self.table2_5.configure(xscrollcommand=tree_scrollx2_5.set)
+
+        self.create_search_section(self.tab5, "score")
+
 
     def create_book_management_tab(self):
         self.book_management_tab = ttk.Frame(self.tab_control, style='TFrame')
@@ -504,8 +614,6 @@ class MainFormGUI:
         self.btn1.place(x=150, y=600)
 
 
-
-
     #edit student and point
     def on_row_select1(self, event):
         selected_item1 = self.table1.selection()
@@ -533,7 +641,31 @@ class MainFormGUI:
 
         else:
             print("Value not found in the sheet.")
-    
+    def on_row_select2(self, event):
+        selected_item2 = self.table2.selection()
+        if selected_item2:
+            row_values2 = self.table2.item(selected_item2, "values")
+            row_list2 = row_values2[0] 
+            if row_list2 in worksheet2.col_values(1):
+                vitribandau2 = "A"+str(worksheet2.find(row_values2[0]).row)
+                matched_row2 = worksheet2.find(row_values2[0]).row
+                # row_data2 = worksheet2.row_values(matched_row2)
+                row_data2 = worksheet2.row_values(matched_row2)
+                if len(row_data2)<=23:
+                    row_data2.extend([""] * (23 - len(row_data2) + 1))
+                char_to_num = dict()
+                count_values2 = len(row_data2)
+                letters2 = [chr(i) for i in range(65, 91)]
+                n2 = 30
+                mapping2 = {}
+                for i in range(1, n2 + 1):
+                    mapping2[i] = letters2[(i - 1) % 26]
+                vitrisua2 = vitribandau2+":"+mapping2[count_values2]+str(matched_row2)
+            # print(row_data1)
+            self.Edit_NewStudent(row_data2,vitrisua2)
+
+        else:
+            print("Value not found in the sheet.")
     def on_combobox_select(self, event = None):
             selected_value = self.tf13.get()
             return selected_value
@@ -740,10 +872,6 @@ class MainFormGUI:
         self.btn1.place(x=520, y=600)
     
 
-
-
-
-    
     #edit book
     def on_row_select3(self, event):
         selected_item3 = self.table3.selection()
@@ -879,23 +1007,6 @@ class MainFormGUI:
                 messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")
         self.btn1 = tk.Button(self.panel3, text="Edit", font=("cambria", 14, "bold"),command=chinhsua, width=20, bg="#FBA834",fg="black" )
         self.btn1.place(x=400, y=600)
-    
-    def on_row_select2(self, event):
-        selected_item2 = self.table2.selection()
-        if selected_item2:
-            row_values2 = self.table2.item(selected_item2, "values")
-            row_list2 = row_values2[0] 
-            if row_list2 in worksheet2.col_values(1):
-                matched_row2 = worksheet2.find(row_values2[0]).row
-                row_data2 = worksheet2.row_values(matched_row2)
-            print(row_data2)
-        else:
-            print("Value not found in the sheet.")
-
-
-    
-    
-
 
 if __name__ == "__main__":
     app = MainFormGUI()
