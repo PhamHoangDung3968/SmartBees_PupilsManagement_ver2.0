@@ -1143,7 +1143,6 @@ class MainFormGUI:
                            a13,a14,a15,total_giaidoan4,percent_giaidoan4,
                            a16,a17,a18,total_giaidoan5,percent_giaidoan5]
 
-            # new_values4 = [int(row_data3[0]),a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,row_data3[22],row_data3[23],row_data3[24], row_data3[25], row_data3[26],row_data3[27],row_data3[28],row_data3[29],row_data3[30],row_data3[31],row_data3[32],row_data3[33],row_data3[34],row_data3[35],row_data3[36],row_data3[37],row_data3[38],row_data3[39],row_data3[40],row_data3[41],row_data3[42],row_data3[43],row_data3[44],row_data3[45],row_data3[46],row_data3[47],row_data3[48],row_data3[49]]
             try:
                 worksheet2.update(values=[new_values4], range_name=vitrisua4)
                 messagebox.showinfo("Thành công", "Cập nhật thành công!")
@@ -1433,24 +1432,7 @@ class MainFormGUI:
             a19 = self.tf17.get()
             a20 = self.tf6.get()
             a21 = self.tf16.get()
-            # try:
-            #     a21 = float(self.tf20.get())
-            # except ValueError:
-            #     a21 = 0
-            # try:
-            #     a19 = float(self.tf21.get())
-            # except ValueError:
-            #     a19 = 0
-            # try:
-            #     a20 = float(self.tf22.get())
-            # except ValueError:
-            #     a20 = 0
-            # total = a21 + a19 + a20
-            # percent = str(round((total/15)*100,2))+"%"
-            
-
             new_values3 = [int(row_data3[0]),a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,row_data3[22],row_data3[23],row_data3[24], row_data3[25], row_data3[26],row_data3[27],row_data3[28],row_data3[29],row_data3[30],row_data3[31],row_data3[32],row_data3[33],row_data3[34],row_data3[35],row_data3[36],row_data3[37],row_data3[38],row_data3[39],row_data3[40],row_data3[41],row_data3[42],row_data3[43],row_data3[44],row_data3[45],row_data3[46],row_data3[47],row_data3[48],row_data3[49]]
-            # worksheet3.update(values=[new_values], range_name=vitrisua)
             try:
                 worksheet2.update(values=[new_values3], range_name=vitrisua3)
                 messagebox.showinfo("Thành công", "Cập nhật thành công!")
@@ -1472,8 +1454,6 @@ class MainFormGUI:
             if row_list3 in worksheet.col_values(1):
                 vitribandau3 = "A"+str(worksheet.find(row_values3[0]).row)
                 matched_row3 = worksheet.find(row_values3[0]).row
-
-                # count_values3 = len(worksheet.row_values(matched_row3))
                 row_data3 = worksheet.row_values(matched_row3)
                 if len(row_data3)<=12:
                     row_data3.extend([""] * (12 - len(row_data3) + 1))
@@ -1585,9 +1565,7 @@ class MainFormGUI:
             a10 = self.tf9.get()
             a11 = self.tf11.get()
             a12 = self.tf12.get()
-            
             new_values3 = [int(row_data3[0]),a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12]
-            # worksheet3.update(values=[new_values], range_name=vitrisua)
             try:
                 worksheet.update(values=[new_values3], range_name=vitrisua3)
                 messagebox.showinfo("Thành công", "Cập nhật thành công!")
