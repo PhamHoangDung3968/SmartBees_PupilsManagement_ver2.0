@@ -53,7 +53,7 @@ class Add_NewStudent:
         self.lb7 = tk.Label(self.panel, text="Parent name", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb7.place(x=33, y=375)
         self.tf7 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
-        self.tf7.place(x=33, y=420, width=430, height=30)
+        self.tf7.place(x=33, y=420, width=300, height=30)
 
         self.lb8 = tk.Label(self.panel, text="New Comer", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb8.place(x=370, y=375)
@@ -117,23 +117,23 @@ class Add_NewStudent:
         self.tf19.place(x=850, y=530, width=130, height=30)
 
 
-        self.lb20 = tk.Label(self.panel, text="Reading & Writing", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb20 = tk.Label(self.panel, text="CURRENT LEVEL", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb20.place(x=1000, y=160)
         self.tf20 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
-        self.tf20.place(x=1050, y=213, width=100, height=30)
+        self.tf20.place(x=1000, y=213, width=150, height=30)
 
-        self.lb21 = tk.Label(self.panel, text="Listening", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb21.place(x=1050, y=270)
+        self.lb21 = tk.Label(self.panel, text="STUDYING DAY", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb21.place(x=1000, y=270)
         self.tf21 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
-        self.tf21.place(x=1050, y=320, width=100, height=30)
+        self.tf21.place(x=1000, y=320, width=150, height=30)
 
-        self.lb22 = tk.Label(self.panel, text="Speaking", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb22.place(x=1050, y=375)
+        self.lb22 = tk.Label(self.panel, text="STUDYING TIME", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb22.place(x=1000, y=375)
         self.tf22 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
-        self.tf22.place(x=1050, y=420, width=100, height=30)
+        self.tf22.place(x=1000, y=420, width=150, height=30)
 
         
-
+        # self.btn1 = tk.Button(self.panel, text="ADD NEW", font=("cambria", 14, "bold"), width=20, bg="#FBA834",fg="black" )
         self.btn1 = tk.Button(self.panel, text="ADD NEW", font=("cambria", 14, "bold"),command=self.Add_Student, width=20, bg="#FBA834",fg="black" )
         self.btn1.place(x=520, y=600)
 
@@ -160,21 +160,24 @@ class Add_NewStudent:
         st = self.tf17.get()
         mf = self.tf18.get()
         c = self.tf19.get()
-        try:
-            rw = float(self.tf20.get())
-        except ValueError:
-            rw = 0
-        try:
-            lis = float(self.tf21.get())
-        except ValueError:
-            lis = 0
+        cl = self.tf20.get()
+        sd = self.tf21.get()
+        hours = self.tf22.get()
+        # try:
+        #     rw = float(self.tf20.get())
+        # except ValueError:
+        #     rw = 0
+        # try:
+        #     lis = float(self.tf21.get())
+        # except ValueError:
+        #     lis = 0
 
-        try:
-            spe = float(self.tf22.get())
-        except ValueError:
-            spe = 0
-        total = rw + lis + spe
-        percent = str(round((total/15)*100,2))+"%"
+        # try:
+        #     spe = float(self.tf22.get())
+        # except ValueError:
+        #     spe = 0
+        # total = rw + lis + spe
+        # percent = str(round((total/15)*100,2))+"%"
         
         existing_fn = [row[:3] for row in test]
         if fn and b in existing_fn:
@@ -185,7 +188,7 @@ class Add_NewStudent:
         elif fn == "" or b =="":
             messagebox.showerror("Error", "Bạn chưa nhập cấp độ")
         else:
-            new_row_values = [max_value ,fn, b, mcla, t, a, stc, e, mc, tf,mf, nc, som,sqm,c, ps,st, stm, tea,lis,spe, rw,total, percent]
+            new_row_values = [max_value, fn, b, mcla, cl, sd, hours, t, a, stc, e, mc, tf, mf, nc, som, sqm, c, ps, st, stm, tea] + [''] * 28
             worksheet2.append_row(new_row_values, value_input_option='RAW')
             messagebox.showinfo("Success", "Lưu thành công!")
             self.tf1.delete(0, 'end')
@@ -194,14 +197,13 @@ class Add_NewStudent:
             self.tf4.delete(0, 'end')
             self.tf5.delete(0, 'end')
             self.tf6.delete(0, 'end')
+            self.tf7.delete(0, 'end')
             self.tf8.delete(0, 'end')
             self.tf9.delete(0, 'end')
             self.tf10.delete(0, 'end')
             self.tf11.delete(0, 'end')
             self.tf12.delete(0, 'end')
-
             self.tf13.delete(0, 'end')
-            self.tf14.delete(0, 'end')
             self.tf15.delete(0, 'end')
             self.tf16.delete(0, 'end')
             self.tf17.delete(0, 'end')
