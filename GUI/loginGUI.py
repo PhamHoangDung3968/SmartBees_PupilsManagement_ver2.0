@@ -8,10 +8,10 @@ class LoginGUI:
         
         self.root = tk.Tk()
         self.root.title("Login")
-        self.root.geometry("875x538")
+        #self.root.geometry("875x538")
         
         # Center the window on the screen
-        self.center_window()
+        self.center_window(875,538)
         
         self.canvas = tk.Canvas(self.root, width=self.root.winfo_screenwidth(), height=self.root.winfo_screenheight())
         self.canvas.pack(fill=tk.BOTH, expand=True)
@@ -38,9 +38,9 @@ class LoginGUI:
         self.btn1 = tk.Button(self.panel, text="Login", font=("cambria", 14), command=self.login, width=20, bg="#FBA834",fg="white" )
         self.btn1.place(x=106, y=299)
         
-    def center_window(self):
-        window_width = 875
-        window_height = 538
+    def center_window(self, width, height):
+        window_width = width
+        window_height = height
 
         # Lấy kích thước màn hình
         screen_width = self.root.winfo_screenwidth()

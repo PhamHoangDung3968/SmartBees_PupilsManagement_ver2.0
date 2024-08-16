@@ -8,7 +8,8 @@ class Add_NewBook:
         
         self.root = tk.Tk()
         self.root.title("Add new book")
-        self.root.geometry("1020x680")
+        #self.root.geometry("1020x680")
+        self.center_window(1020,680)
         self.canvas = tk.Canvas(self.root, width=self.root.winfo_screenwidth(), height=self.root.winfo_screenheight())
         self.canvas.pack(fill=tk.BOTH, expand=True)
         self.panel = tk.Frame(self.canvas, bd=4, relief="solid")
@@ -120,7 +121,22 @@ class Add_NewBook:
             self.tf11.delete(0, 'end')
             self.tf12.delete(0, 'end')
 
-        
+    def center_window(self, width, height):
+        window_width = width
+        window_height = height
+
+        # Lấy kích thước màn hình
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+
+        # Tính toán vị trí x và y để cửa sổ xuất hiện ở giữa màn hình
+        position_x = int((screen_width / 2) - (window_width / 2))
+        position_y = int((screen_height / 2) - (window_height / 2))
+
+        # Đặt lại vị trí cho cửa sổ
+        self.root.geometry(f"{window_width}x{window_height}+{position_x}+{position_y}")
+
+    
     def run(self):
         self.root.resizable(False, False)
         self.root.mainloop()
