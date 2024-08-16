@@ -103,10 +103,10 @@ class MainFormGUI:
         self.style.configure('TFrame', background='#e6e6e6')
         self.style.configure('TButton', background='#cc0000', foreground='#cc0000', font=('Cambria', 12, 'bold'))
         self.style.configure('TLabel', background='#e6e6e6', foreground='#007acc', font=('Cambria', 12, 'bold'))
-        self.style.configure('TEntry', background='#007acc', foreground='#007acc', font=('Cambria', 12))
+        self.style.configure('TEntry', background='#007acc', foreground='#007acc', font=('Cambria', 16,'bold'))
         self.style.configure('TNotebook.Tab', font=('Cambria', 14, 'bold'), background='#007acc', foreground='#007acc')
-        self.style.configure('TTreeview.Heading', font=('Cambria', 11, 'bold'), background='#007ACC', foreground='white')
-        self.style.configure('TTreeview', font=('Cambria', 11), background='#f5f5f5', foreground='#333333')
+        self.style.configure('TTreeview.Heading', font=('Cambria', 20, 'bold'), background='#007ACC', foreground='white')
+        self.style.configure('TTreeview', font=('Cambria', 20), background='#f5f5f5', foreground='#333333')
 
         # Main content frame
         self.content_frame = ttk.Frame(self.root)
@@ -166,8 +166,22 @@ class MainFormGUI:
         
         table_columns = ["CLASSNO", "MAIN CLASS", "STUDYING DAY", "STUDYING TIME", "ROOM", "TEACHER", "FOREIGN TEACHER"]
         self.table = ttk.Treeview(self.class_management_tab, columns=table_columns, show="headings", height=25)
+        
+        # Đặt tiêu đề và độ rộng cho các cột
+        column_widths = {
+            "CLASSNO": 50,
+            "MAIN CLASS": 50,
+            "STUDYING DAY": 50,
+            "STUDYING TIME": 50,
+            "ROOM": 50,
+            "TEACHER": 200,
+            "FOREIGN TEACHER": 200,
+        }
+
         for col in table_columns:
             self.table.heading(col, text=col)
+            self.table.column(col, width=column_widths.get(col, 100), anchor=tk.W)  # Đặt độ rộng theo cấu hình
+
         self.populate_table(self.table, self.original_data_class)
         self.table.pack(fill="x")
         self.table.bind("<Double-1>", self.on_row_select)
@@ -191,8 +205,23 @@ class MainFormGUI:
         
         table_columns1 = ["ID", "FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "TEL", "ADDRESS", "PARENT NAME"]
         self.table1 = ttk.Treeview(self.student_management_tab, columns=table_columns1, show="headings", height=25)
+        
+        # Đặt tiêu đề và độ rộng cho các cột
+        column_widths = {
+            "ID": 50,
+            "FULL NAME": 200,
+            "BIRTHDAY (DOB)": 50,
+            "MAIN CLASS": 50,
+            "TEL": 50,
+            "ADDRESS": 300,
+            "PARENT NAME": 200,
+        }
+
         for col in table_columns1:
             self.table1.heading(col, text=col)
+            self.table1.column(col, width=column_widths.get(col, 100), anchor=tk.W)  # Đặt độ rộng cho từng cột
+
+        
         self.populate_table(self.table1, self.original_data_student)
         self.table1.pack(fill="x")
         tree_scroll_y1 = ttk.Scrollbar(self.student_management_tab, orient="vertical", command=self.table1.yview)
@@ -218,8 +247,25 @@ class MainFormGUI:
         
         table_columns2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2 = ttk.Treeview(self.score_management_tab, columns=table_columns2, show="headings", height=25)
+        
+        # Đặt tiêu đề và độ rộng cho các cột
+        column_widths = {
+            "ID": 50,
+            "FULL NAME": 200,
+            "MAIN CLASS": 50,
+            "TEACHER": 150,
+            "LISTENING": 50,
+            "SPEAKING": 50,
+            "WRITING & READING": 50,
+            "TOTAL GRADE": 50,
+            "PERCENT": 50,
+        }
+
         for col in table_columns2:
             self.table2.heading(col, text=col)
+            self.table2.column(col, width=column_widths.get(col, 100), anchor=tk.W)  # Đặt độ rộng cho từng cột
+
+        
         self.populate_table(self.table2, self.original_data_score)
         self.table2.pack(fill="x")
 
@@ -247,8 +293,20 @@ class MainFormGUI:
         
         table_columns3 = ["ID", "CAMBRIDGE LEVEL", "BOOK NAME", "MAIN BOOK"]
         self.table3 = ttk.Treeview(self.book_management_tab, columns=table_columns3, show="headings", height=25)
+        
+        # Đặt tiêu đề và độ rộng cho các cột
+        column_widths = {
+            "ID": 50,
+            "CAMBRIDGE LEVEL": 150,
+            "BOOK NAME": 200,
+            "MAIN BOOK": 100,
+        }
+
         for col in table_columns3:
             self.table3.heading(col, text=col)
+            self.table3.column(col, width=column_widths.get(col, 100), anchor=tk.W)  # Đặt độ rộng cho từng cột
+
+        
         self.populate_table(self.table3, self.original_data_book)
         self.table3.pack(fill="x")
         self.table3.bind("<Double-1>", self.on_row_select3)
