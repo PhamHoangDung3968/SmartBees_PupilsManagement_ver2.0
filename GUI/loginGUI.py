@@ -9,6 +9,10 @@ class LoginGUI:
         self.root = tk.Tk()
         self.root.title("Login")
         self.root.geometry("875x538")
+        
+        # Center the window on the screen
+        self.center_window()
+        
         self.canvas = tk.Canvas(self.root, width=self.root.winfo_screenwidth(), height=self.root.winfo_screenheight())
         self.canvas.pack(fill=tk.BOTH, expand=True)
         self.bg_image = Image.open("Images\\Bees.jpg")
@@ -33,6 +37,23 @@ class LoginGUI:
         self.tf2.place(x=33, y=224, width=357, height=30)
         self.btn1 = tk.Button(self.panel, text="Login", font=("cambria", 14), command=self.login, width=20, bg="#FBA834",fg="white" )
         self.btn1.place(x=106, y=299)
+        
+    def center_window(self):
+        window_width = 875
+        window_height = 538
+
+        # Lấy kích thước màn hình
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+
+        # Tính toán vị trí x và y để cửa sổ xuất hiện ở giữa màn hình
+        position_x = int((screen_width / 2) - (window_width / 2))
+        position_y = int((screen_height / 2) - (window_height / 2))
+
+        # Đặt lại vị trí cho cửa sổ
+        self.root.geometry(f"{window_width}x{window_height}+{position_x}+{position_y}")
+
+
     def login(self):
         username = self.tf1.get()
         password = self.tf2.get()

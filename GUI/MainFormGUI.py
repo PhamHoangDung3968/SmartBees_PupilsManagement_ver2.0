@@ -99,6 +99,12 @@ class MainFormGUI:
         self.root.geometry("1097x700")
         self.root.configure(bg="#e0f7fa")
         
+        # Set the window to start maximized
+        self.root.state('zoomed')
+        '''
+        # Set full screen
+        self.root.attributes('-fullscreen', True)
+        '''
         self.style = ttk.Style()
         self.style.configure('TFrame', background='#e6e6e6')
         self.style.configure('TButton', background='#cc0000', foreground='#cc0000', font=('Cambria', 12, 'bold'))
