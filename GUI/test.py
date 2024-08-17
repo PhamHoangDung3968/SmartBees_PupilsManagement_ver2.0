@@ -497,8 +497,23 @@ class MainFormGUI:
         
         table_columns2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2 = ttk.Treeview(self.tab1, columns=table_columns2, show="headings", height=25)
+        column_widths = {
+            "ID": 50,
+            "FULL NAME": 200,
+            "MAIN CLASS": 50,
+            "TEACHER": 150,
+            "LISTENING": 50,
+            "SPEAKING": 50,
+            "WRITING & READING": 50,
+            "TOTAL GRADE": 50,
+            "PERCENT": 50,
+        }
+
         for col in table_columns2:
             self.table2.heading(col, text=col)
+            self.table2.column(col, width=column_widths.get(col, 100), anchor=tk.W)
+        
+
         self.populate_table(self.table2, self.original_data_score)
         self.table2.pack(fill="x")
 
