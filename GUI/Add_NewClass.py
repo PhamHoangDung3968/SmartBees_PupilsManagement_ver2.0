@@ -3,6 +3,7 @@ from tkinter import messagebox
 import gspread
 gs = gspread.service_account("cre.json")
 sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
+
 class Add_NewClass:
     def __init__(self):
         
@@ -42,6 +43,8 @@ class Add_NewClass:
         self.tf6.place(x=33, y=545, width=430, height=30)
         self.btn1 = tk.Button(self.panel, text="SUBMIT", font=("cambria", 14, "bold"),command=self.Add_Class, width=20, bg="#FBA834",fg="black" )
         self.btn1.place(x=120, y=600)
+        # Gắn sự kiện nhấn phím Enter với hàm Add_Class
+        self.root.bind('<Return>', self.on_enter_key)
 
     def Add_Class(self):
         worksheet3 = sht.worksheet("sheet 3")
@@ -64,13 +67,21 @@ class Add_NewClass:
             new_row_values = [max_value,name,day,time,room,teacher,fteacher]
             worksheet3.append_row(new_row_values, value_input_option='RAW')
             messagebox.showinfo("Success", "Lưu thành công!")
+            #self.root.destroy()
+
+            
             self.tf1.delete(0, 'end')
             self.tf2.delete(0, 'end')
             self.tf3.delete(0, 'end')
             self.tf4.delete(0, 'end')
             self.tf5.delete(0, 'end')
             self.tf6.delete(0, 'end')
+            
         
+    def on_enter_key(self, event):
+        # Gọi cùng hàm xử lý khi phím Enter được nhấn
+        self.Add_Class()
+
     def center_window(self, width, height):
         window_width = width
         window_height = height

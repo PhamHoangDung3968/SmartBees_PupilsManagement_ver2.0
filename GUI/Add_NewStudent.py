@@ -137,6 +137,8 @@ class Add_NewStudent:
         # self.btn1 = tk.Button(self.panel, text="ADD NEW", font=("cambria", 14, "bold"), width=20, bg="#FBA834",fg="black" )
         self.btn1 = tk.Button(self.panel, text="ADD NEW", font=("cambria", 14, "bold"),command=self.Add_Student, width=20, bg="#FBA834",fg="black" )
         self.btn1.place(x=520, y=600)
+        # Gắn sự kiện nhấn phím Enter với hàm Add_Student
+        self.root.bind('<Return>', self.on_enter_key)
 
     def Add_Student(self):
         worksheet2 = sht.worksheet("sheet 2")
@@ -192,6 +194,8 @@ class Add_NewStudent:
             new_row_values = [max_value, fn, b, mcla, cl, sd, hours, t, a, stc, e, mc, tf, mf, nc, som, sqm, c, ps, st, stm, tea] + [''] * 28
             worksheet2.append_row(new_row_values, value_input_option='RAW')
             messagebox.showinfo("Success", "Lưu thành công!")
+            
+            
             self.tf1.delete(0, 'end')
             self.tf2.delete(0, 'end')
             self.tf3.delete(0, 'end')
@@ -213,8 +217,12 @@ class Add_NewStudent:
             self.tf20.delete(0, 'end')
             self.tf21.delete(0, 'end')
             self.tf22.delete(0, 'end')
-
-        
+            
+    
+    def on_enter_key(self, event):
+        # Gọi cùng hàm xử lý khi phím Enter được nhấn
+        self.Add_Student()
+            
     def center_window(self, width, height):
         window_width = width
         window_height = height

@@ -353,7 +353,7 @@ class MainFormGUI:
         self.content_seach.pack(fill="both", expand=True)
         btnDangXuat = ttk.Button(self.content_seach, text="Đăng xuất", width=25, command=self.dangxuat)
         btnDangXuat.pack(side="right", anchor="ne")
-
+        
 
     def create_class_management_tab(self):
         self.class_management_tab = ttk.Frame(self.tab_control, style='TFrame')
@@ -372,7 +372,7 @@ class MainFormGUI:
         btnXuatExcel.pack(side="right", padx=5, pady=5)
         btnReload.pack(side="right", padx=5, pady=5)
         table_columns = ["CLASSNO", "MAIN CLASS", "STUDYING DAY", "STUDYING TIME", "ROOM", "TEACHER", "FOREIGN TEACHER"]
-        self.table = ttk.Treeview(self.class_management_tab, columns=table_columns, show="headings", height=25)
+        self.table = ttk.Treeview(self.class_management_tab, columns=table_columns, show="headings", height=28)
         
         # Đặt tiêu đề và độ rộng cho các cột
         column_widths = {
@@ -411,7 +411,7 @@ class MainFormGUI:
         btnReload.pack(side="right", padx=5, pady=5)
         
         table_columns1 = ["ID", "FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "CURRENT LEVEL","TEL", "ADDRESS"]
-        self.table1 = ttk.Treeview(self.student_management_tab, columns=table_columns1, show="headings", height=25)
+        self.table1 = ttk.Treeview(self.student_management_tab, columns=table_columns1, show="headings", height=28)
          # Đặt tiêu đề và độ rộng cho các cột
         column_widths = {
             "ID": 50,
@@ -470,7 +470,7 @@ class MainFormGUI:
         btnReload.pack(side="right", padx=5, pady=5)
         
         table_columns2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
-        self.table2 = ttk.Treeview(self.tab1, columns=table_columns2, show="headings", height=25)
+        self.table2 = ttk.Treeview(self.tab1, columns=table_columns2, show="headings", height=28)
          # Đặt tiêu đề và độ rộng cho các cột
         column_widths = {
             "ID": 50,
@@ -508,7 +508,7 @@ class MainFormGUI:
         btnReload_2.pack(side="right", padx=5, pady=5)
 
         table_columns2_2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
-        self.table2_2 = ttk.Treeview(self.tab2, columns=table_columns2_2, show="headings", height=25)
+        self.table2_2 = ttk.Treeview(self.tab2, columns=table_columns2_2, show="headings", height=28)
 
         for col in table_columns2_2:
             self.table2_2.heading(col, text=col)
@@ -533,7 +533,7 @@ class MainFormGUI:
         btnReload_3.pack(side="right", padx=5, pady=5)
 
         table_columns2_3 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
-        self.table2_3 = ttk.Treeview(self.tab3, columns=table_columns2_3, show="headings", height=25)
+        self.table2_3 = ttk.Treeview(self.tab3, columns=table_columns2_3, show="headings", height=28)
 
         for col in table_columns2_3:
             self.table2_3.heading(col, text=col)
@@ -558,7 +558,7 @@ class MainFormGUI:
         btnReload_4.pack(side="right", padx=5, pady=5)
 
         table_columns2_4 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
-        self.table2_4 = ttk.Treeview(self.tab4, columns=table_columns2_4, show="headings", height=25)
+        self.table2_4 = ttk.Treeview(self.tab4, columns=table_columns2_4, show="headings", height=28)
 
         for col in table_columns2_4:
             self.table2_4.heading(col, text=col)
@@ -583,7 +583,7 @@ class MainFormGUI:
         btnReload_5.pack(side="right", padx=5, pady=5)
 
         table_columns2_5 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
-        self.table2_5 = ttk.Treeview(self.tab5, columns=table_columns2_5, show="headings", height=25)
+        self.table2_5 = ttk.Treeview(self.tab5, columns=table_columns2_5, show="headings", height=28)
 
         for col in table_columns2_5:
             self.table2_5.heading(col, text=col)
@@ -617,7 +617,7 @@ class MainFormGUI:
         btnReload.pack(side="right", padx=5, pady=5)
         
         table_columns3 = ["ID", "CAMBRIDGE LEVEL", "BOOK NAME", "MAIN BOOK"]
-        self.table3 = ttk.Treeview(self.book_management_tab, columns=table_columns3, show="headings", height=25)
+        self.table3 = ttk.Treeview(self.book_management_tab, columns=table_columns3, show="headings", height=28)
         for col in table_columns3:
             self.table3.heading(col, text=col)
         self.populate_table(self.table3, self.original_data_book)
@@ -767,18 +767,19 @@ class MainFormGUI:
         Xuat3 = Excel_Create()
         Xuat3.XuatExcel3()
         
-      
+        
     def AddGUI_Class(self):
         AddNewClass = Add_NewClass()
-        AddNewClass.run()
-
+        AddNewClass.run()  # Chạy giao diện
+    
     def AddGUI_Book(self):
         AddNewBook = Add_NewBook()
-        AddNewBook.run()
+        AddNewBook.run()     
     
     def AddGUI_Student(self):
         AddNewStudent = Add_NewStudent()
         AddNewStudent.run()
+        
 
     def center_window(self, width, height, object):
         window_width = width

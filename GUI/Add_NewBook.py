@@ -80,6 +80,8 @@ class Add_NewBook:
 
         self.btn1 = tk.Button(self.panel, text="SUBMIT", font=("cambria", 14, "bold"),command=self.Add_Book, width=20, bg="#FBA834",fg="black" )
         self.btn1.place(x=400, y=600)
+        # Gắn sự kiện nhấn phím Enter với hàm Add_Book
+        self.root.bind('<Return>', self.on_enter_key)
 
     def Add_Book(self):
         worksheet1 = sht.worksheet("sheet 1")
@@ -108,6 +110,8 @@ class Add_NewBook:
             new_row_values = [max_value,cl,mb,sk1,sk2,sk3,sk4,vb,gb,tb,p,vm,pc]
             worksheet1.append_row(new_row_values, value_input_option='RAW')
             messagebox.showinfo("Success", "Lưu thành công!")
+            
+            
             self.tf1.delete(0, 'end')
             self.tf2.delete(0, 'end')
             self.tf3.delete(0, 'end')
@@ -120,7 +124,12 @@ class Add_NewBook:
             self.tf10.delete(0, 'end')
             self.tf11.delete(0, 'end')
             self.tf12.delete(0, 'end')
+            
 
+    def on_enter_key(self, event):
+        # Gọi cùng hàm xử lý khi phím Enter được nhấn
+        self.Add_Book()
+        
     def center_window(self, width, height):
         window_width = width
         window_height = height

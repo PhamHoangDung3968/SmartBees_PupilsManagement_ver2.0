@@ -37,6 +37,8 @@ class LoginGUI:
         self.tf2.place(x=33, y=224, width=357, height=30)
         self.btn1 = tk.Button(self.panel, text="Login", font=("cambria", 14), command=self.login, width=20, bg="#FBA834",fg="white" )
         self.btn1.place(x=106, y=299)
+        # Gắn sự kiện nhấn phím Enter với hàm Add_Class
+        self.root.bind('<Return>', self.on_enter_key)
         
     def center_window(self, width, height):
         window_width = width
@@ -70,6 +72,10 @@ class LoginGUI:
         # Replace with your actual authentication logic
         return username == "admin" and password == "123"
 
+    def on_enter_key(self, event):
+        # Gọi cùng hàm xử lý khi phím Enter được nhấn
+        self.login()
+        
     def run(self):
         self.root.resizable(False, False)
         self.root.mainloop()
