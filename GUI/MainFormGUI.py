@@ -329,7 +329,7 @@ class MainFormGUI:
         # Original data storage
         self.original_data_class = result_list_Class[:]
         self.original_data_student = combined_data_student1[:]
-        self.original_data_score = combined_data6[:]
+        self.original_data_score1 = combined_data6[:]
         self.original_data_score2 = combined_data6_2[:]
         self.original_data_score3 = combined_data6_3[:]
         self.original_data_score4 = combined_data6_4[:]
@@ -471,112 +471,6 @@ class MainFormGUI:
         self.create_search_section(self.student_management_tab, "student")
 
 
-    # def create_score_management_tab(self):
-    #     self.score_management_tab = ttk.Frame(self.tab_control, style='TFrame')
-    #     self.tab_control.add(self.score_management_tab, text="Quản lý điểm số")
-        
-    #     self.inner_tab_control = ttk.Notebook(self.score_management_tab)
-    #     self.inner_tab_control.pack(expand=1, fill="both")
-
-    #     # Định nghĩa tên và dữ liệu cho mỗi tab
-    #     stages = [
-    #         {"name": "Giai đoạn 1", "data_attr": "original_data_score", "select_handler": self.on_row_select2},
-    #         {"name": "Giai đoạn 2", "data_attr": "original_data_score2", "select_handler": self.on_row_select2_2},
-    #         {"name": "Giai đoạn 3", "data_attr": "original_data_score3", "select_handler": self.on_row_select2_3},
-    #         {"name": "Giai đoạn 4", "data_attr": "original_data_score4", "select_handler": self.on_row_select2_4},
-    #         {"name": "Giai đoạn 5", "data_attr": "original_data_score5", "select_handler": self.on_row_select2_5},
-    #     ]
-
-    #     # Định nghĩa các cột và độ rộng tương ứng
-    #     table_columns = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
-    #     column_widths = {
-    #         "ID": 50,
-    #         "FULL NAME": 200,
-    #         "MAIN CLASS": 100,
-    #         "TEACHER": 150,
-    #         "LISTENING": 100,
-    #         "SPEAKING": 100,
-    #         "WRITING & READING": 150,
-    #         "TOTAL GRADE": 100,
-    #         "PERCENT": 100,
-    #     }
-
-    #     self.score_tables = []  # Danh sách lưu trữ các bảng cho mỗi tab
-
-    #     for stage in stages:
-    #         tab = ttk.Frame(self.inner_tab_control, style='TFrame')
-    #         self.inner_tab_control.add(tab, text=stage["name"])
-
-    #         # Tạo khung cho các nút
-    #         button_frame = ttk.Frame(tab, style='TFrame')
-    #         button_frame.pack(side="top", fill="x", padx=5, pady=5)
-            
-    #         btn_export_excel = ttk.Button(
-    #             button_frame, 
-    #             text="Xuất Excel", 
-    #             command=self.XuatExcel12, 
-    #             width=25, 
-    #             style='TButton'
-    #         )
-    #         btn_reload = ttk.Button(
-    #             button_frame, 
-    #             text="Reload", 
-    #             command=lambda: self.reload_tab("score"), 
-    #             width=25, 
-    #             style='TButton'
-    #         )
-            
-    #         btn_export_excel.pack(side="right", padx=5)
-    #         btn_reload.pack(side="right", padx=5)
-            
-    #         # Tạo frame cho bảng và thanh cuộn
-    #         table_frame = ttk.Frame(tab, style='TFrame')
-    #         table_frame.pack(fill="both", expand=True)
-            
-    #         # Tạo bảng Treeview
-    #         tree = ttk.Treeview(
-    #             table_frame, 
-    #             columns=table_columns, 
-    #             show="headings", 
-    #             height=28,
-    #             style='Treeview'
-    #         )
-            
-    #         # Định nghĩa header và cột có chức năng sắp xếp
-    #         for col in table_columns:
-    #             tree.heading(
-    #                 col, 
-    #                 text=col, 
-    #                 command=lambda c=col, t=tree: self.sort_table(t, c, False)
-    #             )
-    #             tree.column(col, width=column_widths[col], anchor=tk.W)
-            
-    #         # Thêm dữ liệu vào bảng
-    #         data = getattr(self, stage["data_attr"], [])
-    #         self.populate_table(tree, data)
-            
-    #         # Thêm thanh cuộn vào trong table_frame
-    #         scrollbar_y = ttk.Scrollbar(table_frame, orient="vertical", command=tree.yview)
-    #         scrollbar_x = ttk.Scrollbar(table_frame, orient="horizontal", command=tree.xview)
-    #         tree.configure(yscrollcommand=scrollbar_y.set, xscrollcommand=scrollbar_x.set)
-            
-    #         # Đặt bảng và thanh cuộn vào grid
-    #         tree.grid(row=0, column=0, sticky="nsew")
-    #         scrollbar_y.grid(row=0, column=1, sticky="ns")
-    #         scrollbar_x.grid(row=1, column=0, sticky="ew")
-            
-    #         # Đảm bảo frame của bảng có thể mở rộng
-    #         table_frame.grid_rowconfigure(0, weight=1)
-    #         table_frame.grid_columnconfigure(0, weight=1)
-            
-    #         # Gắn sự kiện chọn dòng
-    #         tree.bind("<Double-1>", stage["select_handler"])
-            
-    #         # Tạo phần tìm kiếm
-    #         self.create_search_section(tab, "score")
-            
-    #         # Lưu trữ bảng vào danh sách
-    #         self.score_tables.append(tree)
     def create_score_management_tab(self):
         self.score_management_tab = ttk.Frame(self.tab_control, style='TFrame')
         self.tab_control.add(self.score_management_tab, text="Quản lý điểm số")
@@ -625,7 +519,7 @@ class MainFormGUI:
             self.table2.heading(col, text=col)
             self.table2.column(col, width=column_widths.get(col, 100), anchor=tk.W)
 
-        self.populate_table(self.table2, self.original_data_score)
+        self.populate_table(self.table2, self.original_data_score1)
         self.table2.pack(fill="x")
 
         tree_scrollx2 = ttk.Scrollbar(self.tab1, orient="horizontal", command=self.table2.xview)
@@ -633,7 +527,7 @@ class MainFormGUI:
         self.table2.bind("<Double-1>", self.on_row_select2)
         self.table2.configure(xscrollcommand=tree_scrollx2.set)
 
-        self.create_search_section(self.tab1, "score")
+        self.create_search_section(self.tab1, "score1")
 
 
         # tab 2
@@ -658,7 +552,7 @@ class MainFormGUI:
         self.table2_2.bind("<Double-1>", self.on_row_select2_2)
         self.table2_2.configure(xscrollcommand=tree_scrollx2_2.set)
 
-        self.create_search_section(self.tab2, "score")
+        self.create_search_section(self.tab2, "score2")
 
         #tab 3
         button_frame_3 = ttk.Frame(self.tab3, style='TFrame')
@@ -681,7 +575,7 @@ class MainFormGUI:
         self.table2_3.bind("<Double-1>", self.on_row_select2_3)
         self.table2_3.configure(xscrollcommand=tree_scrollx2_3.set)
 
-        self.create_search_section(self.tab3, "score")
+        self.create_search_section(self.tab3, "score3")
 
         #tab 4
         button_frame_4 = ttk.Frame(self.tab4, style='TFrame')
@@ -704,7 +598,7 @@ class MainFormGUI:
         self.table2_4.bind("<Double-1>", self.on_row_select2_4)
         self.table2_4.configure(xscrollcommand=tree_scrollx2_4.set)
 
-        self.create_search_section(self.tab4, "score")
+        self.create_search_section(self.tab4, "score4")
 
         # tab 5
         button_frame_5 = ttk.Frame(self.tab5, style='TFrame')
@@ -727,7 +621,7 @@ class MainFormGUI:
         self.table2_5.bind("<Double-1>", self.on_row_select2_5)
         self.table2_5.configure(xscrollcommand=tree_scrollx2_5.set)
 
-        self.create_search_section(self.tab5, "score")
+        self.create_search_section(self.tab5, "score5")
 
 
     def create_book_management_tab(self):
@@ -791,7 +685,15 @@ class MainFormGUI:
             fields = ["TEACHER", "ROOM", "MAIN CLASS", "CLASSNO"]
         elif type_ == "student":
             fields = ["MAIN CLASS", "FULL NAME", "CLASSNO"]
-        elif type_ == "score":
+        elif type_ == "score1":
+            fields = ["TEACHER", "MAIN CLASS", "FULL NAME", "ID"]
+        elif type_ == "score2":
+            fields = ["TEACHER", "MAIN CLASS", "FULL NAME", "ID"]
+        elif type_ == "score3":
+            fields = ["TEACHER", "MAIN CLASS", "FULL NAME", "ID"]
+        elif type_ == "score4":
+            fields = ["TEACHER", "MAIN CLASS", "FULL NAME", "ID"]
+        elif type_ == "score5":
             fields = ["TEACHER", "MAIN CLASS", "FULL NAME", "ID"]
         elif type_ == "book":
             fields = ["BOOK NAME", "CAMBRIDGE LEVEL", "ID"]
@@ -828,7 +730,31 @@ class MainFormGUI:
                 "FULL NAME": 1,
                 "ID": 0
             },
-            "score": {
+            "score1": {
+                "TEACHER": 3,
+                "MAIN CLASS": 2,
+                "FULL NAME": 1,
+                "ID": 0
+            },
+             "score2": {
+                "TEACHER": 3,
+                "MAIN CLASS": 2,
+                "FULL NAME": 1,
+                "ID": 0
+            },
+              "score3": {
+                "TEACHER": 3,
+                "MAIN CLASS": 2,
+                "FULL NAME": 1,
+                "ID": 0
+            },
+               "score4": {
+                "TEACHER": 3,
+                "MAIN CLASS": 2,
+                "FULL NAME": 1,
+                "ID": 0
+            },
+                "score5": {
                 "TEACHER": 3,
                 "MAIN CLASS": 2,
                 "FULL NAME": 1,
@@ -853,9 +779,21 @@ class MainFormGUI:
         elif type_ == "student":
             data_source = self.original_data_student
             table = self.table1
-        elif type_ == "score":
-            data_source = self.original_data_score
+        elif type_ == "score1":
+            data_source = self.original_data_score1
             table = self.table2
+        elif type_ == "score2":
+            data_source = self.original_data_score2
+            table = self.table2_2
+        elif type_ == "score3":
+            data_source = self.original_data_score3
+            table = self.table2_3
+        elif type_ == "score4":
+            data_source = self.original_data_score4
+            table = self.table2_4
+        elif type_ == "score5":
+            data_source = self.original_data_score5
+            table = self.table2_5
         elif type_ == "book":
             data_source = self.original_data_book
             table = self.table3
@@ -883,8 +821,16 @@ class MainFormGUI:
             self.populate_table(self.table, self.original_data_class)
         elif type_ == "student":
             self.populate_table(self.table1, self.original_data_student)
-        elif type_ == "score":
-            self.populate_table(self.table2, self.original_data_score)
+        elif type_ == "score1":
+            self.populate_table(self.table2, self.original_data_score1)
+        elif type_ == "score2":
+            self.populate_table(self.table2_2, self.original_data_score2)
+        elif type_ == "score3":
+            self.populate_table(self.table2_3, self.original_data_score3)
+        elif type_ == "score4":
+            self.populate_table(self.table2_4, self.original_data_score4)
+        elif type_ == "score5":
+            self.populate_table(self.table2_5, self.original_data_score5)
         elif type_ == "book":
             self.populate_table(self.table3, self.original_data_book)
 
@@ -896,7 +842,11 @@ class MainFormGUI:
     def update_original_data(self):
         self.original_data_class = result_list_Class
         self.original_data_student = result_list_Student
-        self.original_data_score = result_list_Score
+        self.original_data_score1 = result_list_Score
+        self.original_data_score2 = result_list_Score2
+        self.original_data_score3 = result_list_Score3
+        self.original_data_score4 = result_list_Score4
+        self.original_data_score5 = result_list_Score5
         self.original_data_book = result_list_Book
 
     
