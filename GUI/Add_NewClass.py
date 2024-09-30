@@ -5,8 +5,9 @@ gs = gspread.service_account("cre.json")
 sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 
 class Add_NewClass:
-    def __init__(self):
-        
+    def __init__(self, parent):
+        self.parent = parent  # Reference to MainFormGUI
+
         self.root = tk.Tk()
         self.root.title("Add new class")
         #self.root.geometry("520x680")
@@ -66,10 +67,12 @@ class Add_NewClass:
         else:
             new_row_values = [max_value,name,day,time,room,teacher,fteacher]
             worksheet3.append_row(new_row_values, value_input_option='RAW')
-            messagebox.showinfo("Success", "Lưu thành công!")
-            #self.root.destroy()
-
             
+            # Call reload_tab of MainFormGUI to refresh the interface
+            self.parent.reload_tab(type_="class")
+               
+            messagebox.showinfo("Success", "Lưu thành công!")
+         
             self.tf1.delete(0, 'end')
             self.tf2.delete(0, 'end')
             self.tf3.delete(0, 'end')
@@ -77,6 +80,7 @@ class Add_NewClass:
             self.tf5.delete(0, 'end')
             self.tf6.delete(0, 'end')
             
+                
         
     def on_enter_key(self, event):
         # Gọi cùng hàm xử lý khi phím Enter được nhấn

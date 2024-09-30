@@ -871,7 +871,7 @@ class MainFormGUI:
         
         
     def AddGUI_Class(self):
-        AddNewClass = Add_NewClass()
+        AddNewClass = Add_NewClass(self)
         AddNewClass.run()  # Chạy giao diện
     
     def AddGUI_Book(self):
@@ -879,7 +879,7 @@ class MainFormGUI:
         AddNewBook.run()     
     
     def AddGUI_Student(self):
-        AddNewStudent = Add_NewStudent()
+        AddNewStudent = Add_NewStudent(self)
         AddNewStudent.run()
         
 

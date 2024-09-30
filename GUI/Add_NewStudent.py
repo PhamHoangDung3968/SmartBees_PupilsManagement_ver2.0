@@ -8,8 +8,9 @@ worksheet3 = sht.worksheet("sheet 3")
 values_list_Class = worksheet3.get_all_values()[2:]
 result_list_Class = [row[1] for row in values_list_Class]
 class Add_NewStudent:
-    def __init__(self):
-        
+    def __init__(self, parent):
+        self.parent = parent  # Reference to MainFormGUI
+
         self.root = tk.Tk()
         self.root.title("Add new student manager")
         #self.root.geometry("1300x680")
@@ -193,6 +194,10 @@ class Add_NewStudent:
         else:
             new_row_values = [max_value, fn, b, mcla, cl, sd, hours, t, a, stc, e, mc, tf, mf, nc, som, sqm, c, ps, st, stm, tea] + [''] * 28
             worksheet2.append_row(new_row_values, value_input_option='RAW')
+            
+            # Call reload_tab of MainFormGUI to refresh the interface
+            self.parent.reload_tab(type_="student")
+            
             messagebox.showinfo("Success", "Lưu thành công!")
             
             

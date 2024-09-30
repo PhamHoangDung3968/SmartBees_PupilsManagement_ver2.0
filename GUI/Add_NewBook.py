@@ -125,6 +125,7 @@ class Add_NewBook:
             self.tf11.delete(0, 'end')
             self.tf12.delete(0, 'end')
             
+            
 
     def on_enter_key(self, event):
         # Gọi cùng hàm xử lý khi phím Enter được nhấn
