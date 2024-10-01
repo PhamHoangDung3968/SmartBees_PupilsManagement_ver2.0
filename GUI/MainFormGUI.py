@@ -10,6 +10,7 @@ from openpyxl.utils import get_column_letter
 from datetime import datetime
 import string
 
+from PDF.Score_PDF import create_file
 
 from GUI.Add_NewClass import Add_NewClass
 from GUI.Add_NewBook import Add_NewBook
@@ -302,15 +303,15 @@ class MainFormGUI:
         # Set full screen
         self.root.attributes('-fullscreen', True)
         '''
-        
+
         self.style = ttk.Style()
         self.style.configure('TFrame', background='#e6e6e6')
         self.style.configure('TButton', background='#cc0000', foreground='#cc0000', font=('Cambria', 12, 'bold'))
         self.style.configure('TLabel', background='#e6e6e6', foreground='#007acc', font=('Cambria', 12, 'bold'))
-        self.style.configure('TEntry', background='#007acc', foreground='#007acc', font=('Cambria', 12))
+        self.style.configure('TEntry', background='#007acc', foreground='#007acc', font=('Cambria', 14, 'bold'))
         self.style.configure('TNotebook.Tab', font=('Cambria', 14, 'bold'), background='#007acc', foreground='#007acc')
-        self.style.configure('TTreeview.Heading', font=('Cambria', 11, 'bold'), background='#007ACC', foreground='white')
-        self.style.configure('TTreeview', font=('Cambria', 11), background='#f5f5f5', foreground='#333333')
+        self.style.configure('TTreeview.Heading', font=('Cambria', 14, 'bold'), background='#007ACC', foreground='white')
+        self.style.configure('TTreeview', font=('Cambria', 14), background='#f5f5f5', foreground='#333333')
 
         # Main content frame
         self.content_frame = ttk.Frame(self.root)
@@ -1318,10 +1319,40 @@ class MainFormGUI:
                 self.reload_tab("score")
 
             except Exception as e:
-                messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")
+                messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")            
+                
 
+        def print_pdf():
+            # Lấy giá trị từ text box ở đây
+                
+            try:
+                '''
+                def create_file(pdf, level, address, exam_date, stage, exam_type, exam_time, main_teacher, examiner_teacher, study_date, study_time, 
+                 name, birth, class_no, 
+                 stage1, listening1, reading1, speaking1, stage2, listening2, reading2, speaking2, stage3, listening3, reading3, speaking3, 
+                 stage4, listening4, reading4, speaking4, stage5, listening5, reading5, speaking5, 
+                 stage_no1, stage_no2, stage_no3, stage_no4, stage_no5):
+                '''
+                
+                create_file(pdf, 'M', 'C.HB406','11/09/2024','23','Reading','15h30','Nguyễn Trung Sơn','Phạm Hoàng Dũng','M-W-F','19h20', 
+                 'Phạm Hoàng Dũng', '15/06/2003', '8A11', 
+                 'Giai đoạn 1', 10, 10, 10, 'Giai đoạn 2', 10, 20, 24, 'Giai đoạn 3', 10, 20, 20, 
+                 'Giai đoạn 4', 10, 10, 25, 'Giai đoạn 5', 10, 20, 25,
+                 1,2,3,4,5)
+                
+                messagebox.showinfo("Thành công", "In file PDF thành công!")
+                self.rootScore.destroy()
+            
+            except Exception as e:
+                messagebox.showerror("Lỗi", f"In file PDF thất bại: {e}")
+    
+            
         self.btn1 = tk.Button(self.panel4, text="SUBMIT", font=("cambria", 14, "bold"),command=chinhsua ,width=12, bg="#FBA834",fg="black" )
         self.btn1.place(x=800, y=330)
+        
+        self.btn2 = tk.Button(self.panel4, text="PDF", font=("cambria", 14, "bold"),command=print_pdf ,width=12, bg="#FF0000",fg="white" )
+        self.btn2.place(x=800, y=530)
+        
 
     def on_row_select2_2(self, event):
         selected_item2 = self.table2_2.selection()

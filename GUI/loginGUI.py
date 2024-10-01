@@ -33,13 +33,36 @@ class LoginGUI:
         self.tf1.place(x=33, y=108, width=357, height=30)
         self.lb2 = tk.Label(self.panel, text="Password", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb2.place(x=33, y=171)
+        '''
         self.tf2 = tk.Entry(self.panel, show="*", font=("cambria", 13, "bold"))
         self.tf2.place(x=33, y=224, width=357, height=30)
+        '''
+        # Entry cho mật khẩu với ký tự ẩn
+        self.tf2 = tk.Entry(self.panel, show="*", font=("Cambria", 13, "bold"))
+        self.tf2.place(x=33, y=224, width=357, height=30)
+
+        # Tạo một biến để kiểm tra trạng thái của checkbox
+        self.show_password_var = tk.BooleanVar()
+
+        # Checkbutton để bật/tắt hiển thị mật khẩu
+        self.show_password_cb = tk.Checkbutton(self.panel, text="Hiện mật khẩu", variable=self.show_password_var,
+                                               onvalue=True, offvalue=False, command=self.toggle_password)
+        self.show_password_cb.place(x=33, y=260)
+        
+        
         self.btn1 = tk.Button(self.panel, text="Login", font=("cambria", 14), command=self.login, width=20, bg="#FBA834",fg="white" )
         self.btn1.place(x=106, y=299)
         # Gắn sự kiện nhấn phím Enter với hàm Add_Class
         self.root.bind('<Return>', self.on_enter_key)
         
+    # Hàm bật/tắt hiển thị mật khẩu
+    def toggle_password(self):
+        if self.show_password_var.get():
+            self.tf2.config(show="")  # Hiển thị mật khẩu
+        else:
+            self.tf2.config(show="*")  # Ẩn mật khẩu
+            
+            
     def center_window(self, width, height):
         window_width = width
         window_height = height

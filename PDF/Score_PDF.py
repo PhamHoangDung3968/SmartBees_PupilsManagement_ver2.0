@@ -114,7 +114,7 @@ def student_data(pdf, name, birth, class_no):
     pdf.ln(5)
 
 
-def create_table(pdf, xt, yt, zt, xf, yf, zf, stage, listening, reading, speaking):
+def create_table(pdf, xt, yt, zt, xf, yf, zf, stage, listening, reading, speaking, stage_no):
     pdf.set_font('DejaVu', 'B', 8)
     pdf.set_text_color(xt, yt, zt)  # Red color for the main title
     pdf.set_fill_color(xf, yf, zf)
@@ -125,20 +125,20 @@ def create_table(pdf, xt, yt, zt, xf, yf, zf, stage, listening, reading, speakin
     pdf.cell(30, 8, 'Điểm nghe', 1, 0, 'C', True)
     pdf.cell(35, 8, str(listening) + '/20', 1, 0, 'C')
     pdf.cell(30, 8, 'Điểm đọc viết', 1, 0, 'C', True)
-    pdf.cell(35, 8, str(reading) + '/20', 1, 0, 'C')
+    pdf.cell(35, 8, str(reading) + '/25', 1, 0, 'C')
     pdf.cell(30, 8, 'Điểm nói', 1, 0, 'C', True)
     pdf.cell(35, 8, str(speaking) + '/20', 1, 1, 'C')
 
     total_grade = listening + reading + speaking
-    percent = total_grade / 60 * 100
+    percent = round(total_grade / 65 * 100, 2)
 
     pdf.cell(30, 8, 'Điểm tổng cộng:', 1, 0, 'C', True)
-    pdf.cell(65, 8, str(total_grade) + '/60', 1, 0, 'C')
+    pdf.cell(65, 8, str(total_grade) + '/65', 1, 0, 'C')
     pdf.cell(65, 8, 'Phần trăm điểm đạt', 1, 0, 'C')
     pdf.cell(35, 8, str(percent) + '%', 1, 1, 'C')
 
     pdf.cell(30, 8, 'Nhận xét:', 1, 0, 'C', True)
-    pdf.cell(165, 8, 'Giỏi hơn anh Dũng là cái chắc', 1, 1, 'C')
+    pdf.cell(165, 8, get_comment(stage_no, percent), 1, 1, 'C')
 
     pdf.ln(5)
 
@@ -146,7 +146,8 @@ def create_table(pdf, xt, yt, zt, xf, yf, zf, stage, listening, reading, speakin
 def return_value(pdf, level, address, exam_date, stage, exam_type, exam_time, main_teacher, examiner_teacher, study_date, study_time, 
                  name, birth, class_no, 
                  stage1, listening1, reading1, speaking1, stage2, listening2, reading2, speaking2, stage3, listening3, reading3, speaking3, 
-                 stage4, listening4, reading4, speaking4, stage5, listening5, reading5, speaking5):
+                 stage4, listening4, reading4, speaking4, stage5, listening5, reading5, speaking5, 
+                 stage_no1, stage_no2, stage_no3, stage_no4, stage_no5):
     # Exam information
     exam_data(pdf, level, address, exam_date, stage, exam_type, exam_time, main_teacher, examiner_teacher, study_date, study_time)
     
@@ -154,26 +155,87 @@ def return_value(pdf, level, address, exam_date, stage, exam_type, exam_time, ma
     student_data(pdf, name, birth, class_no)
     
     # Grade in every stage
-    create_table(pdf, 0, 0, 0, 239, 210, 209, stage1, listening1, reading1, speaking1)
-    create_table(pdf, 0, 0, 0, 250, 191, 143, stage2, listening2, reading2, speaking2)
-    create_table(pdf, 0, 0, 0, 189, 210, 246, stage3, listening3, reading3, speaking3)
-    create_table(pdf, 0, 0, 0, 194, 214, 155, stage4, listening4, reading4, speaking4)
-    create_table(pdf, 0, 0, 0, 178, 161, 199, stage5, listening5, reading5, speaking5)
+    create_table(pdf, 0, 0, 0, 239, 210, 209, stage1, listening1, reading1, speaking1, stage_no1)
+    create_table(pdf, 0, 0, 0, 250, 191, 143, stage2, listening2, reading2, speaking2, stage_no2)
+    create_table(pdf, 0, 0, 0, 189, 210, 246, stage3, listening3, reading3, speaking3, stage_no3)
+    create_table(pdf, 0, 0, 0, 194, 214, 155, stage4, listening4, reading4, speaking4, stage_no4)
+    create_table(pdf, 0, 0, 0, 178, 161, 199, stage5, listening5, reading5, speaking5, stage_no5)
+
+
+def get_comment(stage, percent):
+    if stage == 1:
+        if percent < 20:
+            return "Yếu"
+        elif 20 <= percent < 30:
+            return "Trung bình"
+        elif 30 <= percent < 40:
+            return "Khá"
+        else:  # percent >= 40
+            return "Giỏi"
+    
+    elif stage == 2:
+        if percent < 40:
+            return "Yếu"
+        elif 40 <= percent < 50:
+            return "Trung bình"
+        elif 50 <= percent < 60:
+            return "Khá"
+        else:  # percent >= 60
+            return "Giỏi"
+    
+    elif stage == 3:
+        if percent < 50:
+            return "Yếu"
+        elif 50 <= percent < 60:
+            return "Trung bình"
+        elif 60 <= percent < 70:
+            return "Khá"
+        else:  # percent >= 70
+            return "Giỏi"
+    
+    elif stage == 4:
+        if percent < 60:
+            return "Yếu"
+        elif 60 <= percent < 70:
+            return "Trung bình"
+        elif 70 <= percent < 80:
+            return "Khá"
+        else:  # percent >= 80
+            return "Giỏi"
+    
+    elif stage == 5:
+        if percent < 70:
+            return "Yếu"
+        elif 70 <= percent < 75:
+            return "Trung bình"
+        elif 75 <= percent < 80:
+            return "Khá"
+        else:  # percent >= 80
+            return "Giỏi"
+    
+    else:
+        return "Giai đoạn không hợp lệ"
 
 
 import os
 from datetime import datetime
 
-def create_file():
+def create_file(pdf, level, address, exam_date, stage, exam_type, exam_time, main_teacher, examiner_teacher, study_date, study_time, 
+                 name, birth, class_no, 
+                 stage1, listening1, reading1, speaking1, stage2, listening2, reading2, speaking2, stage3, listening3, reading3, speaking3, 
+                 stage4, listening4, reading4, speaking4, stage5, listening5, reading5, speaking5, 
+                 stage_no1, stage_no2, stage_no3, stage_no4, stage_no5):
     # Initialize pdf
     pdf = PDF('P', 'mm', 'A4')
     initialize(pdf)
+   
     
     # Examination information
-    return_value(pdf, 'M', 'C.HB406','11/09/2024','23','Reading','15h30','Nguyễn Trung Sơn','Phạm Hoàng Dũng','M-W-F','19h20', 
-                 'Phạm Ngọc Quỳnh Nhi', '15/06/2003', '8A11', 
-                 'Giai đoạn 1', 20, 20, 20, 'Giai đoạn 2', 20, 20, 20, 'Giai đoạn 3', 20, 20, 20, 
-                 'Giai đoạn 4', 20, 20, 20, 'Giai đoạn 5', 20, 20, 20)
+    return_value(pdf, level, address, exam_date, stage, exam_type, exam_time, main_teacher, examiner_teacher, study_date, study_time, 
+                 name, birth, class_no, 
+                 stage1, listening1, reading1, speaking1, stage2, listening2, reading2, speaking2, stage3, listening3, reading3, speaking3, 
+                 stage4, listening4, reading4, speaking4, stage5, listening5, reading5, speaking5, 
+                 stage_no1, stage_no2, stage_no3, stage_no4, stage_no5)
 
     # Lấy thời gian hiện tại
     now = datetime.now()
@@ -182,7 +244,7 @@ def create_file():
     time_string = now.strftime("%H%M%S-%d%m%Y")
 
     # Tạo tên file với thời gian hiện tại
-    output_file = f'PhamHoangDung-{time_string}.pdf'
+    output_file = f'SmartBees-{time_string}.pdf'
 
     # Đường dẫn đến thư mục Downloads
     download_path = os.path.join(os.path.expanduser('~'), 'Downloads', output_file)
@@ -196,4 +258,3 @@ def create_file():
 
 
 
-create_file()
