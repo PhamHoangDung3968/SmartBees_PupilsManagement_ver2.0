@@ -3,6 +3,8 @@ from tkinter import messagebox
 from tkinter import ttk
 from tkcalendar import DateEntry
 
+import socket
+import sys  # Đảm bảo đã import sys
 
 import gspread
 import ezsheets
@@ -64,10 +66,19 @@ def initialize_globals():
     global total5, combined_data5_5
     global ps5, combined_data6_5
 
-    # Connect to Google Sheets
-    gs = gspread.service_account("cre.json")
-    sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
-    worksheet = sht.sheet1
+    try:
+        # Connect to Google Sheets
+        gs = gspread.service_account("cre.json")
+        sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
+        worksheet = sht.sheet1
+
+    except socket.gaierror:
+        messagebox.showerror("Lỗi Kết Nối", "Lỗi DNS: Không thể tìm thấy địa chỉ máy chủ. Vui lòng kiểm tra kết nối Internet của bạn.")
+        sys.exit("Chương trình dừng lại do không thể kết nối đến Google Sheets.")
+
+    except Exception as ex:
+        messagebox.showerror("Lỗi Không Xác Định", f"Có lỗi xảy ra: {ex}")
+        sys.exit("Chương trình dừng lại do lỗi không xác định.")
 
     # Show data
     values_list_Book = worksheet.get_all_values()[2:]
@@ -516,7 +527,7 @@ class MainFormGUI:
         button_frame = ttk.Frame(self.tab1, style='TFrame')
         button_frame.pack(side="top", fill="x")
         btnXuatExcel2 = ttk.Button(button_frame, text="Xuất excel", command=self.XuatExcel12, width=25, style='TButton')
-        btnReload = ttk.Button(button_frame, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
+        btnReload = ttk.Button(button_frame, text="Reload", command=lambda: self.reload_tab("score1"), width=25, style='TButton')
         btnXuatExcel2.pack(side="right", padx=5, pady=5)
         btnReload.pack(side="right", padx=5, pady=5)
         
@@ -545,6 +556,10 @@ class MainFormGUI:
         
         self.table2 = ttk.Treeview(table_frame, columns=table_columns2, show="headings", height=25)
         
+        for col in table_columns2:
+            self.table2.heading(col, text=col, command=lambda c=col: self.sort_table(self.table2, c, False))
+            self.table2.column(col, width=column_widths.get(col, 100), anchor=tk.W)  # Đặt độ rộng theo cấu hình
+            
         # Cấu hình màu nền cho hàng xen kẽ
         self.table2.tag_configure('oddrow', background="white")
         self.table2.tag_configure('evenrow', background="#D8CFE3")
@@ -577,7 +592,7 @@ class MainFormGUI:
         button_frame_2 = ttk.Frame(self.tab2, style='TFrame')
         button_frame_2.pack(side="top", fill="x")
         btnXuatExcel2_2 = ttk.Button(button_frame_2, text="Xuất excel", command=self.XuatExcel12, width=25, style='TButton')
-        btnReload_2 = ttk.Button(button_frame_2, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
+        btnReload_2 = ttk.Button(button_frame_2, text="Reload", command=lambda: self.reload_tab("score2"), width=25, style='TButton')
         btnXuatExcel2_2.pack(side="right", padx=5, pady=5)
         btnReload_2.pack(side="right", padx=5, pady=5)
         
@@ -593,6 +608,12 @@ class MainFormGUI:
         
         self.table2_2 = ttk.Treeview(table_frame2, columns=table_columns2_2, show="headings", height=25)
         
+        
+        for col in table_columns2_2:
+            self.table2_2.heading(col, text=col, command=lambda c=col: self.sort_table(self.table2_2, c, False))
+            self.table2_2.column(col, width=column_widths.get(col, 100), anchor=tk.W)  # Đặt độ rộng theo cấu hình
+            
+            
         # Cấu hình màu nền cho hàng xen kẽ
         self.table2_2.tag_configure('oddrow', background="white")
         self.table2_2.tag_configure('evenrow', background="#D5E1EF")
@@ -626,7 +647,7 @@ class MainFormGUI:
         button_frame_3 = ttk.Frame(self.tab3, style='TFrame')
         button_frame_3.pack(side="top", fill="x")
         btnXuatExcel2_3 = ttk.Button(button_frame_3, text="Xuất excel",command=self.XuatExcel12, width=25, style='TButton')
-        btnReload_3 = ttk.Button(button_frame_3, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
+        btnReload_3 = ttk.Button(button_frame_3, text="Reload", command=lambda: self.reload_tab("score3"), width=25, style='TButton')
         btnXuatExcel2_3.pack(side="right", padx=5, pady=5)
         btnReload_3.pack(side="right", padx=5, pady=5)
         
@@ -641,6 +662,11 @@ class MainFormGUI:
         table_columns2_3 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2_3 = ttk.Treeview(table_frame3, columns=table_columns2_3, show="headings", height=25)
         
+        for col in table_columns2_3:
+            self.table2_3.heading(col, text=col, command=lambda c=col: self.sort_table(self.table2_3, c, False))
+            self.table2_3.column(col, width=column_widths.get(col, 100), anchor=tk.W)  # Đặt độ rộng theo cấu hình
+            
+            
         # Cấu hình màu nền cho hàng xen kẽ
         self.table2_3.tag_configure('oddrow', background="white")
         self.table2_3.tag_configure('evenrow', background="#BDD2F6")
@@ -673,7 +699,7 @@ class MainFormGUI:
         button_frame_4 = ttk.Frame(self.tab4, style='TFrame')
         button_frame_4.pack(side="top", fill="x")
         btnXuatExcel2_4 = ttk.Button(button_frame_4, text="Xuất excel", command=self.XuatExcel12, width=25, style='TButton')
-        btnReload_4 = ttk.Button(button_frame_4, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
+        btnReload_4 = ttk.Button(button_frame_4, text="Reload", command=lambda: self.reload_tab("score4"), width=25, style='TButton')
         btnXuatExcel2_4.pack(side="right", padx=5, pady=5)
         btnReload_4.pack(side="right", padx=5, pady=5)
         
@@ -688,6 +714,11 @@ class MainFormGUI:
         table_columns2_4 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2_4 = ttk.Treeview(table_frame4, columns=table_columns2_4, show="headings", height=25)
         
+        for col in table_columns2_4:
+            self.table2_4.heading(col, text=col, command=lambda c=col: self.sort_table(self.table2_4, c, False))
+            self.table2_4.column(col, width=column_widths.get(col, 100), anchor=tk.W)  # Đặt độ rộng theo cấu hình
+            
+            
         # Cấu hình màu nền cho hàng xen kẽ
         self.table2_4.tag_configure('oddrow', background="white")
         self.table2_4.tag_configure('evenrow', background="#C2D69B")
@@ -720,7 +751,7 @@ class MainFormGUI:
         button_frame_5 = ttk.Frame(self.tab5, style='TFrame')
         button_frame_5.pack(side="top", fill="x")
         btnXuatExcel2_5 = ttk.Button(button_frame_5, text="Xuất excel", command=self.XuatExcel12, width=25, style='TButton')
-        btnReload_5 = ttk.Button(button_frame_5, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
+        btnReload_5 = ttk.Button(button_frame_5, text="Reload", command=lambda: self.reload_tab("score5"), width=25, style='TButton')
         btnXuatExcel2_5.pack(side="right", padx=5, pady=5)
         btnReload_5.pack(side="right", padx=5, pady=5)
         
@@ -735,6 +766,11 @@ class MainFormGUI:
         table_columns2_5 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2_5 = ttk.Treeview(table_frame5, columns=table_columns2_5, show="headings", height=25)
         
+        for col in table_columns2_5:
+            self.table2_5.heading(col, text=col, command=lambda c=col: self.sort_table(self.table2_5, c, False))
+            self.table2_5.column(col, width=column_widths.get(col, 100), anchor=tk.W)  # Đặt độ rộng theo cấu hình
+            
+            
         # Cấu hình màu nền cho hàng xen kẽ
         self.table2_5.tag_configure('oddrow', background="white")
         self.table2_5.tag_configure('evenrow', background="#FDE8D7")
@@ -1220,7 +1256,7 @@ class MainFormGUI:
         self.tf2.place(x=370, y=108, width=300, height=30)
         '''
         # Sử dụng DateEntry thay vì Entry để chọn ngày
-        self.tf2 = DateEntry(self.panel4, font=("Cambria", 13, "bold"), date_pattern='dd-mm-yyyy', 
+        self.tf2 = DateEntry(self.panel4, font=("Cambria", 13, "bold"), date_pattern='dd/mm/yyyy', 
                              background='darkblue', foreground='white', borderwidth=2)
         self.tf2.place(x=370, y=108, width=300, height=30)
 
@@ -1228,6 +1264,7 @@ class MainFormGUI:
         self.lb13.place(x=700, y=60)
         self.tf13 = tk.Entry(self.panel4,font=("cambria", 13, "bold"))
         self.tf13.place(x=700, y=108, width=240, height=30)
+
 
         #giai đoạn 1
         self.lb3 = tk.Label(self.panel4, text="Giai đoạn 1:", font=("cambria", 18, "bold"))
@@ -1355,7 +1392,10 @@ class MainFormGUI:
         self.tfname.insert(0, "Name: "+row_data4[1])
         self.tfname.config(state='readonly')
         self.tf1.insert(0, row_data4[24])
+        
+        self.tf2.delete(0, tk.END)  # Xóa mọi giá trị trong entry
         self.tf2.insert(0, row_data4[22])
+        
         self.tf13.insert(0, row_data4[23])
         self.tf1_1.insert(0, row_data4[25])
         self.tf1_2.insert(0, row_data4[26])
@@ -1466,7 +1506,12 @@ class MainFormGUI:
             try:
                 worksheet2.update(values=[new_values4], range_name=vitrisua4)
                 self.rootScore.destroy()
-                self.reload_tab("score")
+                self.reload_tab("score1")
+                self.reload_tab("score2")
+                self.reload_tab("score3")
+                self.reload_tab("score4")
+                self.reload_tab("score5")
+
                 messagebox.showinfo("Thành công", "Cập nhật thành công!")
 
 
@@ -1637,7 +1682,7 @@ class MainFormGUI:
         self.tf2.place(x=370, y=108, width=300, height=30)
         '''
         # Entry ngày sinh với DateEntry từ tkcalendar
-        self.tf2 = DateEntry(self.panel2, font=("Cambria", 13, "bold"), date_pattern='dd-mm-yyyy', background='darkblue', foreground='white', borderwidth=2)
+        self.tf2 = DateEntry(self.panel2, font=("Cambria", 13, "bold"), date_pattern='dd/mm/yyyy', background='darkblue', foreground='white', borderwidth=2)
         self.tf2.place(x=370, y=108, width=300, height=30)
         
 
@@ -1751,8 +1796,13 @@ class MainFormGUI:
 
         
         self.tf1.insert(0, row_data3[1])
-        self.tf2.insert(0, row_data3[2])
+        
+        self.tf2.delete(0, tk.END)  # Xóa mọi giá trị trong entry
+        self.tf2.insert(0, row_data3[2])  # Chèn giá trị từ row_data3[2]
+
+        self.tf13.delete(0, tk.END)  # Xóa mọi giá trị trong entry
         self.tf13.insert(0, row_data3[3])
+        
         self.tf20.insert(0, row_data3[4])
         self.tf21.insert(0, row_data3[5])
         self.tf22.insert(0, row_data3[6])
