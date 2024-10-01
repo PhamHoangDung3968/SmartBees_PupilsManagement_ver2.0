@@ -378,9 +378,13 @@ class MainFormGUI:
         # Tạo frame cho bảng và thanh cuộn
         table_frame = ttk.Frame(self.class_management_tab, style='TFrame')
         table_frame.pack(fill="both", expand=True)
-        
+    
         table_columns = ["CLASSNO", "MAIN CLASS", "STUDYING DAY", "STUDYING TIME", "ROOM", "TEACHER", "FOREIGN TEACHER"]
         self.table = ttk.Treeview(table_frame, columns=table_columns, show="headings", height=28)
+        
+        # Cấu hình màu nền cho hàng xen kẽ
+        self.table.tag_configure('oddrow', background="white")
+        self.table.tag_configure('evenrow', background="#E8F6F3")
         
         # Đặt tiêu đề và độ rộng cho các cột
         column_widths = {
@@ -439,6 +443,10 @@ class MainFormGUI:
         
         table_columns1 = ["ID", "FULL NAME", "BIRTHDAY (DOB)", "MAIN CLASS", "CURRENT LEVEL", "TEL", "ADDRESS"]
         self.table1 = ttk.Treeview(table_frame, columns=table_columns1, show="headings", height=28)
+        
+        # Cấu hình màu nền cho hàng xen kẽ
+        self.table1.tag_configure('oddrow', background="white")
+        self.table1.tag_configure('evenrow', background="#FDE8D7")
         
         # Đặt tiêu đề và độ rộng cho các cột
         column_widths = {
@@ -518,6 +526,11 @@ class MainFormGUI:
         }
         
         self.table2 = ttk.Treeview(self.tab1, columns=table_columns2, show="headings", height=25)
+        # Cấu hình màu nền cho hàng xen kẽ
+        self.table2.tag_configure('oddrow', background="white")
+        self.table2.tag_configure('evenrow', background="#D8CFE3")
+        
+        
         for col in table_columns2:
             self.table2.heading(col, text=col)
             self.table2.column(col, width=column_widths.get(col, 100), anchor=tk.W)
@@ -544,6 +557,11 @@ class MainFormGUI:
         table_columns2_2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         
         self.table2_2 = ttk.Treeview(self.tab2, columns=table_columns2_2, show="headings", height=25)
+        # Cấu hình màu nền cho hàng xen kẽ
+        self.table2_2.tag_configure('oddrow', background="white")
+        self.table2_2.tag_configure('evenrow', background="#D5E1EF")
+        
+        
         for col in table_columns2_2:
             self.table2_2.heading(col, text=col)
             self.table2_2.column(col, width=column_widths.get(col, 100), anchor=tk.W)
@@ -567,6 +585,11 @@ class MainFormGUI:
 
         table_columns2_3 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2_3 = ttk.Treeview(self.tab3, columns=table_columns2_3, show="headings", height=25)
+        
+        # Cấu hình màu nền cho hàng xen kẽ
+        self.table2_3.tag_configure('oddrow', background="white")
+        self.table2_3.tag_configure('evenrow', background="#BDD2F6")
+        
         for col in table_columns2_3:
             self.table2_3.heading(col, text=col)
             self.table2_3.column(col, width=column_widths.get(col, 100), anchor=tk.W)
@@ -590,6 +613,11 @@ class MainFormGUI:
 
         table_columns2_4 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2_4 = ttk.Treeview(self.tab4, columns=table_columns2_4, show="headings", height=25)
+        
+        # Cấu hình màu nền cho hàng xen kẽ
+        self.table2_4.tag_configure('oddrow', background="white")
+        self.table2_4.tag_configure('evenrow', background="#C2D69B")
+        
         for col in table_columns2_4:
             self.table2_4.heading(col, text=col)
             self.table2_4.column(col, width=column_widths.get(col, 100), anchor=tk.W)
@@ -613,6 +641,11 @@ class MainFormGUI:
 
         table_columns2_5 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2_5 = ttk.Treeview(self.tab5, columns=table_columns2_5, show="headings", height=25)
+        
+        # Cấu hình màu nền cho hàng xen kẽ
+        self.table2_5.tag_configure('oddrow', background="white")
+        self.table2_5.tag_configure('evenrow', background="#FDE8D7")
+        
         for col in table_columns2_5:
             self.table2_5.heading(col, text=col)
             self.table2_5.column(col, width=column_widths.get(col, 100), anchor=tk.W)
@@ -811,10 +844,14 @@ class MainFormGUI:
             messagebox.showinfo("Thông báo", "Không tìm thấy dữ liệu khớp với các tiêu chí tìm kiếm đã nhập")
 
     def populate_table(self, table, data):
+        # Xóa tất cả các hàng hiện có trong bảng
         for row in table.get_children():
             table.delete(row)
-        for row in data:
-            table.insert("", "end", values=row)
+
+        # Thêm dữ liệu mới vào bảng với màu sắc xen kẽ
+        for i, row in enumerate(data):
+            tag = 'evenrow' if i % 2 == 0 else 'oddrow'
+            table.insert("", "end", values=row, tags=(tag,))
 
 
     def reload_tab(self, type_):
