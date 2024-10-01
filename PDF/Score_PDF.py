@@ -241,7 +241,7 @@ def create_file(pdf, level, address, exam_date, stage, exam_type, exam_time, mai
     now = datetime.now()
 
     # Định dạng thời gian theo giờ phút giây ngày tháng năm
-    time_string = now.strftime("%H%M%S-%d%m%Y")
+    time_string = now.strftime("%H-%M-%S-%d-%m-%Y")
 
     # Tạo tên file với thời gian hiện tại
     output_file = f'SmartBees-{time_string}.pdf'

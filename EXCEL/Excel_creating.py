@@ -100,7 +100,7 @@ class Excel_Create:
             ws.column_dimensions[column].width = adjusted_width
 
         # Generate unique file name with date and time
-        current_time = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
+        current_time = datetime.now().strftime("%H-%M-%S-%d-%m-%Y")
         file_path = f'D:\\QLS-{current_time}.xlsx'
 
         # Save the new Excel file
@@ -189,7 +189,7 @@ class Excel_Create:
             ws.column_dimensions[column].width = adjusted_width
 
         # Generate unique file name with date and time
-        current_time = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
+        current_time = datetime.now().strftime("%H-%M-%S-%d-%m-%Y")
         file_path = f'D:\\QLLH-{current_time}.xlsx'
 
         # Save the new Excel file
@@ -281,7 +281,7 @@ class Excel_Create:
             ws.column_dimensions[column].width = adjusted_width
 
         # Generate unique file name with date and time
-        current_time = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
+        current_time = datetime.now().strftime("%H-%M-%S-%d-%m-%Y")
         file_path = f'D:\\QLHS-{current_time}.xlsx'
 
         # Save the new Excel file
