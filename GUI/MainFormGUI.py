@@ -978,9 +978,10 @@ class MainFormGUI:
             new_values = [int(row_data[0]),name,day,time,room,teacher,fteacher]
             try:
                 worksheet3.update(values=[new_values], range_name=vitrisua)
-                messagebox.showinfo("Thành công", "Cập nhật thành công!")
                 self.rootClass.destroy()
                 self.reload_tab("class")
+                messagebox.showinfo("Thành công", "Cập nhật thành công!")
+
             except Exception as e:
                 messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")
         self.btn1 = tk.Button(self.panel1, text="EDIT NEW",command=chinhsua, font=("cambria", 14, "bold"), width=20, bg="#FBA834",fg="black" )
@@ -1050,6 +1051,7 @@ class MainFormGUI:
             self.editScore(row_data2,vitrisua2)
         else:
             print("Value not found in the sheet.")
+            
     def editScore(self,row_data4,vitrisua4):
         self.rootScore = tk.Tk()
         self.rootScore.title("Edit Score")
@@ -1314,9 +1316,10 @@ class MainFormGUI:
 
             try:
                 worksheet2.update(values=[new_values4], range_name=vitrisua4)
-                messagebox.showinfo("Thành công", "Cập nhật thành công!")
                 self.rootScore.destroy()
                 self.reload_tab("score")
+                messagebox.showinfo("Thành công", "Cập nhật thành công!")
+
 
             except Exception as e:
                 messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")            
@@ -1341,7 +1344,6 @@ class MainFormGUI:
                  1,2,3,4,5)
                 
                 messagebox.showinfo("Thành công", "In file PDF thành công!")
-                self.rootScore.destroy()
             
             except Exception as e:
                 messagebox.showerror("Lỗi", f"In file PDF thất bại: {e}")
@@ -1638,9 +1640,9 @@ class MainFormGUI:
             new_values3 = [int(row_data3[0]),a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,row_data3[22],row_data3[23],row_data3[24], row_data3[25], row_data3[26],row_data3[27],row_data3[28],row_data3[29],row_data3[30],row_data3[31],row_data3[32],row_data3[33],row_data3[34],row_data3[35],row_data3[36],row_data3[37],row_data3[38],row_data3[39],row_data3[40],row_data3[41],row_data3[42],row_data3[43],row_data3[44],row_data3[45],row_data3[46],row_data3[47],row_data3[48],row_data3[49]]
             try:
                 worksheet2.update(values=[new_values3], range_name=vitrisua3)
-                messagebox.showinfo("Thành công", "Cập nhật thành công!")
                 self.rootStudent.destroy()
                 self.reload_tab("student")
+                messagebox.showinfo("Thành công", "Cập nhật thành công!")
 
             except Exception as e:
                 messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")
