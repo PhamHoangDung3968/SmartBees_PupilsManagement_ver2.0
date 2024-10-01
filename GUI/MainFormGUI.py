@@ -366,6 +366,10 @@ class MainFormGUI:
         button_frame = ttk.Frame(self.class_management_tab, style='TFrame')
         button_frame.pack(side="top", fill="x")
         
+        # Thêm Label "Quản lý lớp học"
+        label_frame = ttk.Label(button_frame, text="Quản lý lớp học", font=("Cambria", 12, "bold"))
+        label_frame.pack(side="left", padx=20, pady=5)
+        
         # Nút thêm mới, xuất excel và reload
         btnAddNew = ttk.Button(button_frame, text="Thêm mới", command=self.AddGUI_Class, width=25, style='TButton')
         btnXuatExcel = ttk.Button(button_frame, text="Xuất excel", command=self.XuatExcel, width=25, style='TButton')
@@ -427,6 +431,10 @@ class MainFormGUI:
         # Frame chứa các nút
         button_frame = ttk.Frame(self.student_management_tab, style='TFrame')
         button_frame.pack(side="top", fill="x")
+        
+        # Thêm Label "Quản lý học sinh"
+        label_frame = ttk.Label(button_frame, text="Quản lý học sinh", font=("Cambria", 12, "bold"))
+        label_frame.pack(side="left", padx=20, pady=5)
         
         # Nút thêm mới, xuất excel và reload
         btnAddNew1 = ttk.Button(button_frame, text="Thêm mới", command=self.AddGUI_Student, width=25, style='TButton')
@@ -512,6 +520,10 @@ class MainFormGUI:
         btnXuatExcel2.pack(side="right", padx=5, pady=5)
         btnReload.pack(side="right", padx=5, pady=5)
         
+        # Thêm Label "Giai đoạn 1"
+        label_frame1 = ttk.Label(button_frame, text="Giai đoạn 1", font=("Cambria", 12, "bold"))
+        label_frame1.pack(side="left", padx=20, pady=5)
+        
         table_columns2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         column_widths = {
             "ID": 50,
@@ -553,6 +565,10 @@ class MainFormGUI:
         btnReload_2 = ttk.Button(button_frame_2, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
         btnXuatExcel2_2.pack(side="right", padx=5, pady=5)
         btnReload_2.pack(side="right", padx=5, pady=5)
+        
+        # Thêm Label "Giai đoạn 2"
+        label_frame2 = ttk.Label(button_frame_2, text="Giai đoạn 2", font=("Cambria", 12, "bold"))
+        label_frame2.pack(side="left", padx=20, pady=5)
 
         table_columns2_2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         
@@ -582,6 +598,10 @@ class MainFormGUI:
         btnReload_3 = ttk.Button(button_frame_3, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
         btnXuatExcel2_3.pack(side="right", padx=5, pady=5)
         btnReload_3.pack(side="right", padx=5, pady=5)
+        
+        # Thêm Label "Giai đoạn 3"
+        label_frame3 = ttk.Label(button_frame_3, text="Giai đoạn 3", font=("Cambria", 12, "bold"))
+        label_frame3.pack(side="left", padx=20, pady=5)
 
         table_columns2_3 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2_3 = ttk.Treeview(self.tab3, columns=table_columns2_3, show="headings", height=25)
@@ -610,6 +630,10 @@ class MainFormGUI:
         btnReload_4 = ttk.Button(button_frame_4, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
         btnXuatExcel2_4.pack(side="right", padx=5, pady=5)
         btnReload_4.pack(side="right", padx=5, pady=5)
+        
+        # Thêm Label "Giai đoạn 4"
+        label_frame4 = ttk.Label(button_frame_4, text="Giai đoạn 4", font=("Cambria", 12, "bold"))
+        label_frame4.pack(side="left", padx=20, pady=5)
 
         table_columns2_4 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2_4 = ttk.Treeview(self.tab4, columns=table_columns2_4, show="headings", height=25)
@@ -638,6 +662,10 @@ class MainFormGUI:
         btnReload_5 = ttk.Button(button_frame_5, text="Reload", command=lambda: self.reload_tab("score"), width=25, style='TButton')
         btnXuatExcel2_5.pack(side="right", padx=5, pady=5)
         btnReload_5.pack(side="right", padx=5, pady=5)
+        
+        # Thêm Label "Giai đoạn 1"
+        label_frame5 = ttk.Label(button_frame_5, text="Giai đoạn 5", font=("Cambria", 12, "bold"))
+        label_frame5.pack(side="left", padx=20, pady=5)
 
         table_columns2_5 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         self.table2_5 = ttk.Treeview(self.tab5, columns=table_columns2_5, show="headings", height=25)
