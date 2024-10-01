@@ -1,12 +1,16 @@
 import tkinter as tk
 from tkinter import messagebox
-import gspread
+from tkcalendar import DateEntry
 from tkinter import ttk
+
+import gspread
+
 gs = gspread.service_account("cre.json")
 sht = gs.open_by_key("1tTAZapKjFJ21FYJGoEZBaIYRmHWv2LmW_G4lwZ2pOUE")
 worksheet3 = sht.worksheet("sheet 3")
 values_list_Class = worksheet3.get_all_values()[2:]
 result_list_Class = [row[1] for row in values_list_Class]
+
 class Add_NewStudent:
     def __init__(self, parent):
         self.parent = parent  # Reference to MainFormGUI
@@ -28,9 +32,13 @@ class Add_NewStudent:
 
         self.lb2 = tk.Label(self.panel, text="Birthday (DOB)", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb2.place(x=370, y=60)
+        '''
         self.tf2 = tk.Entry(self.panel,font=("cambria", 13, "bold"))
         self.tf2.place(x=370, y=108, width=300, height=30)
-
+        '''
+        # Entry ngày sinh với DateEntry từ tkcalendar
+        self.tf2 = DateEntry(self.panel, font=("Cambria", 13, "bold"), date_pattern='dd/mm/yyyy', background='darkblue', foreground='white', borderwidth=2)
+        self.tf2.place(x=370, y=108, width=300, height=30)
 
         self.lb3 = tk.Label(self.panel, text="Address", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb3.place(x=33, y=160)

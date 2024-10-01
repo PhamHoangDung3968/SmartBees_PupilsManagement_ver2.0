@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
+from tkcalendar import DateEntry
+
 
 import gspread
 import ezsheets
@@ -1070,9 +1072,17 @@ class MainFormGUI:
         self.tf1 = tk.Entry(self.panel4,font=("cambria", 13, "bold"))
         self.tf1.place(x=33, y=108, width=300, height=30)
 
+        
         self.lb2 = tk.Label(self.panel4, text="Exam day", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb2.place(x=370, y=60)
+        
+        '''
         self.tf2 = tk.Entry(self.panel4,font=("cambria", 13, "bold"))
+        self.tf2.place(x=370, y=108, width=300, height=30)
+        '''
+        # Sử dụng DateEntry thay vì Entry để chọn ngày
+        self.tf2 = DateEntry(self.panel4, font=("Cambria", 13, "bold"), date_pattern='dd-mm-yyyy', 
+                             background='darkblue', foreground='white', borderwidth=2)
         self.tf2.place(x=370, y=108, width=300, height=30)
 
         self.lb13 = tk.Label(self.panel4, text="Exam time", font=("cambria", 18, "bold"), fg="#FBA834")
@@ -1406,6 +1416,7 @@ class MainFormGUI:
             self.editScore(row_data2,vitrisua2)
         else:
             print("Value not found in the sheet.")
+            
     def on_row_select2_4(self, event):
         selected_item2 = self.table2_4.selection()
         if selected_item2:
@@ -1478,11 +1489,18 @@ class MainFormGUI:
         self.tf1 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
         self.tf1.place(x=33, y=108, width=300, height=30)
 
+        
         self.lb2 = tk.Label(self.panel2, text="Birthday (DOB)", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb2.place(x=370, y=60)
+        
+        '''
         self.tf2 = tk.Entry(self.panel2,font=("cambria", 13, "bold"))
         self.tf2.place(x=370, y=108, width=300, height=30)
-
+        '''
+        # Entry ngày sinh với DateEntry từ tkcalendar
+        self.tf2 = DateEntry(self.panel2, font=("Cambria", 13, "bold"), date_pattern='dd-mm-yyyy', background='darkblue', foreground='white', borderwidth=2)
+        self.tf2.place(x=370, y=108, width=300, height=30)
+        
 
         self.lb3 = tk.Label(self.panel2, text="Address", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb3.place(x=33, y=160)
