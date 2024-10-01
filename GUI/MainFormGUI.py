@@ -520,9 +520,15 @@ class MainFormGUI:
         btnXuatExcel2.pack(side="right", padx=5, pady=5)
         btnReload.pack(side="right", padx=5, pady=5)
         
+        
         # Thêm Label "Giai đoạn 1"
         label_frame1 = ttk.Label(button_frame, text="Giai đoạn 1", font=("Cambria", 12, "bold"))
         label_frame1.pack(side="left", padx=20, pady=5)
+        
+        # Tạo frame cho bảng và thanh cuộn
+        table_frame = ttk.Frame(self.tab1, style='TFrame')
+        table_frame.pack(fill="both", expand=True)
+        
         
         table_columns2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         column_widths = {
@@ -537,7 +543,8 @@ class MainFormGUI:
             "PERCENT": 100,
         }
         
-        self.table2 = ttk.Treeview(self.tab1, columns=table_columns2, show="headings", height=25)
+        self.table2 = ttk.Treeview(table_frame, columns=table_columns2, show="headings", height=25)
+        
         # Cấu hình màu nền cho hàng xen kẽ
         self.table2.tag_configure('oddrow', background="white")
         self.table2.tag_configure('evenrow', background="#D8CFE3")
@@ -547,14 +554,22 @@ class MainFormGUI:
             self.table2.heading(col, text=col)
             self.table2.column(col, width=column_widths.get(col, 100), anchor=tk.W)
 
+        # Thêm thanh cuộn vào trong table_frame
+        tree_scroll_y1 = ttk.Scrollbar(table_frame, orient="vertical", command=self.table2.yview)
+        tree_scroll_x1 = ttk.Scrollbar(table_frame, orient="horizontal", command=self.table2.xview)
+        self.table2.configure(yscrollcommand=tree_scroll_y1.set, xscrollcommand=tree_scroll_x1.set)
+        
+        # Đặt bảng và thanh cuộn vào grid
+        self.table2.grid(row=0, column=0, sticky="nsew")
+        tree_scroll_y1.grid(row=0, column=1, sticky="ns")
+        tree_scroll_x1.grid(row=1, column=0, sticky="ew")
+        
+        # Đảm bảo frame của bảng có thể mở rộng
+        table_frame.grid_rowconfigure(0, weight=1)
+        table_frame.grid_columnconfigure(0, weight=1)
+        
         self.populate_table(self.table2, self.original_data_score1)
-        self.table2.pack(fill="x")
-
-        tree_scrollx2 = ttk.Scrollbar(self.tab1, orient="horizontal", command=self.table2.xview)
-        tree_scrollx2.pack(fill="x")
         self.table2.bind("<Double-1>", self.on_row_select2)
-        self.table2.configure(xscrollcommand=tree_scrollx2.set)
-
         self.create_search_section(self.tab1, "score1")
 
 
@@ -569,10 +584,15 @@ class MainFormGUI:
         # Thêm Label "Giai đoạn 2"
         label_frame2 = ttk.Label(button_frame_2, text="Giai đoạn 2", font=("Cambria", 12, "bold"))
         label_frame2.pack(side="left", padx=20, pady=5)
+        
+        # Tạo frame cho bảng và thanh cuộn
+        table_frame2 = ttk.Frame(self.tab2, style='TFrame')
+        table_frame2.pack(fill="both", expand=True)
 
         table_columns2_2 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
         
-        self.table2_2 = ttk.Treeview(self.tab2, columns=table_columns2_2, show="headings", height=25)
+        self.table2_2 = ttk.Treeview(table_frame2, columns=table_columns2_2, show="headings", height=25)
+        
         # Cấu hình màu nền cho hàng xen kẽ
         self.table2_2.tag_configure('oddrow', background="white")
         self.table2_2.tag_configure('evenrow', background="#D5E1EF")
@@ -581,15 +601,26 @@ class MainFormGUI:
         for col in table_columns2_2:
             self.table2_2.heading(col, text=col)
             self.table2_2.column(col, width=column_widths.get(col, 100), anchor=tk.W)
-        self.populate_table(self.table2_2, self.original_data_score2)
-        self.table2_2.pack(fill="x")
 
-        tree_scrollx2_2 = ttk.Scrollbar(self.tab2, orient="horizontal", command=self.table2_2.xview)
-        tree_scrollx2_2.pack(fill="x")
+        # Thêm thanh cuộn vào trong table_frame
+        tree_scroll_y2 = ttk.Scrollbar(table_frame2, orient="vertical", command=self.table2_2.yview)
+        tree_scroll_x2 = ttk.Scrollbar(table_frame2, orient="horizontal", command=self.table2_2.xview)
+        self.table2_2.configure(yscrollcommand=tree_scroll_y2.set, xscrollcommand=tree_scroll_x2.set)
+        
+        # Đặt bảng và thanh cuộn vào grid
+        self.table2_2.grid(row=0, column=0, sticky="nsew")
+        tree_scroll_y2.grid(row=0, column=1, sticky="ns")
+        tree_scroll_x2.grid(row=1, column=0, sticky="ew")
+        
+        # Đảm bảo frame của bảng có thể mở rộng
+        table_frame2.grid_rowconfigure(0, weight=1)
+        table_frame2.grid_columnconfigure(0, weight=1)
+        
+        
         self.table2_2.bind("<Double-1>", self.on_row_select2_2)
-        self.table2_2.configure(xscrollcommand=tree_scrollx2_2.set)
-
+        self.populate_table(self.table2_2, self.original_data_score2)
         self.create_search_section(self.tab2, "score2")
+
 
         #tab 3
         button_frame_3 = ttk.Frame(self.tab3, style='TFrame')
@@ -602,9 +633,13 @@ class MainFormGUI:
         # Thêm Label "Giai đoạn 3"
         label_frame3 = ttk.Label(button_frame_3, text="Giai đoạn 3", font=("Cambria", 12, "bold"))
         label_frame3.pack(side="left", padx=20, pady=5)
+        
+        # Tạo frame cho bảng và thanh cuộn
+        table_frame3 = ttk.Frame(self.tab3, style='TFrame')
+        table_frame3.pack(fill="both", expand=True)
 
         table_columns2_3 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
-        self.table2_3 = ttk.Treeview(self.tab3, columns=table_columns2_3, show="headings", height=25)
+        self.table2_3 = ttk.Treeview(table_frame3, columns=table_columns2_3, show="headings", height=25)
         
         # Cấu hình màu nền cho hàng xen kẽ
         self.table2_3.tag_configure('oddrow', background="white")
@@ -613,15 +648,26 @@ class MainFormGUI:
         for col in table_columns2_3:
             self.table2_3.heading(col, text=col)
             self.table2_3.column(col, width=column_widths.get(col, 100), anchor=tk.W)
-        self.populate_table(self.table2_3, self.original_data_score3)
-        self.table2_3.pack(fill="x")
 
-        tree_scrollx2_3 = ttk.Scrollbar(self.tab3, orient="horizontal", command=self.table2_3.xview)
-        tree_scrollx2_3.pack(fill="x")
+        # Thêm thanh cuộn vào trong table_frame
+        tree_scroll_y3 = ttk.Scrollbar(table_frame3, orient="vertical", command=self.table2_3.yview)
+        tree_scroll_x3 = ttk.Scrollbar(table_frame3, orient="horizontal", command=self.table2_3.xview)
+        self.table2_3.configure(yscrollcommand=tree_scroll_y3.set, xscrollcommand=tree_scroll_x3.set)
+        
+        # Đặt bảng và thanh cuộn vào grid
+        self.table2_3.grid(row=0, column=0, sticky="nsew")
+        tree_scroll_y3.grid(row=0, column=1, sticky="ns")
+        tree_scroll_x3.grid(row=1, column=0, sticky="ew")
+        
+        # Đảm bảo frame của bảng có thể mở rộng
+        table_frame3.grid_rowconfigure(0, weight=1)
+        table_frame3.grid_columnconfigure(0, weight=1)
+        
+        
         self.table2_3.bind("<Double-1>", self.on_row_select2_3)
-        self.table2_3.configure(xscrollcommand=tree_scrollx2_3.set)
-
+        self.populate_table(self.table2_3, self.original_data_score3)
         self.create_search_section(self.tab3, "score3")
+
 
         #tab 4
         button_frame_4 = ttk.Frame(self.tab4, style='TFrame')
@@ -634,9 +680,13 @@ class MainFormGUI:
         # Thêm Label "Giai đoạn 4"
         label_frame4 = ttk.Label(button_frame_4, text="Giai đoạn 4", font=("Cambria", 12, "bold"))
         label_frame4.pack(side="left", padx=20, pady=5)
+        
+        # Tạo frame cho bảng và thanh cuộn
+        table_frame4 = ttk.Frame(self.tab4, style='TFrame')
+        table_frame4.pack(fill="both", expand=True)
 
         table_columns2_4 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
-        self.table2_4 = ttk.Treeview(self.tab4, columns=table_columns2_4, show="headings", height=25)
+        self.table2_4 = ttk.Treeview(table_frame4, columns=table_columns2_4, show="headings", height=25)
         
         # Cấu hình màu nền cho hàng xen kẽ
         self.table2_4.tag_configure('oddrow', background="white")
@@ -645,15 +695,26 @@ class MainFormGUI:
         for col in table_columns2_4:
             self.table2_4.heading(col, text=col)
             self.table2_4.column(col, width=column_widths.get(col, 100), anchor=tk.W)
-        self.populate_table(self.table2_4, self.original_data_score4)
-        self.table2_4.pack(fill="x")
 
-        tree_scrollx2_4 = ttk.Scrollbar(self.tab4, orient="horizontal", command=self.table2_4.xview)
-        tree_scrollx2_4.pack(fill="x")
+
+        # Thêm thanh cuộn vào trong table_frame
+        tree_scroll_y4 = ttk.Scrollbar(table_frame4, orient="vertical", command=self.table2_4.yview)
+        tree_scroll_x4 = ttk.Scrollbar(table_frame4, orient="horizontal", command=self.table2_4.xview)
+        self.table2_4.configure(yscrollcommand=tree_scroll_y4.set, xscrollcommand=tree_scroll_x4.set)
+        
+        # Đặt bảng và thanh cuộn vào grid
+        self.table2_4.grid(row=0, column=0, sticky="nsew")
+        tree_scroll_y4.grid(row=0, column=1, sticky="ns")
+        tree_scroll_x4.grid(row=1, column=0, sticky="ew")
+        
+        # Đảm bảo frame của bảng có thể mở rộng
+        table_frame4.grid_rowconfigure(0, weight=1)
+        table_frame4.grid_columnconfigure(0, weight=1)
+      
         self.table2_4.bind("<Double-1>", self.on_row_select2_4)
-        self.table2_4.configure(xscrollcommand=tree_scrollx2_4.set)
-
+        self.populate_table(self.table2_4, self.original_data_score4)
         self.create_search_section(self.tab4, "score4")
+
 
         # tab 5
         button_frame_5 = ttk.Frame(self.tab5, style='TFrame')
@@ -667,8 +728,12 @@ class MainFormGUI:
         label_frame5 = ttk.Label(button_frame_5, text="Giai đoạn 5", font=("Cambria", 12, "bold"))
         label_frame5.pack(side="left", padx=20, pady=5)
 
+        # Tạo frame cho bảng và thanh cuộn
+        table_frame5 = ttk.Frame(self.tab5, style='TFrame')
+        table_frame5.pack(fill="both", expand=True)
+        
         table_columns2_5 = ["ID", "FULL NAME", "MAIN CLASS", "TEACHER", "LISTENING", "SPEAKING", "WRITING & READING", "TOTAL GRADE", "PERCENT"]
-        self.table2_5 = ttk.Treeview(self.tab5, columns=table_columns2_5, show="headings", height=25)
+        self.table2_5 = ttk.Treeview(table_frame5, columns=table_columns2_5, show="headings", height=25)
         
         # Cấu hình màu nền cho hàng xen kẽ
         self.table2_5.tag_configure('oddrow', background="white")
@@ -677,14 +742,23 @@ class MainFormGUI:
         for col in table_columns2_5:
             self.table2_5.heading(col, text=col)
             self.table2_5.column(col, width=column_widths.get(col, 100), anchor=tk.W)
-        self.populate_table(self.table2_5, self.original_data_score5)
-        self.table2_5.pack(fill="x")
-
-        tree_scrollx2_5 = ttk.Scrollbar(self.tab5, orient="horizontal", command=self.table2_5.xview)
-        tree_scrollx2_5.pack(fill="x")
+     
+        # Thêm thanh cuộn vào trong table_frame
+        tree_scroll_y5 = ttk.Scrollbar(table_frame5, orient="vertical", command=self.table2_5.yview)
+        tree_scroll_x5 = ttk.Scrollbar(table_frame5, orient="horizontal", command=self.table2_5.xview)
+        self.table2_5.configure(yscrollcommand=tree_scroll_y5.set, xscrollcommand=tree_scroll_x5.set)
+        
+        # Đặt bảng và thanh cuộn vào grid
+        self.table2_5.grid(row=0, column=0, sticky="nsew")
+        tree_scroll_y5.grid(row=0, column=1, sticky="ns")
+        tree_scroll_x5.grid(row=1, column=0, sticky="ew")
+        
+        # Đảm bảo frame của bảng có thể mở rộng
+        table_frame5.grid_rowconfigure(0, weight=1)
+        table_frame5.grid_columnconfigure(0, weight=1)
+        
         self.table2_5.bind("<Double-1>", self.on_row_select2_5)
-        self.table2_5.configure(xscrollcommand=tree_scrollx2_5.set)
-
+        self.populate_table(self.table2_5, self.original_data_score5)
         self.create_search_section(self.tab5, "score5")
 
 
