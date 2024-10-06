@@ -845,13 +845,37 @@ class MainFormGUI:
 
 
     def sort_table(self, table, col, reverse):
-        l = [(table.set(k, col), k) for k in table.get_children('')]
-        l.sort(reverse=reverse)
+        if col == 'ID' or col == 'CLASSNO':
+            def convert(value):
+                """Try to convert the value to an integer if possible, otherwise return the string."""
+                try:
+                    return int(value)
+                except ValueError:
+                    return value
 
-        for index, (val, k) in enumerate(l):
-            table.move(k, '', index)
+            # Extract data from the table
+            l = [(convert(table.set(k, col)), k) for k in table.get_children('')]
 
-        table.heading(col, command=lambda: self.sort_table(table, col, not reverse))
+            # Sort based on the data type (numerical vs string) and reverse option
+            l.sort(reverse=reverse)
+
+            # Re-arrange the rows based on the sorted order
+            for index, (val, k) in enumerate(l):
+                table.move(k, '', index)
+
+            # Update column heading to toggle sorting direction on click
+            table.heading(col, command=lambda: self.sort_table(table, col, not reverse))
+            
+        else:
+            l = [(table.set(k, col), k) for k in table.get_children('')]
+            l.sort(reverse=reverse)
+
+            for index, (val, k) in enumerate(l):
+                table.move(k, '', index)
+
+            table.heading(col, command=lambda: self.sort_table(table, col, not reverse))
+
+        
 
 
     def create_search_section(self, tab, type_):
