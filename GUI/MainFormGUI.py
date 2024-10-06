@@ -1261,6 +1261,7 @@ class MainFormGUI:
                              background='darkblue', foreground='white', borderwidth=2)
         self.tf2.place(x=370, y=108, width=300, height=30)
 
+
         self.lb13 = tk.Label(self.panel4, text="Exam time", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb13.place(x=700, y=60)
         self.tf13 = tk.Entry(self.panel4,font=("cambria", 13, "bold"))
@@ -1415,11 +1416,12 @@ class MainFormGUI:
         self.tf5_3.insert(0, row_data4[47])
         
         def get_value():
-            global a1, a2, a3, a4, a5, a6,total_giaidoan1,percent_giaidoan1
-            global a7,a8,a9, total_giaidoan2,percent_giaidoan2
-            global a10,a11,a12,total_giaidoan3,percent_giaidoan3
-            global a13,a14,a15,total_giaidoan4,percent_giaidoan4
-            global a16,a17,a18,total_giaidoan5,percent_giaidoan5
+            global a1, a2, a3
+            global a4, a5, a6,total_giaidoan1,percent_giaidoan1
+            global a7, a8, a9, total_giaidoan2,percent_giaidoan2
+            global a10, a11, a12, total_giaidoan3,percent_giaidoan3
+            global a13, a14, a15 ,total_giaidoan4,percent_giaidoan4
+            global a16, a17, a18, total_giaidoan5,percent_giaidoan5
             
             a1 = self.tf1.get()
             a2 = self.tf2.get()
@@ -1509,7 +1511,8 @@ class MainFormGUI:
             get_value()
 
             new_values4 = [int(row_data4[0]),row_data4[1],row_data4[2],row_data4[3],row_data4[4],row_data4[5],row_data4[6],row_data4[7],row_data4[8],row_data4[9],row_data4[10],row_data4[11],row_data4[12],row_data4[13],row_data4[14],row_data4[15],row_data4[16],row_data4[17],row_data4[18],row_data4[19],row_data4[20],row_data4[21], 
-                           a1, a2, a3, a4, a5,a6,total_giaidoan1,percent_giaidoan1,
+                           a2, a3, a1, a4, 
+                           a5,a6,total_giaidoan1,percent_giaidoan1,
                            a7,a8,a9,total_giaidoan2,percent_giaidoan2,
                            a10,a11,a12,total_giaidoan3,percent_giaidoan3,
                            a13,a14,a15,total_giaidoan4,percent_giaidoan4,
@@ -1531,6 +1534,29 @@ class MainFormGUI:
                 messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")            
                 
 
+        def stage_definition(level, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18):
+            result = None  # Biến lưu trữ tạm thời kết quả
+            
+            if (a4 is not None and a4 != 0) or (a5 is not None and a5 != 0) or (a6 is not None and a6 != 0):
+                result = level + ' ' + '1/5'
+                
+            if (a7 is not None and a7 != 0) or (a8 is not None and a8 != 0) or (a9 is not None and a9 != 0):
+                result = level + ' ' + '2/5'
+                
+            if (a10 is not None and a10 != 0) or (a11 is not None and a11 != 0) or (a12 is not None and a12 != 0):
+                result = level + ' ' + '3/5'
+                
+            if (a13 is not None and a13 != 0) or (a14 is not None and a14 != 0) or (a15 is not None and a15 != 0):
+                result = level + ' ' + '4/5'
+                
+            if (a16 is not None and a16 != 0) or (a17 is not None and a17 != 0) or (a18 is not None and a18 != 0):
+                result = level + ' ' + '5/5'
+            
+            # Nếu có một if nào thỏa mãn thì trả về result, nếu không thì trả về 'Complete'
+            return result if result else level + ' ' + 'Unidentified'
+
+
+        
         def print_pdf():                
             try:
                 # Lấy giá trị từ text box ở đây
@@ -1538,14 +1564,14 @@ class MainFormGUI:
 
                 level = row_data4[4]
                 address = 'Con Ong Thông Minh'
-                stage = 'XXXXXX'
+                stage = stage_definition(level, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18)
                 exam_type = 'Camp'
                 teacher = row_data4[21]
                 study_date = row_data4[22]
                 study_time = row_data4[23]
-                name = row_data4[0]
-                birth = row_data4[0]
-                class_no = row_data4[0]
+                name = row_data4[1]
+                birth = row_data4[2]
+                class_no = row_data4[3]
                 
                 '''
                 def create_file(pdf, level, address, exam_date, stage, exam_type, exam_time, main_teacher, examiner_teacher, study_date, study_time, 
@@ -1555,7 +1581,7 @@ class MainFormGUI:
                  stage_no1, stage_no2, stage_no3, stage_no4, stage_no5):
                 '''
                 
-                create_file('pdf',level, address, a2, stage, exam_type, a3, teacher , a1, study_date, study_time,
+                create_file('pdf', level, address, a2, stage, exam_type, a3, teacher , a1, study_date, study_time,
                             name, birth, class_no,
                             'Giai đoạn 1', a4, a5, a6, 'Giai đoạn 2', a7, a8, a9, 'Giai đoạn 3', a10, a11, a12, 
                             'Giai đoạn 4', a13, a14, a15, 'Giai đoạn 5', a16, a17, a18,

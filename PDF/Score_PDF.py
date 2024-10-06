@@ -115,6 +115,13 @@ def student_data(pdf, name, birth, class_no):
 
 
 def create_table(pdf, xt, yt, zt, xf, yf, zf, stage, listening, reading, speaking, stage_no):
+    if listening is None:
+        listening = 0
+    if reading is None:
+        reading = 0
+    if speaking is None:
+        speaking = 0
+    
     pdf.set_font('DejaVu', 'B', 8)
     pdf.set_text_color(xt, yt, zt)  # Red color for the main title
     pdf.set_fill_color(xf, yf, zf)
