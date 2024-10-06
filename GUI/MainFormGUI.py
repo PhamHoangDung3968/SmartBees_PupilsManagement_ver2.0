@@ -1198,6 +1198,7 @@ class MainFormGUI:
 
         else:
             print("Value not found in the sheet.")
+            
     def on_row_select2(self, event):
         selected_item2 = self.table2.selection()
         if selected_item2:
@@ -1412,7 +1413,14 @@ class MainFormGUI:
         self.tf5_1.insert(0, row_data4[45])
         self.tf5_2.insert(0, row_data4[46])
         self.tf5_3.insert(0, row_data4[47])
-        def chinhsua():
+        
+        def get_value():
+            global a1, a2, a3, a4, a5, a6,total_giaidoan1,percent_giaidoan1
+            global a7,a8,a9, total_giaidoan2,percent_giaidoan2
+            global a10,a11,a12,total_giaidoan3,percent_giaidoan3
+            global a13,a14,a15,total_giaidoan4,percent_giaidoan4
+            global a16,a17,a18,total_giaidoan5,percent_giaidoan5
+            
             a1 = self.tf1.get()
             a2 = self.tf2.get()
             a3 = self.tf13.get()
@@ -1495,6 +1503,10 @@ class MainFormGUI:
                 a18 = 0
             total_giaidoan5 = a16 + a17 + a18
             percent_giaidoan5 = str(round((total_giaidoan5/65)*100))+"%"
+            
+            
+        def chinhsua():
+            get_value()
 
             new_values4 = [int(row_data4[0]),row_data4[1],row_data4[2],row_data4[3],row_data4[4],row_data4[5],row_data4[6],row_data4[7],row_data4[8],row_data4[9],row_data4[10],row_data4[11],row_data4[12],row_data4[13],row_data4[14],row_data4[15],row_data4[16],row_data4[17],row_data4[18],row_data4[19],row_data4[20],row_data4[21], 
                            a1, a2, a3, a4, a5,a6,total_giaidoan1,percent_giaidoan1,
@@ -1519,10 +1531,22 @@ class MainFormGUI:
                 messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")            
                 
 
-        def print_pdf():
-            # Lấy giá trị từ text box ở đây
-                
+        def print_pdf():                
             try:
+                # Lấy giá trị từ text box ở đây
+                get_value()
+
+                level = row_data4[4]
+                address = 'Con Ong Thông Minh'
+                stage = 'XXXXXX'
+                exam_type = 'Camp'
+                teacher = row_data4[21]
+                study_date = row_data4[22]
+                study_time = row_data4[23]
+                name = row_data4[0]
+                birth = row_data4[0]
+                class_no = row_data4[0]
+                
                 '''
                 def create_file(pdf, level, address, exam_date, stage, exam_type, exam_time, main_teacher, examiner_teacher, study_date, study_time, 
                  name, birth, class_no, 
@@ -1531,11 +1555,18 @@ class MainFormGUI:
                  stage_no1, stage_no2, stage_no3, stage_no4, stage_no5):
                 '''
                 
-                create_file(pdf, 'M', 'C.HB406','11/09/2024','23','Reading','15h30','Nguyễn Trung Sơn','Phạm Hoàng Dũng','M-W-F','19h20', 
+                create_file('pdf',level, address, a2, stage, exam_type, a3, teacher , a1, study_date, study_time,
+                            name, birth, class_no,
+                            'Giai đoạn 1', a4, a5, a6, 'Giai đoạn 2', a7, a8, a9, 'Giai đoạn 3', a10, a11, a12, 
+                            'Giai đoạn 4', a13, a14, a15, 'Giai đoạn 5', a16, a17, a18,
+                            1,2,3,4,5)
+                '''
+                create_file('pdf', 'M', 'C.HB406','11/09/2024','23','Reading','15h30','Nguyễn Trung Sơn','Phạm Hoàng Dũng','M-W-F','19h20', 
                  'Phạm Hoàng Dũng', '15/06/2003', '8A11', 
                  'Giai đoạn 1', 10, 10, 10, 'Giai đoạn 2', 10, 20, 24, 'Giai đoạn 3', 10, 20, 20, 
                  'Giai đoạn 4', 10, 10, 25, 'Giai đoạn 5', 10, 20, 25,
                  1,2,3,4,5)
+                '''
                 
                 messagebox.showinfo("Thành công", "In file PDF thành công!")
             
