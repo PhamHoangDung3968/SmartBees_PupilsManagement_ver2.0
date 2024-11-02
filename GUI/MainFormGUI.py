@@ -18,15 +18,20 @@ from PDF.Score_PDF import create_file
 
 from GUI.Add_NewClass import Add_NewClass
 from GUI.Add_NewBook import Add_NewBook
+from GUI.Add_NewSach import Add_NewSach
 from GUI.Add_NewStudent import Add_NewStudent
+from GUI.Add_NewChangeClass import Add_NewChangeClass
+
+
 
 
 def initialize_globals():
-    global gs, sht, worksheet, worksheet2, worksheet3
+    global gs, sht, worksheet, worksheet2, worksheet3, worksheet5
     global values_list_Book, result_list_Book
     global values_list_Student, result_list_Student
     global values_list_Class, result_list_Class
     global values_list_Score, result_list_Score
+    global values_list_changeclass, result_list_changeclass
     global lop, combined_data
     global teacher, combined_data1
     global listen1, combined_data2
@@ -81,8 +86,12 @@ def initialize_globals():
         sys.exit("Chương trình dừng lại do lỗi không xác định.")
 
     # Show data
+    worksheet5 = sht.worksheet("sheet 5")
+    values_list_changeclass = worksheet5.get_all_values()[2:]
+    result_list_changeclass = [row[:9] for row in values_list_changeclass]
+
     values_list_Book = worksheet.get_all_values()[2:]
-    result_list_Book = [row[:5] for row in values_list_Book]
+    result_list_Book = [row[:9] for row in values_list_Book]
 
     worksheet2 = sht.worksheet("sheet 2")
     values_list_Student = worksheet2.get_all_values()[2:]
@@ -337,7 +346,8 @@ class MainFormGUI:
             "class": [],
             "student": [],
             "score": [],
-            "book": []
+            "book": [],
+            "changeclass": []
         }
         
         # Original data storage
@@ -349,6 +359,8 @@ class MainFormGUI:
         self.original_data_score4 = combined_data6_4[:]
         self.original_data_score5 = combined_data6_5[:]
         self.original_data_book = result_list_Book[:]
+        self.original_data_changeclass = result_list_changeclass[:]
+
         
         # Class management tab
         self.create_class_management_tab()
@@ -361,6 +373,8 @@ class MainFormGUI:
         
         # Book management tab
         self.create_book_management_tab()
+        #Change class management tab
+        self.create_changeclass_management_tab()
         
         # Logout button
         self.content_seach = ttk.Frame(self.root)
@@ -817,12 +831,25 @@ class MainFormGUI:
         table_frame = ttk.Frame(self.book_management_tab, style='TFrame')
         table_frame.pack(fill="both", expand=True)
         
-        table_columns3 = ["ID", "CAMBRIDGE LEVEL", "BOOK NAME", "MAIN BOOK"]
+        table_columns3 = ['ID', "Tên lớp chính", "Sách 1", "Sách 2","Sách 3",'Sách 4', 'Sách 5', 'Tên giáo viên', 'Tên giáo viên nước ngoài']
         self.table3 = ttk.Treeview(table_frame, columns=table_columns3, show="headings", height=28)
-        
+        column_widths = {
+            "ID": 3,
+            "Tên lớp chính": 20, 
+            "Sách 1":30, 
+            "Sách 2":30,
+            "Sách 3":30,
+            'Sách 4':30, 
+            'Sách 5':30, 
+            'Tên giáo viên': 60, 
+            'Tên giáo viên nước ngoài': 60
+        }
         # Add sorting capability
+        self.table3 = ttk.Treeview(table_frame, columns=table_columns3, show="headings", height=25)
+        
         for col in table_columns3:
-            self.table3.heading(col, text=col, command=lambda _col=col: self.sort_table(self.table3, _col, False))
+            self.table3.heading(col, text=col, command=lambda c=col: self.sort_table(self.table3, c, False))
+            self.table3.column(col, width=column_widths.get(col, 100), anchor=tk.W)  # Đặt độ rộng theo cấu hình
         
         # Scrollbars within the table frame
         tree_scroll_y3 = ttk.Scrollbar(table_frame, orient="vertical", command=self.table3.yview)
@@ -842,7 +869,77 @@ class MainFormGUI:
         self.table3.bind("<Double-1>", self.on_row_select3)
         
         self.create_search_section(self.book_management_tab, "book")
+    def create_changeclass_management_tab(self):
+        self.changeclass_management_tab = ttk.Frame(self.tab_control, style='TFrame')
+        self.tab_control.add(self.changeclass_management_tab, text="Quản lý chuyển lớp")
+        
+        # Frame chứa các nút
+        button_frame = ttk.Frame(self.changeclass_management_tab, style='TFrame')
+        button_frame.pack(side="top", fill="x")
+        
+        # Thêm Label "Quản lý lớp học"
+        label_frame = ttk.Label(button_frame, text="Quản lý chuyển lớp", font=("Cambria", 12, "bold"))
+        label_frame.pack(side="left", padx=20, pady=5)
+        
+        # Nút thêm mới, xuất excel và reload
+        btnAddNew4 = ttk.Button(button_frame, text="Thêm mới", command=self.AddGUI_ClassChange, width=25, style='TButton')
+        btnXuatExcel4 = ttk.Button(button_frame, text="Xuất excel", command=self.XuatExcel4, width=25, style='TButton')
+        btnReload4 = ttk.Button(button_frame, text="Reload", command=lambda: self.reload_tab("changeclass"), width=25, style='TButton')
+        
+        btnAddNew4.pack(side="right", padx=5, pady=5)
+        btnXuatExcel4.pack(side="right", padx=5, pady=5)
+        btnReload4.pack(side="right", padx=5, pady=5)
 
+
+        
+        
+        # Tạo frame cho bảng và thanh cuộn
+        table_frame = ttk.Frame(self.changeclass_management_tab, style='TFrame')
+        table_frame.pack(fill="both", expand=True)
+
+
+
+    
+        table_columns = ['ID', "Mã học sinh","Họ và tên", "SĐT", "Tên lớp chính","Tên lớp chuyển",'Lý do chuyển', 'Thời gian bắt đầu học']
+        self.table4 = ttk.Treeview(table_frame, columns=table_columns, show="headings", height=28)
+        
+        # Cấu hình màu nền cho hàng xen kẽ
+        self.table4.tag_configure('oddrow', background="white")
+        self.table4.tag_configure('evenrow', background="#E8F6F3")
+        
+        # Đặt tiêu đề và độ rộng cho các cột
+        column_widths = {
+            "ID": 3,
+            "Mã học sinh": 90,
+            "Họ và tên": 120,
+            "SĐT": 50,
+            "Tên lớp chính": 170,
+            "Tên lớp chuyển": 170,
+            "Lý do chuyển": 100,
+            "Thời gian bắt đầu học": 50,
+        }
+        
+        for col in table_columns:
+            self.table4.heading(col, text=col, command=lambda c=col: self.sort_table(self.table4, c, False))
+            self.table4.column(col, width=column_widths.get(col, 100), anchor=tk.W)  # Đặt độ rộng theo cấu hình
+        
+        # Thêm thanh cuộn vào trong table_frame
+        tree_scroll_y = ttk.Scrollbar(table_frame, orient="vertical", command=self.table4.yview)
+        tree_scroll_x = ttk.Scrollbar(table_frame, orient="horizontal", command=self.table4.xview)
+        self.table4.configure(yscrollcommand=tree_scroll_y.set, xscrollcommand=tree_scroll_x.set)
+        
+        # Đặt bảng và thanh cuộn vào grid
+        self.table4.grid(row=0, column=0, sticky="nsew")
+        tree_scroll_y.grid(row=0, column=1, sticky="ns")
+        tree_scroll_x.grid(row=1, column=0, sticky="ew")
+        
+        # Đảm bảo frame của bảng có thể mở rộng
+        table_frame.grid_rowconfigure(0, weight=1)
+        table_frame.grid_columnconfigure(0, weight=1)
+        
+        self.populate_table(self.table4, self.original_data_changeclass)
+        self.table4.bind("<Double-1>", self.on_row_select4)
+        self.create_search_section(self.changeclass_management_tab, "changeclass")
 
     def sort_table(self, table, col, reverse):
         if col == 'ID' or col == 'CLASSNO':
@@ -894,7 +991,10 @@ class MainFormGUI:
         elif type_ == "score5":
             fields = ["TEACHER", "MAIN CLASS", "FULL NAME", "ID"]
         elif type_ == "book":
-            fields = ["BOOK NAME", "CAMBRIDGE LEVEL", "ID"]
+            fields = ["Tên lớp chính", "Sách",'Tên giáo viên']
+        elif type_ == "changeclass":
+            fields = ["Họ và tên", "Mã học sinh",'Tên lớp chính', 'Tên lớp chuyển']
+            
         
         self.entries[type_] = {}  # Use a dictionary to store entry widgets
         for i, field in enumerate(fields):
@@ -959,9 +1059,15 @@ class MainFormGUI:
                 "ID": 0
             },
             "book": {
-                "BOOK NAME": 2,
-                "CAMBRIDGE LEVEL": 1,
-                "ID": 0,
+                "Tên lớp chính": 1, 
+                "Sách": [2, 3, 4, 5, 6],
+                'Tên giáo viên': [7, 8],
+            },
+            "changeclass": {
+                "Họ và tên": 2,
+                "Mã học sinh": 1,
+                "Tên lớp chính": 4,
+                "Tên lớp chuyển": 5,
             }
         }
         
@@ -995,9 +1101,27 @@ class MainFormGUI:
         elif type_ == "book":
             data_source = self.original_data_book
             table = self.table3
+        elif type_ == "changeclass":
+            data_source = self.original_data_changeclass
+            table = self.table4
 
+        # for row in data_source:
+        #     if all(search_criteria[f'tf{index+1}'] in row[mapping[field]].lower() for index, field in enumerate(mapping)):
+        #         matching_rows.append(row)
         for row in data_source:
-            if all(search_criteria[f'tf{index+1}'] in row[mapping[field]].lower() for index, field in enumerate(mapping)):
+            match = True
+            for index, field in enumerate(mapping):
+                if isinstance(mapping[field], list):
+                    # If the mapping is a list, check all columns in the list
+                    if not any(search_criteria[f'tf{index+1}'] in row[col].lower() for col in mapping[field]):
+                        match = False
+                        break
+                else:
+                    # If the mapping is a single column, check that column
+                    if search_criteria[f'tf{index+1}'] not in row[mapping[field]].lower():
+                        match = False
+                        break
+            if match:
                 matching_rows.append(row)
         
         self.populate_table(table, matching_rows)
@@ -1035,6 +1159,8 @@ class MainFormGUI:
             self.populate_table(self.table2_5, self.original_data_score5)
         elif type_ == "book":
             self.populate_table(self.table3, self.original_data_book)
+        elif type_ == "changeclass":
+            self.populate_table(self.table4, self.original_data_changeclass)
 
         # Reset search entries
         for entry in self.entries[type_].values():
@@ -1050,6 +1176,8 @@ class MainFormGUI:
         self.original_data_score4 = result_list_Score4
         self.original_data_score5 = result_list_Score5
         self.original_data_book = result_list_Book
+        self.original_data_changeclass = result_list_changeclass[:]
+
 
     
     def run(self):
@@ -1062,6 +1190,9 @@ class MainFormGUI:
     def XuatExcel(self):
         Xuat1 = Excel_Create()
         Xuat1.XuatExcel()
+    def XuatExcel4(self):
+        Xuat4 = Excel_Create()
+        Xuat4.XuatExcel4()
         
     def XuatExcel12(self):
         Xuat2 = Excel_Create()
@@ -1077,12 +1208,16 @@ class MainFormGUI:
         AddNewClass.run()  # Chạy giao diện
     
     def AddGUI_Book(self):
-        AddNewBook = Add_NewBook()
+        AddNewBook = Add_NewSach()
         AddNewBook.run()     
     
     def AddGUI_Student(self):
         AddNewStudent = Add_NewStudent(self)
         AddNewStudent.run()
+
+    def AddGUI_ClassChange(self):
+        AddNewChangeClass = Add_NewChangeClass(self)
+        AddNewChangeClass.run()
         
 
     def center_window(self, width, height, object):
@@ -1959,118 +2094,212 @@ class MainFormGUI:
                 for i in range(1, n3 + 1):
                     mapping3[i] = letters3[(i - 1) % 26]
                 vitrisua3 = vitribandau3+":"+mapping3[count_values3]+str(matched_row3)
-            self.Edit_NewBook(row_data3,vitrisua3)
+            self.Edit_NewSach(row_data3,vitrisua3)
         else:
             print("Value not found in the sheet.")
     
-    def Edit_NewBook(self,row_data3,vitrisua3):
-        self.rootBook = tk.Tk()
-        self.rootBook.title("Edit book")
-        #self.rootBook.geometry("1020x680")
-        self.center_window(1020,680,self.rootBook)
-        self.canvas3 = tk.Canvas(self.rootBook, width=self.rootBook.winfo_screenwidth(), height=self.rootBook.winfo_screenheight())
-        self.canvas3.pack(fill=tk.BOTH, expand=True)
-        self.panel3 = tk.Frame(self.canvas3, bd=4, relief="solid")
-        self.panel3.place(x=10, y=10, width=1000, height=650)
-        self.lbl_editNewBook = tk.Label(self.panel3, text="Edit book", font=("cambria", 24, "bold"), fg="black")
-        self.lbl_editNewBook.place(x=300, y=10)
-        self.lb1 = tk.Label(self.panel3, text="Cambridge level", font=("cambria", 18, "bold"), fg="#FBA834")
+    def Edit_NewSach(self,row_data3,vitrisua3):
+        self.rootSach = tk.Tk('EDIT')
+        self.rootSach.title()
+        self.rootSach.geometry("735x550")
+        self.canvas4 = tk.Canvas(self.rootSach, width=self.rootSach.winfo_screenwidth(), height=self.rootSach.winfo_screenheight())
+        self.canvas4.pack(fill=tk.BOTH, expand=True)
+        self.panel4 = tk.Frame(self.canvas4, bd=4, relief="solid")
+        self.panel4.place(x=10, y=10, width=710, height=530)
+        self.lbl_addNewBook = tk.Label(self.panel4, text="Chỉnh sửa thông tin sách", font=("cambria", 24, "bold"), fg="black")
+        self.lbl_addNewBook.place(x=190, y=10)
+        self.lb1 = tk.Label(self.panel4, text="Tên lớp chính", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb1.place(x=33, y=60)
-        self.tf1 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
-        self.tf1.place(x=33, y=108, width=430, height=30)
+        self.tf1 = tk.Entry(self.panel4,font=("cambria", 13, "bold"))
+        self.tf1.place(x=33, y=108, width=300, height=30)
 
-        self.lb2 = tk.Label(self.panel3, text="Main book", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb2.place(x=530, y=60)
-        self.tf2 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
-        self.tf2.place(x=530, y=108, width=430, height=30)
+        self.lb2 = tk.Label(self.panel4, text="Sách 1", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb2.place(x=380, y=60)
+        self.tf2 = tk.Entry(self.panel4,font=("cambria", 13, "bold"))
+        self.tf2.place(x=380, y=108, width=300, height=30)
 
 
-        self.lb3 = tk.Label(self.panel3, text="Skill book 1", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb3 = tk.Label(self.panel4, text="Sách 2", font=("cambria", 18, "bold"), fg="#FBA834")
         self.lb3.place(x=33, y=160)
-        self.tf3 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
-        self.tf3.place(x=33, y=213, width=430, height=30)
+        self.tf3 = tk.Entry(self.panel4,font=("cambria", 13, "bold"))
+        self.tf3.place(x=33, y=213, width=300, height=30)
 
-        self.lb4 = tk.Label(self.panel3, text="Skill book 2", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb4.place(x=530, y=160)
-        self.tf4 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
-        self.tf4.place(x=530, y=213, width=430, height=30)
+        self.lb4 = tk.Label(self.panel4, text="Sách 3", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb4.place(x=380, y=160)
+        self.tf4 = tk.Entry(self.panel4,font=("cambria", 13, "bold"))
+        self.tf4.place(x=380, y=213, width=300, height=30)
 
-        self.lb5 = tk.Label(self.panel3, text="Skill book 3", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb5.place(x=33, y=270)
-        self.tf5 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
-        self.tf5.place(x=33, y=320, width=430, height=30)
+        self.lb9 = tk.Label(self.panel4, text="Sách 4", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb9.place(x=33, y=270)
+        self.tf9 = tk.Entry(self.panel4,font=("cambria", 13, "bold"))
+        self.tf9.place(x=33, y=320, width=300, height=30)
+        
 
-        self.lb6 = tk.Label(self.panel3, text="Skill book 4", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb6.place(x=530, y=270)
-        self.tf6 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
-        self.tf6.place(x=530, y=320, width=430, height=30)
+        self.lb10 = tk.Label(self.panel4, text="Sách 5", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb10.place(x=380, y=270)
+        self.tf10 = tk.Entry(self.panel4,font=("cambria", 13, "bold"))
+        self.tf10.place(x=380, y=320, width=300, height=30)
 
-        self.lb7 = tk.Label(self.panel3, text="Vocab book", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb7.place(x=33, y=375)
-        self.tf7 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
-        self.tf7.place(x=33, y=420, width=430, height=30)
+        self.lb11 = tk.Label(self.panel4, text="Giáo viên", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb11.place(x=33, y=380)
+        self.tf11 = tk.Entry(self.panel4,font=("cambria", 13, "bold"))
+        self.tf11.place(x=33, y=430, width=300, height=30)
 
-        self.lb8 = tk.Label(self.panel3, text="Grammar book", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb8.place(x=530, y=375)
-        self.tf8 = tk.Entry(self.panel3,font=("cambria", 13, "bold"))
-        self.tf8.place(x=530, y=420, width=430, height=30)
+        self.lb12 = tk.Label(self.panel4, text="Giáo viên nước ngoài", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb12.place(x=380, y=380)
+        self.tf12 = tk.Entry(self.panel4,font=("cambria", 13, "bold"))
+        self.tf12.place(x=380, y=430, width=300, height=30)
 
-        self.lb9 = tk.Label(self.panel3, text="Test book", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb9.place(x=33, y=480)
-        self.tf9 = tk.Entry(self.panel3, font=("cambria", 13, "bold"))
-        self.tf9.place(x=33, y=530, width=200, height=30)
-
-        self.lb10 = tk.Label(self.panel3, text="Progress", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb10.place(x=260, y=480)
-        self.tf10 = tk.Entry(self.panel3, font=("cambria", 13, "bold"))
-        self.tf10.place(x=260, y=530, width=200, height=30)
-
-        self.lb11 = tk.Label(self.panel3, text="Videos-Movies", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb11.place(x=530, y=480)
-        self.tf11 = tk.Entry(self.panel3, font=("cambria", 13, "bold"))
-        self.tf11.place(x=530, y=530, width=200, height=30)
-
-        self.lb12 = tk.Label(self.panel3, text="Pictures-Cards", font=("cambria", 18, "bold"), fg="#FBA834")
-        self.lb12.place(x=750, y=480)
-        self.tf12 = tk.Entry(self.panel3, font=("cambria", 13, "bold"))
-        self.tf12.place(x=750, y=530, width=200, height=30)
+        
 
         self.tf1.insert(0, row_data3[1])
-        self.tf10.insert(0, row_data3[2])
-        self.tf2.insert(0, row_data3[3])
-        self.tf3.insert(0, row_data3[4])
-        self.tf7.insert(0, row_data3[5])
-        self.tf4.insert(0, row_data3[6])
-        self.tf5.insert(0, row_data3[7])
-        self.tf6.insert(0, row_data3[8])
-        self.tf8.insert(0, row_data3[9])
-        self.tf9.insert(0, row_data3[10])
-        self.tf11.insert(0, row_data3[11])
-        self.tf12.insert(0, row_data3[12])
+        self.tf2.insert(0, row_data3[2])
+        self.tf3.insert(0, row_data3[3])
+        self.tf4.insert(0, row_data3[4])
+        self.tf9.insert(0, row_data3[5])
+        self.tf10.insert(0, row_data3[6])
+        self.tf11.insert(0, row_data3[7])
+        self.tf12.insert(0, row_data3[8])
+
+
         def chinhsua():
             a1 = self.tf1.get()
-            a2 = self.tf10.get()
-            a3 = self.tf2.get()
-            a4 = self.tf3.get()
-            a5 = self.tf7.get()
-            a6 = self.tf4.get()
-            a7 = self.tf5.get()
-            a8 = self.tf6.get()
-            a9 = self.tf8.get()
-            a10 = self.tf9.get()
+            a2 = self.tf2.get()
+            a3 = self.tf3.get()
+            a4 = self.tf4.get()
+            a9 = self.tf9.get()
+            a10 = self.tf10.get()
             a11 = self.tf11.get()
             a12 = self.tf12.get()
-            new_values3 = [int(row_data3[0]),a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12]
+            worksheet6 = sht.worksheet("sheet 1")
+            test = worksheet6.get_all_values()[2:]
+            existing_cls = [row[1].lower() for row in test]
+            if a1 in existing_cls:
+                messagebox.showerror("Error", "Lớp này đã có thông tin sách")
+                self.tf1.delete(0, 'end')
+            elif a1 == "":
+                messagebox.showerror("Error", "Bạn chưa nhập tên lớp")
+            elif a1 not in existing_cls:
+                new_values3 = [int(row_data3[0]),a1, a2,a3,a4,a9,a10,a11,a12]
+                # worksheet3.update(values=[new_values], range_name=vitrisua)
+                try:
+                    worksheet6.update(values=[new_values3], range_name=vitrisua3)
+                    messagebox.showinfo("Thành công", "Cập nhật thành công!")
+                    self.rootSach.destroy()
+
+                except Exception as e:
+                    messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")
+        self.btn1 = tk.Button(self.panel4, text="Xác nhận", font=("cambria", 14, "bold"),command=chinhsua, width=20, bg="#FBA834",fg="black" )
+        self.btn1.place(x=250, y=470)
+
+
+    def on_row_select4(self, event):
+        selected_item3 = self.table4.selection()
+        if selected_item3:
+            row_values3 = self.table4.item(selected_item3, "values")
+            row_list3 = row_values3[0] 
+            if row_list3 in worksheet5.col_values(1):
+                vitribandau3 = "A"+str(worksheet5.find(row_values3[0]).row)
+                matched_row3 = worksheet5.find(row_values3[0]).row
+
+                # count_values3 = len(worksheet.row_values(matched_row3))
+                row_data3 = worksheet5.row_values(matched_row3)
+                if len(row_data3)<=7:
+                    row_data3.extend([""] * (7 - len(row_data3) + 1))
+                char_to_num = dict()
+                count_values3 = len(row_data3)
+                letters3 = [chr(i) for i in range(65, 91)]
+                n3 = 30
+                mapping3 = {}
+                for i in range(1, n3 + 1):
+                    mapping3[i] = letters3[(i - 1) % 26]
+                vitrisua3 = vitribandau3+":"+mapping3[count_values3]+str(matched_row3)
+            self.Edit_NewChangeClass(row_data3,vitrisua3)
+        else:
+            print("Value not found in the sheet.")
+
+    def Edit_NewChangeClass(self,row_data3,vitrisua3):
+        self.rootChangeClass = tk.Tk('EDIT')
+        self.rootChangeClass.title()
+        self.rootChangeClass.geometry("735x540")
+        self.canvas1 = tk.Canvas(self.rootChangeClass, width=self.rootChangeClass.winfo_screenwidth(), height=self.rootChangeClass.winfo_screenheight())
+        self.canvas1.pack(fill=tk.BOTH, expand=True)
+        
+        self.panel1 = tk.Frame(self.canvas1, bd=4, relief="solid")
+        self.panel1.place(x=10, y=10, width=710, height=520)
+        self.lbl_addNewBook = tk.Label(self.panel1, text="Sửa thông tin chuyển lớp", font=("cambria", 24, "bold"), fg="black")
+        self.lbl_addNewBook.place(x=160, y=10)
+        self.lb1 = tk.Label(self.panel1, text="Họ và tên", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb1.place(x=33, y=60)
+        self.tf1 = tk.Entry(self.panel1,font=("cambria", 13, "bold"))
+        self.tf1.place(x=33, y=108, width=300, height=30)
+
+        self.lb2 = tk.Label(self.panel1, text="Mã học sinh", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb2.place(x=380, y=60)
+        self.tf2 = tk.Entry(self.panel1,font=("cambria", 13, "bold"))
+        self.tf2.place(x=380, y=108, width=300, height=30)
+
+
+        self.lb3 = tk.Label(self.panel1, text="Tên lớp chính", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb3.place(x=33, y=160)
+        self.tf3 = tk.Entry(self.panel1,font=("cambria", 13, "bold"))
+        self.tf3.place(x=33, y=213, width=300, height=30)
+
+        self.lb4 = tk.Label(self.panel1, text="Tên lớp chuyển", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb4.place(x=380, y=160)
+        self.tf4 = tk.Entry(self.panel1,font=("cambria", 13, "bold"))
+        self.tf4.place(x=380, y=213, width=300, height=30)
+
+        self.lb9 = tk.Label(self.panel1, text="Lý do chuyển lớp", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb9.place(x=33, y=270)
+        self.tf9 = tk.Text(self.panel1,font=("cambria", 13, "bold"))
+        self.tf9.place(x=33, y=320, width=300, height=50)
+
+        self.lb10 = tk.Label(self.panel1, text="Thời gian bắt đầu", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb10.place(x=380, y=270)
+        self.tf10 = tk.Entry(self.panel1,font=("cambria", 13, "bold"))
+        self.tf10.place(x=380, y=320, width=300, height=30)
+        
+        self.lb5 = tk.Label(self.panel1, text="Số điện thoại", font=("cambria", 18, "bold"), fg="#FBA834")
+        self.lb5.place(x=33, y=390)
+        self.tf5 = tk.Entry(self.panel1,font=("cambria", 13, "bold"))
+        self.tf5.place(x=33, y=430, width=300, height=30)
+
+        self.tf1.insert(0, row_data3[2])
+        self.tf2.insert(0, row_data3[1])
+        self.tf3.insert(0, row_data3[4])
+        self.tf4.insert(0, row_data3[5])
+        self.tf9.insert("1.0", row_data3[6])
+        self.tf10.insert(0, row_data3[7])
+        self.tf5.insert(0, row_data3[3])
+
+        def chinhsua():
+            a1 = self.tf1.get()
+            a2 = self.tf2.get()
+            a3 = self.tf3.get()
+            a4 = self.tf4.get()
+            a9 = self.tf9.get("1.0", "end-1c")
+            a10 = self.tf10.get()
+            a5 = self.tf5.get()
+            worksheet5 = sht.worksheet("sheet 5")
+            test = worksheet5.get_all_values()[2:]
+            existing_code = [row[1] for row in test]
+            existing_name = [row2[2].lower() for row2 in test]
+            # if a2 in existing_code or a1.lower() in existing_name:
+            def custom_title(s):
+                return ' '.join(word.capitalize() for word in s.split())
+            output_string = custom_title(a1.lower())
+            new_values3 = [int(row_data3[0]),a2,output_string.strip(),a5,a3,a4,a9,a10]
+                # worksheet3.update(values=[new_values], range_name=vitrisua)
             try:
-                worksheet.update(values=[new_values3], range_name=vitrisua3)
-                messagebox.showinfo("Thành công", "Cập nhật thành công!")
-                self.rootBook.destroy()
-                self.reload_tab("book")
+                worksheet5.update(values=[new_values3], range_name=vitrisua3)
+                messagebox.showinfo("Thành công", "Cập nhật thành công!")   
+                self.rootChangeClass.destroy()
 
             except Exception as e:
                 messagebox.showerror("Lỗi", f"Cập nhật thất bại: {e}")
-        self.btn1 = tk.Button(self.panel3, text="Edit", font=("cambria", 14, "bold"),command=chinhsua, width=20, bg="#FBA834",fg="black" )
-        self.btn1.place(x=400, y=600)
+        self.btn1 = tk.Button(self.panel1, text="Edit", font=("cambria", 14, "bold"),command=chinhsua, width=20, bg="#FBA834",fg="black" )
+        self.btn1.place(x=250, y=470)
 
 if __name__ == "__main__":
     app = MainFormGUI()

@@ -192,12 +192,12 @@ class Add_NewStudent:
         # percent = str(round((total/15)*100,2))+"%"
         
         existing_fn = [row[:3] for row in test]
-        if fn and b in existing_fn:
+        if fn in existing_fn:
             messagebox.showerror("Error", "Học sinh này đã được lưu")
             self.tf1.delete(0, 'end')
             self.tf2.delete(0, 'end')
 
-        elif fn == "" or b =="":
+        elif fn == "":
             messagebox.showerror("Error", "Bạn chưa nhập cấp độ")
         else:
             new_row_values = [max_value, fn, b, mcla, cl, sd, hours, t, a, stc, e, mc, tf, mf, nc, som, sqm, c, ps, st, stm, tea] + [''] * 28
