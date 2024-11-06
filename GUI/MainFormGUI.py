@@ -1020,7 +1020,7 @@ class MainFormGUI:
 
 
     def sort_table(self, table, col, reverse):
-        if col == 'ID' or col == 'CLASSNO':
+        if col == 'ID' or col == 'Mã lớp':
             def convert(value):
                 """Try to convert the value to an integer if possible, otherwise return the string."""
                 try:
